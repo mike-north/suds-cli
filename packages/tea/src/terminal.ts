@@ -49,6 +49,7 @@ export class TerminalController {
     const asTty = this.input as NodeJS.ReadStream;
     if (this.rawMode && typeof asTty.setRawMode === "function") {
       asTty.setRawMode(false);
+      asTty.pause();
       this.rawMode = false;
     }
   }

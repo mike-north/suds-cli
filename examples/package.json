@@ -1,0 +1,19 @@
+{
+  "name": "@suds-cli/examples",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "tsx spinner-demo.ts"
+  },
+  "dependencies": {
+    "@suds-cli/chapstick": "workspace:*",
+    "@suds-cli/key": "workspace:*",
+    "@suds-cli/spinner": "workspace:*",
+    "@suds-cli/tea": "workspace:*"
+  },
+  "devDependencies": {
+    "tsx": "^4.7.0"
+  }
+}
+

@@ -41,6 +41,7 @@ export class Program<M extends Model<Msg, M>> {
   private queue: Msg[] = [];
   private draining = false;
   private result: ProgramResult<M> | null = null;
+  private resolveWait?: () => void;
 
   constructor(model: M, options: ProgramOptions = {}) {
     this.model = model;
@@ -62,7 +63,8 @@ export class Program<M extends Model<Msg, M>> {
       await this.runCmd(this.model.init());
       this.renderer.write(this.model.view());
       this.startInputLoop();
-      await this.drainQueue();
+      // Wait until the program is explicitly quit
+      await this.waitUntilDone();
       this.result = { model: this.model };
     } catch (err) {
       this.result = { model: this.model, error: err };
@@ -71,6 +73,16 @@ export class Program<M extends Model<Msg, M>> {
     }
 
     return this.result ?? { model: this.model };
+  }
+
+  private waitUntilDone(): Promise<void> {
+    return new Promise((resolve) => {
+      this.resolveWait = resolve;
+      // If already not running, resolve immediately
+      if (!this.running) {
+        resolve();
+      }
+    });
   }
 
   send(msg: Msg): void {
@@ -122,6 +134,9 @@ export class Program<M extends Model<Msg, M>> {
   private handleInternal(msg: Msg): boolean {
     if (msg instanceof QuitMsg || msg instanceof InterruptMsg) {
       this.running = false;
+      if (this.resolveWait) {
+        this.resolveWait();
+      }
       return true;
     }
     if (msg instanceof ClearScreenMsg) {

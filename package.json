@@ -20,7 +20,8 @@
     "fix:markdown": "markdownlint-cli2 --fix \"**/*.md\"",
     "changeset": "changeset",
     "version-packages": "changeset version",
-    "release": "pnpm build && changeset publish"
+    "release": "pnpm build && changeset publish",
+    "demo": "pnpm -C examples start"
   },
   "keywords": [],
   "author": "",
