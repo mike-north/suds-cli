@@ -5,7 +5,7 @@
 ```ts
 
 // @public
-export type Align = 'left' | 'center' | 'right';
+export type Align = "left" | "center" | "right";
 
 // @public
 export interface BorderStyle {

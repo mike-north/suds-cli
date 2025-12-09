@@ -199,7 +199,7 @@
             },
             {
               "kind": "Content",
-              "text": "'left' | 'center' | 'right'"
+              "text": "\"left\" | \"center\" | \"right\""
             },
             {
               "kind": "Content",
