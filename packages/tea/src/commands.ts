@@ -1,16 +1,4 @@
 import { QuitMsg } from "./messages.js";
-import {
-  clearScreen,
-  disableMouse,
-  enableMouseAllMotion,
-  enableMouseCellMotion,
-  enterAltScreen,
-  exitAltScreen,
-  hideCursor,
-  setWindowTitle,
-  showCursor,
-  windowSize,
-} from "./screen.js";
 import { Cmd, Effect, Msg } from "./types.js";
 
 type MsgOrArray<M extends Msg> = M | M[];
