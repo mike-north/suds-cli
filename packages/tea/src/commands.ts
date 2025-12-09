@@ -60,6 +60,10 @@ export function tick<M extends Msg>(ms: number, fn: (t: Date) => M): Cmd<M> {
     });
 }
 
+/**
+ * Schedule a single message aligned to the next interval boundary.
+ * Call again from your update loop to continue a repeating cadence.
+ */
 export function every<M extends Msg>(ms: number, fn: (t: Date) => M): Cmd<M> {
   return () =>
     new Promise<M>((resolve) => {
@@ -69,7 +73,8 @@ export function every<M extends Msg>(ms: number, fn: (t: Date) => M): Cmd<M> {
     });
 }
 
-export const quit = (): Msg => new QuitMsg();
+export const msg = <M extends Msg>(value: M): Cmd<M> => () => value;
+export const quit = (): Cmd<Msg> => msg(new QuitMsg());
 export {
   clearScreen,
   enterAltScreen,

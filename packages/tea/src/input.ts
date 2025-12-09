@@ -18,7 +18,7 @@ export function startInput(options: InputOptions): () => void {
 
   const onData = (data: Buffer | string) => {
     const chunk = typeof data === 'string' ? Buffer.from(data, 'utf8') : data;
-    buffer = Buffer.from(Buffer.concat([buffer, chunk]));
+    buffer = Buffer.concat([buffer, chunk]);
     buffer = consumeBuffer(buffer, options.onMessage);
   };
 
@@ -89,8 +89,8 @@ function detectOne(buffer: Buffer, allowMoreData: boolean): DetectResult | undef
 }
 
 function detectFocus(buffer: Buffer): DetectResult | undefined {
-  // Focus in: ESC [ I, Focus out: ESC [ O
-  if (buffer.length >= 3 && buffer[0] === 0x1b && buffer[1] === 0x5b) {
+  // Focus in: ESC [ I, Focus out: ESC [ O (exactly three bytes)
+  if (buffer.length === 3 && buffer[0] === 0x1b && buffer[1] === 0x5b) {
     if (buffer[2] === 0x49) {
       return { msg: new FocusMsg(), length: 3 };
     }

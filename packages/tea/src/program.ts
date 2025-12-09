@@ -16,7 +16,7 @@ import {
 } from './messages.js';
 import { StandardRenderer } from './renderer.js';
 import { TerminalController } from './terminal.js';
-import type { Cmd, Model, Msg, ProgramResult } from './types.js';
+import type { Cmd, Model, ModelMsg, Msg, ProgramResult } from './types.js';
 import { WindowSizeMsg } from './messages.js';
 
 export interface ProgramOptions {
@@ -36,7 +36,7 @@ export class Program<M extends Model> {
   private readonly opts: ProgramOptions;
   private stopInput?: () => void;
   private running = false;
-  private queue: Msg[] = [];
+  private queue: Array<ModelMsg<M>> = [];
   private draining = false;
   private result: ProgramResult<M> | null = null;
 
@@ -68,7 +68,7 @@ export class Program<M extends Model> {
     return this.result ?? { model: this.model };
   }
 
-  send(msg: Msg): void {
+  send(msg: ModelMsg<M>): void {
     if (!msg) {
       return;
     }
@@ -104,8 +104,8 @@ export class Program<M extends Model> {
         continue;
       }
 
-      const [nextModel, cmd] = this.model.update(msg as never);
-      this.model = nextModel as M;
+      const [nextModel, cmd] = this.model.update(msg);
+      this.model = nextModel;
 
       await this.runCmd(cmd);
       this.renderer.write(this.model.view());
@@ -114,57 +114,56 @@ export class Program<M extends Model> {
     this.draining = false;
   }
 
-  private handleInternal(msg: Msg): boolean {
+  private handleInternal(msg: ModelMsg<M>): boolean {
     if (msg instanceof QuitMsg || msg instanceof InterruptMsg) {
       this.running = false;
       return true;
     }
     if (msg instanceof ClearScreenMsg) {
       this.terminal.clearScreen();
-      return true;
+      return false;
     }
     if (msg instanceof EnterAltScreenMsg) {
       this.terminal.enterAltScreen();
       this.renderer.repaint();
-      return true;
+      return false;
     }
     if (msg instanceof ExitAltScreenMsg) {
       this.terminal.exitAltScreen();
       this.renderer.repaint();
-      return true;
+      return false;
     }
     if (msg instanceof EnableMouseCellMotionMsg) {
       this.terminal.enableMouseCellMotion();
-      return true;
+      return false;
     }
     if (msg instanceof EnableMouseAllMotionMsg) {
       this.terminal.enableMouseAllMotion();
-      return true;
+      return false;
     }
     if (msg instanceof DisableMouseMsg) {
       this.terminal.disableMouse();
-      return true;
+      return false;
     }
     if (msg instanceof ShowCursorMsg) {
       this.terminal.showCursor();
-      return true;
+      return false;
     }
     if (msg instanceof HideCursorMsg) {
       this.terminal.hideCursor();
-      return true;
+      return false;
     }
     if (msg instanceof SetWindowTitleMsg) {
       this.terminal.setWindowTitle(msg.title);
-      return true;
+      return false;
     }
     if (msg instanceof ResumeMsg) {
-      // no-op placeholder
-      return true;
+      return false;
     }
     return false;
   }
 
-  private async runCmd(cmd: Cmd<Msg> | undefined): Promise<void> {
+  private async runCmd(cmd: Cmd<ModelMsg<M>> | undefined): Promise<void> {
     if (!cmd) {
       return;
     }
@@ -208,13 +207,14 @@ export class Program<M extends Model> {
   private startInputLoop(): void {
     this.stopInput = startInput({
       input: this.opts.input,
-      onMessage: (msg) => this.send(msg)
+      onMessage: (msg) => this.send(msg as ModelMsg<M>)
     });
   }
 
   private setupSignals(): void {
+    const output = this.opts.output ?? process.stdout;
     const handleResize = () => {
-      const { columns, rows } = getSize(this.opts.output ?? process.stdout);
+      const { columns, rows } = getSize(output);
       const w = columns ?? 0;
       const h = rows ?? 0;
       this.send(new WindowSizeMsg(w, h));
@@ -222,7 +222,9 @@ export class Program<M extends Model> {
 
     process.on('SIGINT', this.onSigInt);
     process.on('SIGTERM', this.onSigTerm);
-    process.stdout.on('resize', handleResize);
+    if ('on' in output && typeof (output as NodeJS.Process['stdout']).on === 'function') {
+      (output as NodeJS.Process['stdout']).on('resize', handleResize);
+    }
 
     // Initial size
     handleResize();
@@ -230,7 +232,9 @@ export class Program<M extends Model> {
     this.disposeSignals = () => {
       process.off('SIGINT', this.onSigInt);
       process.off('SIGTERM', this.onSigTerm);
-      process.stdout.off('resize', handleResize);
+      if ('off' in output && typeof (output as NodeJS.Process['stdout']).off === 'function') {
+        (output as NodeJS.Process['stdout']).off('resize', handleResize);
+      }
     };
   }
 

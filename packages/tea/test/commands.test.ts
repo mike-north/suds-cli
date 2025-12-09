@@ -1,5 +1,6 @@
 import { describe, expect, test, vi } from 'vitest';
-import { batch, every, sequence, tick } from '../src/commands.js';
+import { batch, clearScreen, every, msg, quit, sequence, tick } from '../src/commands.js';
+import { ClearScreenMsg, QuitMsg } from '../src/messages.js';
 
 const resolved = <T>(value: T) => () => value;
 
@@ -52,7 +53,21 @@ describe('commands', () => {
     vi.advanceTimersByTime(1);
     const result = await promise;
     expect(result).toBe(new Date('2020-01-01T00:00:01.000Z').getTime());
+    expect(vi.getTimerCount()).toBe(0);
     vi.useRealTimers();
+  });
+
+  test('msg lifts message into command', async () => {
+    const cmd = msg(new QuitMsg());
+    const result = await cmd?.();
+    expect(result).toBeInstanceOf(QuitMsg);
+  });
+
+  test('screen helper commands yield messages', async () => {
+    const clear = clearScreen();
+    const quitCmd = quit();
+    expect(await clear?.()).toBeInstanceOf(ClearScreenMsg);
+    expect(await quitCmd?.()).toBeInstanceOf(QuitMsg);
   });
 });
 

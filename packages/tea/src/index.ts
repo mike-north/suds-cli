@@ -28,7 +28,7 @@ export { KeyMsg, KeyType, type Key } from './keys.js';
 export { MouseMsg, MouseAction, MouseButton, type MouseEvent } from './mouse.js';
 
 // Commands
-export { batch, sequence, tick, every, quit } from './commands.js';
+export { batch, sequence, tick, every, quit, msg } from './commands.js';
 export {
   clearScreen,
   enterAltScreen,
