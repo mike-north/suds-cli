@@ -680,6 +680,9 @@ function visibleRange(widths: number[], position: number, maxWidth: number): [nu
     current = widthAt(position);
     start = position;
     end = position + 1;
+  } else {
+    // Cursor is at the end - reserve 1 cell for the cursor space character
+    current = 1;
   }
 
   while (start > 0) {
