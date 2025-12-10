@@ -45,10 +45,15 @@ export function defaultStyles(): ListStyles {
   };
 }
 
-/** Merge user provided overrides with defaults. */
+/**
+ * Merge user provided overrides with defaults.
+ * @public
+ */
 export function mergeStyles(overrides?: Partial<ListStyles>): ListStyles {
   if (!overrides) {
     return defaultStyles();
   }
   return { ...defaultStyles(), ...overrides };
 }
+
+

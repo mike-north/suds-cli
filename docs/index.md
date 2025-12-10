@@ -37,6 +37,15 @@ Description
 </td></tr>
 <tr><td>
 
+[@suds-cli/filepicker](./filepicker.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
 [@suds-cli/help](./help.md)
 
 
@@ -55,7 +64,25 @@ Description
 </td></tr>
 <tr><td>
 
+[@suds-cli/list](./list.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
 [@suds-cli/paginator](./paginator.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[@suds-cli/progress](./progress.md)
 
 
 </td><td>
@@ -91,6 +118,15 @@ Description
 </td></tr>
 <tr><td>
 
+[@suds-cli/table](./table.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
 [@suds-cli/tea](./tea.md)
 
 
@@ -100,7 +136,34 @@ Description
 </td></tr>
 <tr><td>
 
+[@suds-cli/textarea](./textarea.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[@suds-cli/textinput](./textinput.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
 [@suds-cli/timer](./timer.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[@suds-cli/viewport](./viewport.md)
 
 
 </td><td>

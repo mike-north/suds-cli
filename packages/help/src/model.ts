@@ -182,3 +182,5 @@ function shouldRenderColumn(bindings: Binding[]): boolean {
   return bindings.some((b) => b.enabled());
 }
 
+
+

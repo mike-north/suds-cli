@@ -175,7 +175,7 @@ export class TextareaModel {
     }
     const [cursor, cmd] = this.cursor.focus();
     const next = this.#with({ focused: true, cursor });
-    return [next, cmd as Cmd<Msg>];
+    return [next, cmd];
   }
 
   /** Blur the textarea. */
@@ -205,7 +205,6 @@ export class TextareaModel {
 
   /** Move cursor left, possibly across lines. */
   cursorLeft(): TextareaModel {
-    const line = this.lines[this.pos.line] ?? "";
     if (this.pos.column > 0) {
       return this.#withPosition({ line: this.pos.line, column: this.pos.column - 1 });
     }
@@ -292,10 +291,12 @@ export class TextareaModel {
   /** Delete character to the left (backspace). */
   deleteLeft(n = 1): TextareaModel {
     if (n <= 0) return this;
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
     let model: TextareaModel = this;
     for (let i = 0; i < n; i++) {
-      model = model.#deleteLeftOnce();
-      if (model === this) break;
+      const next = model.#deleteLeftOnce();
+      if (next === model) break;
+      model = next;
     }
     return model;
   }
@@ -331,10 +332,12 @@ export class TextareaModel {
   /** Delete character to the right (delete). */
   deleteRight(n = 1): TextareaModel {
     if (n <= 0) return this;
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
     let model: TextareaModel = this;
     for (let i = 0; i < n; i++) {
-      model = model.#deleteRightOnce();
-      if (model === this) break;
+      const next = model.#deleteRightOnce();
+      if (next === model) break;
+      model = next;
     }
     return model;
   }
@@ -434,6 +437,7 @@ export class TextareaModel {
 
   /** Tea update loop. */
   update(msg: Msg): [TextareaModel, Cmd<Msg>] {
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
     let model: TextareaModel = this;
     const cmds: Cmd<Msg>[] = [];
 
@@ -494,6 +498,7 @@ export class TextareaModel {
   }
 
   #handleKey(msg: KeyMsg): [TextareaModel, Cmd<Msg> | null] {
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
     let next: TextareaModel = this;
     let cmd: Cmd<Msg> | null = null;
     const keyMap = this.keyMap;
@@ -577,7 +582,7 @@ export class TextareaModel {
     return prefix + beforeStyled + cursorView + afterStyled;
   }
 
-  #linePrefix(lineIndex: number, isCursorLine: boolean): string {
+  #linePrefix(lineIndex: number, _isCursorLine: boolean): string {
     const prompt = this.prompt ? this.promptStyle.inline(true).render(this.prompt) : "";
     const ln =
       this.showLineNumbers && this.lines.length > 0
@@ -708,6 +713,10 @@ function replaceLine(lines: string[], index: number, value: string): string[] {
 
 function asError(err: unknown): Error {
   if (err instanceof Error) return err;
-  return new Error(String(err ?? "textarea error"));
+  if (typeof err === "string") return new Error(err);
+  if (typeof err === "number" || typeof err === "boolean") return new Error(String(err));
+  return new Error("textarea error");
 }
+
+
 

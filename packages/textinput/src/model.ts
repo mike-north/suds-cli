@@ -150,7 +150,7 @@ export class TextInputModel {
     }
     const [cursor, cmd] = this.cursor.focus();
     const next = this.#with({ focused: true, cursor });
-    return [next, cmd as Cmd<Msg>];
+    return [next, cmd];
   }
 
   /** Blur the input (hides cursor, ignores key handling). */
@@ -384,6 +384,7 @@ export class TextInputModel {
 
   /** Handle Tea messages (keys, cursor, paste). */
   update(msg: Msg): [TextInputModel, Cmd<Msg>] {
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
     let model: TextInputModel = this;
     const cmds: Cmd<Msg>[] = [];
 
@@ -428,6 +429,7 @@ export class TextInputModel {
   }
 
   #handleKey(msg: KeyMsg): [TextInputModel, Cmd<Msg> | null] {
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
     let next: TextInputModel = this;
     let cmd: Cmd<Msg> | null = null;
     const keyMap = this.keyMap;
@@ -716,5 +718,7 @@ function asError(err: unknown): Error {
   if (err instanceof Error) {
     return err;
   }
-  return new Error(String(err ?? "clipboard error"));
+  if (typeof err === "string") return new Error(err);
+  if (typeof err === "number" || typeof err === "boolean") return new Error(String(err));
+  return new Error("clipboard error");
 }

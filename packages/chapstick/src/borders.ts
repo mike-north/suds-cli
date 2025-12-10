@@ -57,5 +57,4 @@ export const borderStyles: Record<BorderStyleName, BorderStyle> = {
  * Default border style (single line).
  * @public
  */
-export const defaultBorderStyle: BorderStyle =
-  borderStyles.normal as BorderStyle;
+export const defaultBorderStyle: BorderStyle = borderStyles.normal;
