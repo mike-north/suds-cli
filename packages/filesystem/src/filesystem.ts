@@ -43,6 +43,44 @@ export const DirectoriesListingType = "directories";
 export const FilesListingType = "files";
 
 /**
+ * Generates a timestamped filename for a copy or archive operation.
+ * @param filePath - The original file path
+ * @param extension - The extension to use (e.g., "" for copy, ".zip" for zip)
+ * @returns The new filename with timestamp
+ */
+function generateTimestampedFilename(
+  filePath: string,
+  extension: string,
+): string {
+  const timestamp = Math.floor(Date.now() / 1000);
+  const ext = path.extname(filePath);
+  const basename = path.basename(filePath, ext);
+  const dirname = path.dirname(filePath);
+  const filename = path.basename(filePath);
+
+  let output: string;
+
+  if (filename.startsWith(".") && ext === "") {
+    // Hidden file with no extension (e.g., ".gitignore")
+    output = path.join(dirname, `${filename}_${timestamp}${extension}`);
+  } else if (filename.startsWith(".") && ext !== "") {
+    // Hidden file with extension (e.g., ".config.json")
+    output = path.join(dirname, `${basename}_${timestamp}${ext}${extension}`);
+  } else if (ext !== "" && extension === "") {
+    // Regular file with extension, copying (preserve original extension)
+    output = path.join(dirname, `${basename}_${timestamp}${ext}`);
+  } else if (ext !== "" && extension !== "") {
+    // Regular file with extension, archiving (replace with new extension)
+    output = path.join(dirname, `${basename}_${timestamp}${extension}`);
+  } else {
+    // File without extension
+    output = path.join(dirname, `${filename}_${timestamp}${extension}`);
+  }
+
+  return output;
+}
+
+/**
  * Directory entry type matching Node.js fs.Dirent.
  * @public
  */
@@ -194,7 +232,8 @@ export async function findFilesByName(
         }
       }
     } catch {
-      // Skip directories we can't access
+      // Skip directories we can't access (e.g., permission denied)
+      // This allows the search to continue even when some directories are inaccessible
     }
   }
 
@@ -278,27 +317,7 @@ export async function moveDirectoryItem(
  * @public
  */
 export async function copyFile(name: string): Promise<string> {
-  const timestamp = Math.floor(Date.now() / 1000);
-  const ext = path.extname(name);
-  const basename = path.basename(name, ext);
-  const dirname = path.dirname(name);
-  const filename = path.basename(name);
-
-  let output: string;
-
-  if (filename.startsWith(".") && ext === "") {
-    // Hidden file with no extension (e.g., ".gitignore")
-    output = path.join(dirname, `${filename}_${timestamp}`);
-  } else if (filename.startsWith(".") && ext !== "") {
-    // Hidden file with extension (e.g., ".config.json")
-    output = path.join(dirname, `${basename}_${timestamp}${ext}`);
-  } else if (ext !== "") {
-    // Regular file with extension
-    output = path.join(dirname, `${basename}_${timestamp}${ext}`);
-  } else {
-    // File without extension
-    output = path.join(dirname, `${filename}_${timestamp}`);
-  }
+  const output = generateTimestampedFilename(name, "");
 
   await fs.copyFile(name, output);
   return output;
@@ -360,27 +379,7 @@ export async function writeToFile(
  * @public
  */
 export async function zip(name: string): Promise<string> {
-  const timestamp = Math.floor(Date.now() / 1000);
-  const ext = path.extname(name);
-  const basename = path.basename(name, ext);
-  const dirname = path.dirname(name);
-  const filename = path.basename(name);
-
-  let output: string;
-
-  if (filename.startsWith(".") && ext === "") {
-    // Hidden file with no extension (e.g., ".gitignore")
-    output = path.join(dirname, `${filename}_${timestamp}.zip`);
-  } else if (filename.startsWith(".") && ext !== "") {
-    // Hidden file with extension (e.g., ".config.json")
-    output = path.join(dirname, `${basename}_${timestamp}.zip`);
-  } else if (ext !== "") {
-    // Regular file with extension
-    output = path.join(dirname, `${basename}_${timestamp}.zip`);
-  } else {
-    // File without extension
-    output = path.join(dirname, `${filename}_${timestamp}.zip`);
-  }
+  const output = generateTimestampedFilename(name, ".zip");
 
   return new Promise((resolve, reject) => {
     const outputStream = createWriteStream(output);
