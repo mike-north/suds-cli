@@ -1,4 +1,4 @@
-export interface SpringConfig {
+interface SpringConfig {
   /** Oscillation speed (Hz). */
   frequency?: number;
   /** Damping factor (1.0 = critical-ish). */
@@ -75,4 +75,6 @@ export class Spring {
     });
   }
 }
+
+
 

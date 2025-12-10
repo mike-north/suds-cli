@@ -117,7 +117,7 @@ function totalColumnWidth(columns: Column[], bordered: boolean): number {
   return bordered ? base + Math.max(0, columns.length - 1) : base;
 }
 
-function innerWidthFrom(
+function _innerWidthFrom(
   widths: number[],
   bordered: boolean,
   columnCount: number,
@@ -139,7 +139,7 @@ function fixedWidthCell(text: string, width: number): string {
     .render(truncated);
 }
 
-function verticalChar(styles: TableStyles): string {
+function _verticalChar(styles: TableStyles): string {
   return styles.borderStyle?.left ?? borderStyles.normal.left;
 }
 
@@ -493,4 +493,6 @@ export class TableModel {
     });
   }
 }
+
+
 

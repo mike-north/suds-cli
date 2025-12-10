@@ -1,4 +1,4 @@
-import { Binding, newBinding } from "@suds-cli/key";
+import { newBinding } from "@suds-cli/key";
 import type { FilepickerKeyMap } from "./types.js";
 
 /** Default filepicker keymap. @public */
@@ -24,4 +24,6 @@ export const defaultKeyMap: FilepickerKeyMap = {
     ];
   },
 };
+
+
 

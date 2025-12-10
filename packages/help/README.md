@@ -9,3 +9,5 @@ const help = HelpModel.new({ width: 80 });
 const text = help.view(keyMap);
 ```
 
+
+

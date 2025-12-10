@@ -53,7 +53,7 @@ describe("TextareaModel", () => {
   it("moves cursor left/right across lines and deletes last char", () => {
     let model = TextareaModel.new({ value: "ab\nc" });
     const [focused] = model.focus();
-    model = focused.gotoLineEnd(); // end of first line
+    model = focused.gotoLine(0).gotoLineEnd(); // end of first line
     model = model.cursorRight(); // move to start of next line
     model = model.deleteLeft(); // delete newline -> joins lines
     expect(model.value()).toBe("abc");
@@ -62,4 +62,6 @@ describe("TextareaModel", () => {
     expect(model.value()).toBe("ab");
   });
 });
+
+
 

@@ -5,3 +5,5 @@ export type { Column, Row, TableOptions } from "./types.js";
 export type { TableStyles } from "./styles.js";
 export { defaultStyles } from "./styles.js";
 
+
+

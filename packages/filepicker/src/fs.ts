@@ -2,7 +2,10 @@ import { readdir, stat } from "fs/promises";
 import { join } from "node:path";
 import type { FileInfo } from "./types.js";
 
-/** Read a directory and return file info entries. */
+/**
+ * Read a directory and return file info entries.
+ * @public
+ */
 export async function readDirectory(
   path: string,
   showHidden: boolean,
@@ -31,7 +34,10 @@ export async function readDirectory(
   return files.sort((a, b) => sortFiles(a, b, dirFirst));
 }
 
-/** Sort directories first then alphabetical. */
+/**
+ * Sort directories first then alphabetical.
+ * @public
+ */
 export function sortFiles(
   a: FileInfo,
   b: FileInfo,
@@ -44,7 +50,12 @@ export function sortFiles(
   return a.name.localeCompare(b.name);
 }
 
-/** Hidden file detection (Unix-style). */
+/**
+ * Hidden file detection (Unix-style).
+ * @public
+ */
 export function isHiddenUnix(name: string): boolean {
   return name.startsWith(".");
 }
+
+

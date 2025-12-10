@@ -9,5 +9,5 @@ Predefined border styles matching common terminal box characters.
 **Signature:**
 
 ```typescript
-borderStyles: Record<string, BorderStyle>
+borderStyles: Record<BorderStyleName, BorderStyle>
 ```

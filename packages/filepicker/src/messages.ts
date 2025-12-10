@@ -17,3 +17,5 @@ export class FileSelectedMsg {
 
   constructor(public readonly file: FileInfo) {}
 }
+
+

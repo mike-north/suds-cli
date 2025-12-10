@@ -27,3 +27,5 @@ export const defaultKeyMap: KeyMap = {
   nextPage: newBinding({ keys: ["pgdown", "right", "l"] }),
 };
 
+
+

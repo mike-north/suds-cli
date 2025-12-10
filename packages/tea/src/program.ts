@@ -60,7 +60,7 @@ export class Program<M extends Model<Msg, M>> {
     this.renderer.start();
 
     try {
-      await this.runCmd(this.model.init());
+      this.runCmd(this.model.init());
       this.renderer.write(this.model.view());
       this.startInputLoop();
       // Wait until the program is explicitly quit
@@ -104,7 +104,7 @@ export class Program<M extends Model<Msg, M>> {
     this.shutdown();
   }
 
-  private async drainQueue(): Promise<void> {
+  private drainQueue(): void {
     if (this.draining) {
       return;
     }
@@ -124,7 +124,7 @@ export class Program<M extends Model<Msg, M>> {
       const [nextModel, cmd] = this.model.update(msg);
       this.model = nextModel;
 
-      await this.runCmd(cmd);
+      this.runCmd(cmd);
       this.renderer.write(this.model.view());
     }
 
@@ -206,14 +206,12 @@ export class Program<M extends Model<Msg, M>> {
       if (effect instanceof Promise) {
         effect.then(handleResult).catch((err) => {
           // Preserve behavior but don't block other messages
-          // eslint-disable-next-line no-console
           console.error(err);
         });
       } else {
         handleResult(effect);
       }
     } catch (err) {
-      // eslint-disable-next-line no-console
       console.error(err);
     }
   }
