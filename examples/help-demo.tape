@@ -3,11 +3,11 @@
 Output "help-demo.gif"
 
 Set Shell "bash"
-Set FontSize 18
-Set Width 700
-Set Height 350
+Set FontSize 49
+Set Width 1900
+Set Height 950
 Set Theme "Catppuccin Mocha"
-Set Padding 20
+Set Padding 40
 Set Framerate 30
 
 Type "npx tsx help-demo.ts"

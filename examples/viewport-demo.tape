@@ -3,11 +3,11 @@
 Output "viewport-demo.gif"
 
 Set Shell "bash"
-Set FontSize 18
-Set Width 850
-Set Height 450
+Set FontSize 40
+Set Width 1900
+Set Height 1006
 Set Theme "Catppuccin Mocha"
-Set Padding 20
+Set Padding 40
 Set Framerate 30
 
 Type "npx tsx viewport-demo.ts"

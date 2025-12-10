@@ -3,11 +3,11 @@
 Output "list-demo.gif"
 
 Set Shell "bash"
-Set FontSize 18
-Set Width 500
-Set Height 500
+Set FontSize 68
+Set Width 1900
+Set Height 1900
 Set Theme "Catppuccin Mocha"
-Set Padding 20
+Set Padding 40
 Set Framerate 30
 
 Type "npx tsx list-demo.ts"

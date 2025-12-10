@@ -2,7 +2,7 @@
 
 Filterable, selectable list with integrated help, spinner, and paginator. Ported from the Charm `bubbles/list` component.
 
-![List Demo](../../examples/list-demo.gif)
+<img src="../../examples/list-demo.gif" width="950" />
 
 ## Usage
 

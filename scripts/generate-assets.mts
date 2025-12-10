@@ -12,91 +12,90 @@
  *   npx tsx scripts/generate-assets.mts --list    # List available demos
  */
 
-import { spawn, spawnSync } from "node:child_process";
-import { readFileSync, readdirSync } from "node:fs";
-import { basename, dirname, join, resolve } from "node:path";
-import { fileURLToPath } from "node:url";
+import { spawn, spawnSync } from 'node:child_process'
+import { readFileSync, readdirSync } from 'node:fs'
+import { basename, dirname, join, resolve } from 'node:path'
+import { fileURLToPath } from 'node:url'
 
-import { Style, borderStyles } from "@suds-cli/chapstick";
-import { newBinding, matches } from "@suds-cli/key";
-import { DefaultItem, ListModel } from "@suds-cli/list";
-import { ProgressModel } from "@suds-cli/progress";
-import { SpinnerModel, dot } from "@suds-cli/spinner";
-import { StopwatchModel } from "@suds-cli/stopwatch";
+import { Style, borderStyles } from '@suds-cli/chapstick'
+import { newBinding, matches } from '@suds-cli/key'
+import { DefaultItem, ListModel } from '@suds-cli/list'
+import { ProgressModel } from '@suds-cli/progress'
+import { SpinnerModel, dot } from '@suds-cli/spinner'
+import { StopwatchModel } from '@suds-cli/stopwatch'
 import {
   KeyMsg,
   Program,
   WindowSizeMsg,
   quit,
-  msg,
   type Cmd,
   type Model,
   type Msg,
-} from "@suds-cli/tea";
+} from '@suds-cli/tea'
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
 
-const EXAMPLES_DIR = resolve(__dirname, "../examples");
+const EXAMPLES_DIR = resolve(__dirname, '../examples')
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Styles
 // ─────────────────────────────────────────────────────────────────────────────
 
 const styles = {
-  title: new Style().bold(true).foreground("#ff79c6"),
-  subtitle: new Style().foreground("#bd93f9"),
-  success: new Style().foreground("#50fa7b"),
-  error: new Style().foreground("#ff5555"),
-  warning: new Style().foreground("#f1fa8c"),
-  muted: new Style().foreground("#6272a4").italic(true),
-  key: new Style().foreground("#8be9fd").bold(true),
-  highlight: new Style().foreground("#f8f8f2").bold(true),
-  currentPkg: new Style().foreground("#bd93f9"),
-  checkMark: new Style().foreground("#50fa7b"),
-  crossMark: new Style().foreground("#ff5555"),
-  time: new Style().foreground("#6272a4"),
+  title: new Style().bold(true).foreground('#ff79c6'),
+  subtitle: new Style().foreground('#bd93f9'),
+  success: new Style().foreground('#50fa7b'),
+  error: new Style().foreground('#ff5555'),
+  warning: new Style().foreground('#f1fa8c'),
+  muted: new Style().foreground('#6272a4').italic(true),
+  key: new Style().foreground('#8be9fd').bold(true),
+  highlight: new Style().foreground('#f8f8f2').bold(true),
+  currentPkg: new Style().foreground('#bd93f9'),
+  checkMark: new Style().foreground('#50fa7b'),
+  crossMark: new Style().foreground('#ff5555'),
+  time: new Style().foreground('#6272a4'),
   box: new Style()
     .border(true)
     .borderStyle(borderStyles.rounded)
-    .borderForeground("#bd93f9")
+    .borderForeground('#bd93f9')
     .padding(0, 1),
-};
+}
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Tape File Discovery & Parsing
 // ─────────────────────────────────────────────────────────────────────────────
 
 interface TapeInfo {
-  name: string;
-  path: string;
-  description: string;
+  name: string
+  path: string
+  description: string
 }
 
 function parseTapeFile(tapePath: string): TapeInfo {
-  const filename = basename(tapePath);
-  const name = filename.replace("-demo.tape", "");
+  const filename = basename(tapePath)
+  const name = filename.replace('-demo.tape', '')
 
-  let description = "";
+  let description = ''
   try {
-    const content = readFileSync(tapePath, "utf-8");
-    const firstLine = content.split("\n")[0]?.trim() ?? "";
-    if (firstLine.startsWith("#") && !firstLine.includes("@vhs.")) {
-      description = firstLine.replace(/^#\s*/, "");
+    const content = readFileSync(tapePath, 'utf-8')
+    const firstLine = content.split('\n')[0]?.trim() ?? ''
+    if (firstLine.startsWith('#') && !firstLine.includes('@vhs.')) {
+      description = firstLine.replace(/^#\s*/, '')
     }
   } catch {
     // Ignore read errors
   }
 
-  return { name, path: tapePath, description };
+  return { name, path: tapePath, description }
 }
 
 function discoverTapeFiles(): TapeInfo[] {
-  const files = readdirSync(EXAMPLES_DIR);
+  const files = readdirSync(EXAMPLES_DIR)
   return files
-    .filter((f) => f.endsWith("-demo.tape"))
+    .filter((f) => f.endsWith('-demo.tape'))
     .map((f) => parseTapeFile(join(EXAMPLES_DIR, f)))
-    .sort((a, b) => a.name.localeCompare(b.name));
+    .sort((a, b) => a.name.localeCompare(b.name))
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -105,72 +104,72 @@ function discoverTapeFiles(): TapeInfo[] {
 
 function commandExists(cmd: string): boolean {
   try {
-    const result = spawnSync("which", [cmd], { encoding: "utf-8" });
-    return result.status === 0;
+    const result = spawnSync('which', [cmd], { encoding: 'utf-8' })
+    return result.status === 0
   } catch {
-    return false;
+    return false
   }
 }
 
 interface VhsResult {
-  success: boolean;
-  error?: string;
+  success: boolean
+  error?: string
 }
 
 function runVhsAsync(tapePath: string): Promise<VhsResult> {
   return new Promise((resolve) => {
-    const proc = spawn("vhs", [tapePath], {
+    const proc = spawn('vhs', [tapePath], {
       cwd: EXAMPLES_DIR,
-      stdio: "pipe",
-    });
+      stdio: 'pipe',
+    })
 
-    let stderr = "";
-    proc.stderr?.on("data", (data: Buffer) => {
-      stderr += data.toString();
-    });
+    let stderr = ''
+    proc.stderr?.on('data', (data: Buffer) => {
+      stderr += data.toString()
+    })
 
-    proc.on("close", (code) => {
+    proc.on('close', (code) => {
       if (code === 0) {
-        resolve({ success: true });
+        resolve({ success: true })
       } else {
         const errorMatch =
           stderr.match(/error[:\s]+(.+)/i) ||
           stderr.match(/failed[:\s]+(.+)/i) ||
-          stderr.match(/(.+failed.+)/i);
+          stderr.match(/(.+failed.+)/i)
         const error =
           errorMatch?.[1]?.trim() ||
-          stderr.trim().split("\n").pop() ||
-          "Unknown error";
-        resolve({ success: false, error });
+          stderr.trim().split('\n').pop() ||
+          'Unknown error'
+        resolve({ success: false, error })
       }
-    });
+    })
 
-    proc.on("error", (err) => {
-      resolve({ success: false, error: err.message });
-    });
-  });
+    proc.on('error', (err) => {
+      resolve({ success: false, error: err.message })
+    })
+  })
 }
 
 /** Format milliseconds as human-readable duration with fixed width (0.01s precision) */
 function formatDuration(ms: number): string {
-  const totalSeconds = ms / 1000;
-  
+  const totalSeconds = ms / 1000
+
   if (totalSeconds < 60) {
     // Show format: "XX.XXs" for consistent width (6 chars)
     // Round to 2 decimal places
-    const rounded = Math.floor(totalSeconds * 100) / 100;
-    const seconds = Math.floor(rounded);
-    const hundredths = Math.floor((rounded % 1) * 100);
-    const paddedSeconds = String(seconds).padStart(2, " ");
-    const paddedHundredths = String(hundredths).padStart(2, "0");
-    return `${paddedSeconds}.${paddedHundredths}s`;
+    const rounded = Math.floor(totalSeconds * 100) / 100
+    const seconds = Math.floor(rounded)
+    const hundredths = Math.floor((rounded % 1) * 100)
+    const paddedSeconds = String(seconds).padStart(2, ' ')
+    const paddedHundredths = String(hundredths).padStart(2, '0')
+    return `${paddedSeconds}.${paddedHundredths}s`
   }
-  
+
   // For >= 60s, show "XmXXs" format
-  const seconds = Math.floor(totalSeconds);
-  const minutes = Math.floor(seconds / 60);
-  const secs = String(seconds % 60).padStart(2, "0");
-  return `${minutes}m${secs}s`;
+  const seconds = Math.floor(totalSeconds)
+  const minutes = Math.floor(seconds / 60)
+  const secs = String(seconds % 60).padStart(2, '0')
+  return `${minutes}m${secs}s`
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -178,18 +177,18 @@ function formatDuration(ms: number): string {
 // ─────────────────────────────────────────────────────────────────────────────
 
 class DemoItem extends DefaultItem {
-  readonly tape: TapeInfo;
-  selected: boolean;
+  readonly tape: TapeInfo
+  selected: boolean
 
   constructor(tape: TapeInfo, selected = false) {
-    super(tape.name, tape.description);
-    this.tape = tape;
-    this.selected = selected;
+    super(tape.name, tape.description)
+    this.tape = tape
+    this.selected = selected
   }
 
   override title(): string {
-    const checkbox = this.selected ? "◉" : "○";
-    return `${checkbox} ${this.tape.name}`;
+    const checkbox = this.selected ? '◉' : '○'
+    return `${checkbox} ${this.tape.name}`
   }
 }
 
@@ -197,15 +196,15 @@ class DemoItem extends DefaultItem {
 // Application States & Messages
 // ─────────────────────────────────────────────────────────────────────────────
 
-type AppState = "select" | "generating" | "done";
+type AppState = 'select' | 'generating' | 'done'
 
 class StartGeneratingMsg {
-  readonly _tag = "StartGeneratingMsg" as const;
+  readonly _tag = 'StartGeneratingMsg' as const
   constructor(readonly tapes: TapeInfo[]) {}
 }
 
 class StartVhsMsg {
-  readonly _tag = "StartVhsMsg" as const;
+  readonly _tag = 'StartVhsMsg' as const
   constructor(
     readonly tape: TapeInfo,
     readonly startTime: number,
@@ -213,7 +212,7 @@ class StartVhsMsg {
 }
 
 class VhsCompleteMsg {
-  readonly _tag = "VhsCompleteMsg" as const;
+  readonly _tag = 'VhsCompleteMsg' as const
   constructor(
     readonly name: string,
     readonly success: boolean,
@@ -227,10 +226,10 @@ class VhsCompleteMsg {
 // ─────────────────────────────────────────────────────────────────────────────
 
 interface CompletedItem {
-  name: string;
-  success: boolean;
-  durationMs: number;
-  error?: string;
+  name: string
+  success: boolean
+  durationMs: number
+  error?: string
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -238,78 +237,80 @@ interface CompletedItem {
 // ─────────────────────────────────────────────────────────────────────────────
 
 const keys = {
-  quit: newBinding({ keys: ["q", "Q", "ctrl+c"] }),
-  toggle: newBinding({ keys: [" "] }),
-  selectAll: newBinding({ keys: ["a", "A"] }),
-  confirm: newBinding({ keys: ["enter"] }),
-};
+  quit: newBinding({ keys: ['q', 'Q', 'ctrl+c'] }),
+  toggle: newBinding({ keys: [' '] }),
+  selectAll: newBinding({ keys: ['a', 'A'] }),
+  confirm: newBinding({ keys: ['enter'] }),
+}
 
 class AppModel implements Model<Msg, AppModel> {
-  readonly state: AppState;
-  readonly list: ListModel<DemoItem>;
-  readonly spinner: SpinnerModel;
-  readonly stopwatch: StopwatchModel;
-  readonly progress: ProgressModel;
-  readonly currentDemo: string;
-  readonly completed: CompletedItem[];
-  readonly pending: TapeInfo[];
-  readonly totalDemos: number;
-  readonly tapes: TapeInfo[];
-  readonly width: number;
+  readonly state: AppState
+  readonly list: ListModel<DemoItem>
+  readonly spinner: SpinnerModel
+  readonly stopwatch: StopwatchModel
+  readonly progress: ProgressModel
+  readonly currentDemo: string
+  readonly completed: CompletedItem[]
+  readonly pending: TapeInfo[]
+  readonly totalDemos: number
+  readonly tapes: TapeInfo[]
+  readonly width: number
 
   constructor(opts: {
-    state?: AppState;
-    list?: ListModel<DemoItem>;
-    spinner?: SpinnerModel;
-    stopwatch?: StopwatchModel;
-    progress?: ProgressModel;
-    currentDemo?: string;
-    completed?: CompletedItem[];
-    pending?: TapeInfo[];
-    totalDemos?: number;
-    tapes: TapeInfo[];
-    width?: number;
+    state?: AppState
+    list?: ListModel<DemoItem>
+    spinner?: SpinnerModel
+    stopwatch?: StopwatchModel
+    progress?: ProgressModel
+    currentDemo?: string
+    completed?: CompletedItem[]
+    pending?: TapeInfo[]
+    totalDemos?: number
+    tapes: TapeInfo[]
+    width?: number
   }) {
-    this.state = opts.state ?? "select";
-    this.tapes = opts.tapes;
-    this.width = opts.width ?? 80;
+    this.state = opts.state ?? 'select'
+    this.tapes = opts.tapes
+    this.width = opts.width ?? 80
 
-    const items = this.tapes.map((t) => new DemoItem(t, false));
+    const items = this.tapes.map((t) => new DemoItem(t, false))
     this.list =
       opts.list ??
       ListModel.new({
         items,
-        title: "Select demos to generate",
+        title: 'Select demos to generate',
         height: 14,
         showFilter: true,
         showPagination: true,
         showHelp: false,
-      });
+      })
 
     this.spinner =
       opts.spinner ??
       new SpinnerModel({
         spinner: dot,
         style: styles.subtitle,
-      });
+      })
 
     // Stopwatch with 10ms resolution (0.01s precision)
-    this.stopwatch = opts.stopwatch ?? StopwatchModel.new({ interval: 10 });
+    this.stopwatch = opts.stopwatch ?? StopwatchModel.new({ interval: 10 })
 
     this.progress =
       opts.progress ??
       ProgressModel.withDefaultGradient({
         width: 40,
         showPercentage: false,
-      });
+      })
 
-    this.currentDemo = opts.currentDemo ?? "";
-    this.completed = opts.completed ?? [];
-    this.pending = opts.pending ?? [];
-    this.totalDemos = opts.totalDemos ?? 0;
+    this.currentDemo = opts.currentDemo ?? ''
+    this.completed = opts.completed ?? []
+    this.pending = opts.pending ?? []
+    this.totalDemos = opts.totalDemos ?? 0
   }
 
-  private copy(opts: Partial<Omit<ConstructorParameters<typeof AppModel>[0], "tapes">>): AppModel {
+  private copy(
+    opts: Partial<Omit<ConstructorParameters<typeof AppModel>[0], 'tapes'>>,
+  ): AppModel {
     return new AppModel({
       state: opts.state ?? this.state,
       list: opts.list ?? this.list,
@@ -322,150 +323,155 @@ class AppModel implements Model<Msg, AppModel> {
       totalDemos: opts.totalDemos ?? this.totalDemos,
       tapes: this.tapes,
       width: opts.width ?? this.width,
-    });
+    })
   }
 
   init(): Cmd<Msg> {
-    return this.list.init();
+    return this.list.init()
   }
 
   update(msg: Msg): [AppModel, Cmd<Msg>] {
     if (msg instanceof KeyMsg && matches(msg, keys.quit)) {
-      return [this, quit()];
+      return [this, quit()]
     }
 
     if (msg instanceof WindowSizeMsg) {
-      const nextList = this.list.setHeight(Math.max(8, msg.height - 10));
-      return [this.copy({ list: nextList, width: msg.width }), null];
+      const nextList = this.list.setHeight(Math.max(8, msg.height - 10))
+      return [this.copy({ list: nextList, width: msg.width }), null]
     }
 
     switch (this.state) {
-      case "select":
-        return this.updateSelect(msg);
-      case "generating":
-        return this.updateGenerating(msg);
-      case "done":
-        return [this, null];
+      case 'select':
+        return this.updateSelect(msg)
+      case 'generating':
+        return this.updateGenerating(msg)
+      case 'done':
+        return [this, null]
     }
   }
 
   private updateSelect(msg: Msg): [AppModel, Cmd<Msg>] {
     // Handle start generating (from confirm key)
     if (msg instanceof StartGeneratingMsg) {
-      return this.startGenerating(msg.tapes);
+      return this.startGenerating(msg.tapes)
     }
 
     if (msg instanceof KeyMsg) {
       if (matches(msg, keys.toggle)) {
-        const items = [...this.list.items];
-        const idx = this.list.selectedIndex();
-        const item = items[idx];
+        const items = [...this.list.items]
+        const idx = this.list.selectedIndex()
+        const item = items[idx]
         if (item) {
-          items[idx] = new DemoItem(item.tape, !item.selected);
-          const nextList = this.list.setItems(items);
-          return [this.copy({ list: nextList }), null];
+          items[idx] = new DemoItem(item.tape, !item.selected)
+          const nextList = this.list.setItems(items)
+          return [this.copy({ list: nextList }), null]
         }
       }
 
       if (matches(msg, keys.selectAll)) {
-        const anySelected = this.list.items.some((i: DemoItem) => i.selected);
+        const anySelected = this.list.items.some((i: DemoItem) => i.selected)
         const items = this.list.items.map(
           (i: DemoItem) => new DemoItem(i.tape, !anySelected),
-        );
-        const nextList = this.list.setItems(items);
-        return [this.copy({ list: nextList }), null];
+        )
+        const nextList = this.list.setItems(items)
+        return [this.copy({ list: nextList }), null]
       }
 
       if (matches(msg, keys.confirm)) {
         const selected = this.list.items
           .filter((i: DemoItem) => i.selected)
-          .map((i: DemoItem) => i.tape);
+          .map((i: DemoItem) => i.tape)
 
         if (selected.length === 0) {
-          return [this, null];
+          return [this, null]
         }
 
-        return this.startGenerating(selected);
+        return this.startGenerating(selected)
       }
     }
 
-    const [nextList, cmd] = this.list.update(msg);
+    const [nextList, cmd] = this.list.update(msg)
     if (nextList !== this.list) {
-      return [this.copy({ list: nextList }), cmd];
+      return [this.copy({ list: nextList }), cmd]
     }
 
-    return [this, cmd];
+    return [this, cmd]
   }
 
   private startGenerating(tapes: TapeInfo[]): [AppModel, Cmd<Msg>] {
     if (tapes.length === 0) {
-      return [this.copy({ state: "done" }), quit()];
+      return [this.copy({ state: 'done' }), quit()]
     }
 
-    const first = tapes[0];
+    const first = tapes[0]
     if (!first) {
-      return [this.copy({ state: "done" }), quit()];
+      return [this.copy({ state: 'done' }), quit()]
     }
 
     // Create fresh stopwatch for timing this generation
-    const freshStopwatch = StopwatchModel.new({ interval: 10 });
+    const freshStopwatch = StopwatchModel.new({ interval: 10 })
 
     const nextModel = this.copy({
-      state: "generating",
+      state: 'generating',
       totalDemos: tapes.length,
       pending: tapes.slice(1),
       currentDemo: first.name,
       stopwatch: freshStopwatch,
-    });
+    })
 
     // Return command that starts animations and sends StartVhsMsg
     return [
       nextModel,
       async () => {
         // Get spinner and stopwatch commands and execute them
-        const spinnerCmd = nextModel.spinner.tick();
-        const stopwatchCmd = nextModel.stopwatch.start();
-        
+        const spinnerCmd = nextModel.spinner.tick()
+        const stopwatchCmd = nextModel.stopwatch.start()
+
         // Execute and collect results
-        const spinnerResult = spinnerCmd ? await spinnerCmd() : null;
-        const stopwatchResult = stopwatchCmd ? await stopwatchCmd() : null;
-        const vhsStartMsg = new StartVhsMsg(first, Date.now());
-        
+        const spinnerResult = spinnerCmd ? await spinnerCmd() : null
+        const stopwatchResult = stopwatchCmd ? await stopwatchCmd() : null
+        const vhsStartMsg = new StartVhsMsg(first, Date.now())
+
         // Flatten and return all messages
-        const messages: Msg[] = [];
+        const messages: Msg[] = []
         if (spinnerResult) {
           if (Array.isArray(spinnerResult)) {
-            messages.push(...spinnerResult);
+            messages.push(...spinnerResult)
           } else {
-            messages.push(spinnerResult as Msg);
+            messages.push(spinnerResult as Msg)
           }
         }
         if (stopwatchResult) {
           if (Array.isArray(stopwatchResult)) {
-            messages.push(...stopwatchResult);
+            messages.push(...stopwatchResult)
           } else {
-            messages.push(stopwatchResult as Msg);
+            messages.push(stopwatchResult as Msg)
           }
         }
-        messages.push(vhsStartMsg);
-        
-        return messages;
+        messages.push(vhsStartMsg)
+
+        return messages
       },
-    ];
+    ]
   }
 
   private updateGenerating(msg: Msg): [AppModel, Cmd<Msg>] {
     // Handle VHS start message
     if (msg instanceof StartVhsMsg) {
-      const startTime = msg.startTime;
+      const startTime = msg.startTime
       return [
         this,
         async () => {
-          const result = await runVhsAsync(msg.tape.path);
-          const duration = Date.now() - startTime;
-          return new VhsCompleteMsg(msg.tape.name, result.success, duration, result.error);
+          const result = await runVhsAsync(msg.tape.path)
+          const duration = Date.now() - startTime
+          return new VhsCompleteMsg(
+            msg.tape.name,
+            result.success,
+            duration,
+            result.error,
+          )
         },
-      ];
+      ]
     }
 
     if (msg instanceof VhsCompleteMsg) {
@@ -477,35 +483,32 @@ class AppModel implements Model<Msg, AppModel> {
           durationMs: msg.durationMs,
           error: msg.error,
         },
-      ];
+      ]
 
-      const percent = newCompleted.length / this.totalDemos;
-      const [nextProgress] = this.progress.setPercent(percent);
+      const percent = newCompleted.length / this.totalDemos
+      const [nextProgress] = this.progress.setPercent(percent)
 
       // Check if we're done
       if (this.pending.length === 0) {
         return [
           this.copy({
-            state: "done",
+            state: 'done',
             completed: newCompleted,
             progress: nextProgress,
-            currentDemo: "",
+            currentDemo: '',
           }),
           quit(),
-        ];
+        ]
       }
 
       // Process next
-      const next = this.pending[0];
+      const next = this.pending[0]
       if (!next) {
-        return [
-          this.copy({ state: "done", completed: newCompleted }),
-          quit(),
-        ];
+        return [this.copy({ state: 'done', completed: newCompleted }), quit()]
       }
 
       // Reset stopwatch for next item
-      const freshStopwatch = StopwatchModel.new({ interval: 10 });
+      const freshStopwatch = StopwatchModel.new({ interval: 10 })
 
       const nextModel = this.copy({
         currentDemo: next.name,
@@ -513,157 +516,163 @@ class AppModel implements Model<Msg, AppModel> {
         pending: this.pending.slice(1),
         progress: nextProgress,
         stopwatch: freshStopwatch,
-      });
+      })
 
       return [
         nextModel,
         async () => {
           // Restart stopwatch for next item (spinner continues from previous)
-          const stopwatchCmd = nextModel.stopwatch.start();
-          const stopwatchResult = stopwatchCmd ? await stopwatchCmd() : null;
-          const vhsStartMsg = new StartVhsMsg(next, Date.now());
-          
-          const messages: Msg[] = [];
+          const stopwatchCmd = nextModel.stopwatch.start()
+          const stopwatchResult = stopwatchCmd ? await stopwatchCmd() : null
+          const vhsStartMsg = new StartVhsMsg(next, Date.now())
+
+          const messages: Msg[] = []
           if (stopwatchResult) {
             if (Array.isArray(stopwatchResult)) {
-              messages.push(...stopwatchResult);
+              messages.push(...stopwatchResult)
             } else {
-              messages.push(stopwatchResult as Msg);
+              messages.push(stopwatchResult as Msg)
             }
           }
-          messages.push(vhsStartMsg);
-          
-          return messages;
+          messages.push(vhsStartMsg)
+
+          return messages
         },
-      ];
+      ]
     }
 
     // Update spinner - keep it animating during generation
-    const [nextSpinner, spinnerCmd] = this.spinner.update(msg);
+    const [nextSpinner, spinnerCmd] = this.spinner.update(msg)
     if (nextSpinner !== this.spinner) {
-      return [this.copy({ spinner: nextSpinner }), spinnerCmd as Cmd<Msg>];
+      return [this.copy({ spinner: nextSpinner }), spinnerCmd as Cmd<Msg>]
     }
 
     // Update stopwatch - keep it ticking
-    const [nextStopwatch, stopwatchCmd] = this.stopwatch.update(msg);
+    const [nextStopwatch, stopwatchCmd] = this.stopwatch.update(msg)
     if (nextStopwatch !== this.stopwatch) {
-      return [this.copy({ stopwatch: nextStopwatch }), stopwatchCmd as Cmd<Msg>];
+      return [this.copy({ stopwatch: nextStopwatch }), stopwatchCmd as Cmd<Msg>]
     }
 
     // Update progress
-    const [nextProgress, progressCmd] = this.progress.update(msg);
+    const [nextProgress, progressCmd] = this.progress.update(msg)
     if (nextProgress !== this.progress) {
-      return [this.copy({ progress: nextProgress }), progressCmd as Cmd<Msg>];
+      return [this.copy({ progress: nextProgress }), progressCmd as Cmd<Msg>]
     }
 
-    return [this, null];
+    return [this, null]
   }
 
   view(): string {
     switch (this.state) {
-      case "select":
-        return this.viewSelect();
-      case "generating":
-        return this.viewGenerating();
-      case "done":
-        return this.viewDone();
+      case 'select':
+        return this.viewSelect()
+      case 'generating':
+        return this.viewGenerating()
+      case 'done':
+        return this.viewDone()
     }
   }
 
   private viewSelect(): string {
-    const lines: string[] = [];
+    const lines: string[] = []
 
-    lines.push("");
-    lines.push(styles.title.render("📼 Suds Asset Generator"));
-    lines.push(styles.muted.render("Generate GIF demos using VHS"));
-    lines.push("");
-    lines.push(this.list.view());
-    lines.push("");
+    lines.push('')
+    lines.push(styles.title.render('📼 Suds Asset Generator'))
+    lines.push(styles.muted.render('Generate GIF demos using VHS'))
+    lines.push('')
+    lines.push(this.list.view())
+    lines.push('')
 
     const selectedCount = this.list.items.filter(
       (i: DemoItem) => i.selected,
-    ).length;
+    ).length
     const status =
       selectedCount > 0
         ? styles.success.render(`${selectedCount} demo(s) selected`)
-        : styles.muted.render("No demos selected");
+        : styles.muted.render('No demos selected')
 
-    lines.push(status);
-    lines.push("");
+    lines.push(status)
+    lines.push('')
 
     const help = [
-      `${styles.key.render("↑↓")} navigate`,
-      `${styles.key.render("space")} toggle`,
-      `${styles.key.render("a")} select all`,
-      `${styles.key.render("enter")} generate`,
-      `${styles.key.render("q")} quit`,
-    ].join("  •  ");
+      `${styles.key.render('↑↓')} navigate`,
+      `${styles.key.render('space')} toggle`,
+      `${styles.key.render('a')} select all`,
+      `${styles.key.render('enter')} generate`,
+      `${styles.key.render('q')} quit`,
+    ].join('  •  ')
 
-    lines.push(styles.muted.render(help));
+    lines.push(styles.muted.render(help))
 
-    return lines.join("\n");
+    return lines.join('\n')
   }
 
   private viewGenerating(): string {
-    const lines: string[] = [];
+    const lines: string[] = []
 
     // Print completed items with timing
     for (const item of this.completed) {
       const icon = item.success
-        ? styles.checkMark.render("✓")
-        : styles.crossMark.render("✗");
-      const duration = styles.time.render(`(${formatDuration(item.durationMs)})`);
-      lines.push(`${icon} ${item.name}-demo.gif ${duration}`);
+        ? styles.checkMark.render('✓')
+        : styles.crossMark.render('✗')
+      const duration = styles.time.render(
+        `(${formatDuration(item.durationMs)})`,
+      )
+      lines.push(`${icon} ${item.name}-demo.gif ${duration}`)
     }
 
     // Current progress line: spinner + name + elapsed + progress + count
-    const n = this.totalDemos;
-    const w = String(n).length;
-    const pkgCount = `${String(this.completed.length + 1).padStart(w)}/${n}`;
+    const n = this.totalDemos
+    const w = String(n).length
+    const pkgCount = `${String(this.completed.length + 1).padStart(w)}/${n}`
 
-    const spin = this.spinner.view() + " ";
-    const prog = this.progress.view();
-    const pkgName = styles.currentPkg.render(`${this.currentDemo}-demo`);
-    const elapsed = styles.time.render(`(${formatDuration(this.stopwatch.elapsed())})`);
+    const spin = this.spinner.view() + ' '
+    const prog = this.progress.view()
+    const pkgName = styles.currentPkg.render(`${this.currentDemo}-demo`)
+    const elapsed = styles.time.render(
+      `(${formatDuration(this.stopwatch.elapsed())})`,
+    )
 
-    lines.push(`${spin}${pkgName} ${elapsed}  ${prog}  ${pkgCount}`);
+    lines.push(`${spin}${pkgName} ${elapsed}  ${prog}  ${pkgCount}`)
 
-    return lines.join("\n");
+    return lines.join('\n')
   }
 
   private viewDone(): string {
-    const lines: string[] = [];
+    const lines: string[] = []
 
     // Print all completed items with timing
     for (const item of this.completed) {
       const icon = item.success
-        ? styles.checkMark.render("✓")
-        : styles.crossMark.render("✗");
-      const duration = styles.time.render(`(${formatDuration(item.durationMs)})`);
-      lines.push(`${icon} ${item.name}-demo.gif ${duration}`);
+        ? styles.checkMark.render('✓')
+        : styles.crossMark.render('✗')
+      const duration = styles.time.render(
+        `(${formatDuration(item.durationMs)})`,
+      )
+      lines.push(`${icon} ${item.name}-demo.gif ${duration}`)
     }
 
-    lines.push("");
+    lines.push('')
 
-    const successCount = this.completed.filter((c) => c.success).length;
-    const failCount = this.completed.length - successCount;
-    const totalTime = this.completed.reduce((sum, c) => sum + c.durationMs, 0);
+    const successCount = this.completed.filter((c) => c.success).length
+    const failCount = this.completed.length - successCount
+    const totalTime = this.completed.reduce((sum, c) => sum + c.durationMs, 0)
 
     if (failCount === 0) {
       lines.push(
         styles.success.render(
           `Done! Generated ${successCount} GIF(s) in ${formatDuration(totalTime)}.`,
         ),
-      );
+      )
     } else {
       lines.push(
         styles.warning.render(
           `Done! Generated ${successCount} GIF(s), ${failCount} failed. Total: ${formatDuration(totalTime)}.`,
         ),
-      );
+      )
     }
 
-    return lines.join("\n");
+    return lines.join('\n')
   }
 }
 
@@ -673,20 +682,20 @@ class AppModel implements Model<Msg, AppModel> {
 
 function printStatic(
   message: string,
-  color?: "red" | "green" | "yellow" | "cyan",
+  color?: 'red' | 'green' | 'yellow' | 'cyan',
 ): void {
   const colors: Record<string, string> = {
-    red: "\x1b[31m",
-    green: "\x1b[32m",
-    yellow: "\x1b[33m",
-    cyan: "\x1b[36m",
-  };
-  const reset = "\x1b[0m";
+    red: '\x1b[31m',
+    green: '\x1b[32m',
+    yellow: '\x1b[33m',
+    cyan: '\x1b[36m',
+  }
+  const reset = '\x1b[0m'
 
   if (color && colors[color]) {
-    console.log(`${colors[color]}${message}${reset}`);
+    console.log(`${colors[color]}${message}${reset}`)
   } else {
-    console.log(message);
+    console.log(message)
   }
 }
 
@@ -695,72 +704,72 @@ function printStatic(
 // ─────────────────────────────────────────────────────────────────────────────
 
 async function main(): Promise<void> {
-  const args = process.argv.slice(2);
+  const args = process.argv.slice(2)
 
   // Handle --list flag
-  if (args.includes("--list")) {
-    const tapes = discoverTapeFiles();
-    printStatic("\n📼 Available demos:\n", "cyan");
+  if (args.includes('--list')) {
+    const tapes = discoverTapeFiles()
+    printStatic('\n📼 Available demos:\n', 'cyan')
     for (const tape of tapes) {
-      const desc = tape.description ? ` - ${tape.description}` : "";
-      printStatic(`  • ${tape.name}${desc}`);
+      const desc = tape.description ? ` - ${tape.description}` : ''
+      printStatic(`  • ${tape.name}${desc}`)
     }
-    printStatic("");
-    return;
+    printStatic('')
+    return
   }
 
   // Check for VHS
-  if (!commandExists("vhs")) {
-    printStatic("\n✗ Error: VHS is not installed or not in PATH\n", "red");
-    printStatic("VHS is required to generate GIF recordings.", "yellow");
-    printStatic("Install VHS using one of the following methods:\n");
-    printStatic("  # macOS or Linux (Homebrew)");
-    printStatic("  brew install vhs\n");
-    printStatic("  # Go install");
-    printStatic("  go install github.com/charmbracelet/vhs@latest\n");
-    printStatic("  # See: https://github.com/charmbracelet/vhs\n");
-    process.exit(1);
+  if (!commandExists('vhs')) {
+    printStatic('\n✗ Error: VHS is not installed or not in PATH\n', 'red')
+    printStatic('VHS is required to generate GIF recordings.', 'yellow')
+    printStatic('Install VHS using one of the following methods:\n')
+    printStatic('  # macOS or Linux (Homebrew)')
+    printStatic('  brew install vhs\n')
+    printStatic('  # Go install')
+    printStatic('  go install github.com/charmbracelet/vhs@latest\n')
+    printStatic('  # See: https://github.com/charmbracelet/vhs\n')
+    process.exit(1)
   }
 
-  const requestedDemos = args.filter((a) => !a.startsWith("--"));
-  const runAll = args.includes("--all");
+  const requestedDemos = args.filter((a) => !a.startsWith('--'))
+  const runAll = args.includes('--all')
 
   // Discover all tapes
-  const allTapes = discoverTapeFiles();
+  const allTapes = discoverTapeFiles()
 
   // Validate requested demos
   if (requestedDemos.length > 0) {
-    const availableNames = allTapes.map((t) => t.name);
+    const availableNames = allTapes.map((t) => t.name)
     for (const demo of requestedDemos) {
       if (!availableNames.includes(demo)) {
-        printStatic(`\n✗ Error: No tape file found for "${demo}"`, "red");
-        printStatic(`  Available: ${availableNames.join(", ")}`, "yellow");
-        process.exit(1);
+        printStatic(`\n✗ Error: No tape file found for "${demo}"`, 'red')
+        printStatic(`  Available: ${availableNames.join(', ')}`, 'yellow')
+        process.exit(1)
       }
     }
   }
 
   // Determine which tapes to use
-  let tapes = allTapes;
+  let tapes = allTapes
   if (requestedDemos.length > 0) {
-    tapes = allTapes.filter((t) => requestedDemos.includes(t.name));
+    tapes = allTapes.filter((t) => requestedDemos.includes(t.name))
   }
 
   // Create model
-  const model = new AppModel({ tapes });
+  const model = new AppModel({ tapes })
 
   // Create program
-  const program = new Program(model, { altScreen: false });
+  const program = new Program(model, { altScreen: false })
 
   // For non-interactive mode, send StartGeneratingMsg after init
   if (runAll || requestedDemos.length > 0) {
     // Use a small delay to let the program initialize
     setTimeout(() => {
-      program.send(new StartGeneratingMsg(tapes));
-    }, 10);
+      program.send(new StartGeneratingMsg(tapes))
+    }, 10)
   }
 
-  await program.run();
+  await program.run()
 }
 
-main().catch(console.error);
+main().catch(console.error)

@@ -3,11 +3,11 @@
 Output "textinput-demo.gif"
 
 Set Shell "bash"
-Set FontSize 18
-Set Width 800
-Set Height 200
+Set FontSize 43
+Set Width 1900
+Set Height 475
 Set Theme "Catppuccin Mocha"
-Set Padding 20
+Set Padding 40
 Set Framerate 30
 
 Type "npx tsx textinput-demo.ts"

@@ -4,7 +4,7 @@
 
 Suds is a **best-effort TypeScript port** of the wonderful [Bubble Tea](https://github.com/charmbracelet/bubbletea) framework and [Bubbles](https://github.com/charmbracelet/bubbles) component library from [Charm](https://charm.sh), with additional utilities inspired by [Teacup](https://github.com/mistakenelf/teacup).
 
-![Spinner Demo](./examples/textarea-demo.gif)
+<img src="./examples/textarea-demo.gif" width="800" />
 
 ## Why Suds?
 

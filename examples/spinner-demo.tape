@@ -3,11 +3,11 @@
 Output "spinner-demo.gif"
 
 Set Shell "bash"
-Set FontSize 18
-Set Width 600
-Set Height 200
+Set FontSize 57
+Set Width 1900
+Set Height 634
 Set Theme "Catppuccin Mocha"
-Set Padding 20
+Set Padding 40
 Set Framerate 30
 
 Type "npx tsx spinner-demo.ts"

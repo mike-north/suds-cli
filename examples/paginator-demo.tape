@@ -3,11 +3,11 @@
 Output "paginator-demo.gif"
 
 Set Shell "bash"
-Set FontSize 18
-Set Width 400
-Set Height 500
+Set FontSize 86
+Set Width 1900
+Set Height 2375
 Set Theme "Catppuccin Mocha"
-Set Padding 20
+Set Padding 40
 Set Framerate 30
 
 Type "npx tsx paginator-demo.ts"

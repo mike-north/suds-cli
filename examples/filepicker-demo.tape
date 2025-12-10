@@ -3,11 +3,11 @@
 Output "filepicker-demo.gif"
 
 Set Shell "bash"
-Set FontSize 14
-Set Width 800
-Set Height 500
+Set FontSize 33
+Set Width 1900
+Set Height 1188
 Set Theme "Catppuccin Mocha"
-Set Padding 20
+Set Padding 40
 Set Framerate 30
 
 Type "npx tsx filepicker-demo.ts"

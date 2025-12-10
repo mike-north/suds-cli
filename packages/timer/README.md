@@ -2,7 +2,7 @@
 
 Countdown timer component for Suds terminal UIs. Port of Charmbracelet Bubbles timer.
 
-![Timer Demo](../../examples/timer-demo.gif)
+<img src="../../examples/timer-demo.gif" width="950" />
 
 ## Install
 

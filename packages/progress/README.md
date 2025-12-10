@@ -2,7 +2,7 @@
 
 Animated progress bar for Suds terminal UIs. Port of Charmbracelet Bubbles progress.
 
-![Progress Demo](../../examples/progress-demo.gif)
+<img src="../../examples/progress-demo.gif" width="950" />
 
 ## Install
 
