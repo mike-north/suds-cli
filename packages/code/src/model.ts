@@ -55,7 +55,7 @@ export async function highlight(
       }
     }
 
-    // Convert tokens to ANSI colored text
+    // Get tokens from highlighter
     const tokens = highlighter.codeToTokens(content, {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment
       lang: lang as any,
@@ -249,7 +249,6 @@ export class CodeModel {
       const nextViewport = this.viewport.setContent(rendered);
       return [
         this.with({
-          filename: "",
           highlightedContent: rendered,
           viewport: nextViewport,
         }),
@@ -266,7 +265,6 @@ export class CodeModel {
       const nextViewport = this.viewport.setContent(rendered);
       return [
         this.with({
-          filename: "",
           highlightedContent: rendered,
           viewport: nextViewport,
         }),
