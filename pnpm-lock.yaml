@@ -247,12 +247,6 @@ importers:
       '@suds-cli/chapstick':
         specifier: workspace:*
         version: link:../chapstick
-      '@suds-cli/filesystem':
-        specifier: workspace:*
-        version: link:../filesystem
-      '@suds-cli/icons':
-        specifier: workspace:*
-        version: link:../icons
       '@suds-cli/key':
         specifier: workspace:*
         version: link:../key
