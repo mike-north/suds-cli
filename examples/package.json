@@ -16,10 +16,12 @@
     "textarea": "tsx textarea-demo.ts",
     "table": "tsx table-demo.ts",
     "list": "tsx list-demo.ts",
-    "filepicker": "tsx filepicker-demo.ts"
+    "filepicker": "tsx filepicker-demo.ts",
+    "code": "tsx code-demo.ts"
   },
   "dependencies": {
     "@suds-cli/chapstick": "workspace:*",
+    "@suds-cli/code": "workspace:*",
     "@suds-cli/key": "workspace:*",
     "@suds-cli/help": "workspace:*",
     "@suds-cli/list": "workspace:*",

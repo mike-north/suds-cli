@@ -1,0 +1,34 @@
+{
+  "name": "@suds-cli/code",
+  "version": "0.0.0",
+  "description": "Syntax-highlighted code viewer with scrollable viewport for Suds terminal UIs",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "clean": "rm -rf dist",
+    "build": "pnpm run clean && tsc -p ./tsconfig.json",
+    "test": "vitest run",
+    "generate:api-report": "api-extractor run --local",
+    "check:api-report": "pnpm run generate:api-report",
+    "check:eslint": "pnpm run lint",
+    "lint": "eslint \"{src,test}/**/*.{ts,tsx}\""
+  },
+  "dependencies": {
+    "@suds-cli/chapstick": "workspace:*",
+    "@suds-cli/filesystem": "workspace:*",
+    "@suds-cli/tea": "workspace:*",
+    "@suds-cli/viewport": "workspace:*",
+    "shiki": "^1.24.2"
+  },
+  "devDependencies": {
+    "typescript": "5.8.2",
+    "vitest": "^4.0.15"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}
