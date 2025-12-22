@@ -18,7 +18,8 @@
     "table": "tsx table-demo.ts",
     "list": "tsx list-demo.ts",
     "filepicker": "tsx filepicker-demo.ts",
-    "code": "tsx code-demo.ts"
+    "code": "tsx code-demo.ts",
+    "markdown": "tsx markdown-demo.ts"
   },
   "dependencies": {
     "@suds-cli/chapstick": "workspace:*",
@@ -26,6 +27,7 @@
     "@suds-cli/key": "workspace:*",
     "@suds-cli/help": "workspace:*",
     "@suds-cli/list": "workspace:*",
+    "@suds-cli/markdown": "workspace:*",
     "@suds-cli/paginator": "workspace:*",
     "@suds-cli/progress": "workspace:*",
     "@suds-cli/spinner": "workspace:*",
