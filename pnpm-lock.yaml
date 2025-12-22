@@ -83,62 +83,53 @@ importers:
   examples:
     dependencies:
       '@suds-cli/chapstick':
-        specifier: 0.1.0-alpha.0
-        version: 0.1.0-alpha.0
-      '@suds-cli/code':
-        specifier: 0.1.0-alpha.0
-        version: 0.1.0-alpha.0
+        specifier: workspace:*
+        version: link:../packages/chapstick
       '@suds-cli/filepicker':
-        specifier: 0.0.1-alpha.0
-        version: 0.0.1-alpha.0
+        specifier: workspace:*
+        version: link:../packages/filepicker
+      '@suds-cli/filetree':
+        specifier: workspace:*
+        version: link:../packages/filetree
       '@suds-cli/help':
-        specifier: 0.1.0-alpha.0
-        version: 0.1.0-alpha.0
-      '@suds-cli/icons':
-        specifier: 0.0.0
-        version: 0.0.0
+        specifier: workspace:*
+        version: link:../packages/help
       '@suds-cli/key':
-        specifier: 0.0.0
-        version: 0.0.0
+        specifier: workspace:*
+        version: link:../packages/key
       '@suds-cli/list':
-        specifier: 0.0.1-alpha.0
-        version: 0.0.1-alpha.0
-      '@suds-cli/markdown':
-        specifier: 0.1.0-alpha.0
-        version: 0.1.0-alpha.0
+        specifier: workspace:*
+        version: link:../packages/list
       '@suds-cli/paginator':
-        specifier: 0.0.0
-        version: 0.0.0
+        specifier: workspace:*
+        version: link:../packages/paginator
       '@suds-cli/progress':
-        specifier: 0.0.1-alpha.0
-        version: 0.0.1-alpha.0
+        specifier: workspace:*
+        version: link:../packages/progress
       '@suds-cli/spinner':
-        specifier: 0.0.1-alpha.0
-        version: 0.0.1-alpha.0
-      '@suds-cli/statusbar':
-        specifier: 0.1.0-alpha.0
-        version: 0.1.0-alpha.0
+        specifier: workspace:*
+        version: link:../packages/spinner
       '@suds-cli/stopwatch':
-        specifier: 0.0.0
-        version: 0.0.0
+        specifier: workspace:*
+        version: link:../packages/stopwatch
       '@suds-cli/table':
-        specifier: 0.0.1-alpha.0
-        version: 0.0.1-alpha.0
+        specifier: workspace:*
+        version: link:../packages/table
       '@suds-cli/tea':
-        specifier: 0.0.0
-        version: 0.0.0
+        specifier: workspace:*
+        version: link:../packages/tea
       '@suds-cli/textarea':
-        specifier: 0.0.1-alpha.0
-        version: 0.0.1-alpha.0
+        specifier: workspace:*
+        version: link:../packages/textarea
       '@suds-cli/textinput':
-        specifier: 0.0.1-alpha.0
-        version: 0.0.1-alpha.0
+        specifier: workspace:*
+        version: link:../packages/textinput
       '@suds-cli/timer':
-        specifier: 0.0.0
-        version: 0.0.0
+        specifier: workspace:*
+        version: link:../packages/timer
       '@suds-cli/viewport':
-        specifier: 0.0.1-alpha.0
-        version: 0.0.1-alpha.0
+        specifier: workspace:*
+        version: link:../packages/viewport
     devDependencies:
       tsx:
         specifier: ^4.21.0
@@ -249,6 +240,31 @@ importers:
         version: 5.8.2
       vitest:
         specifier: ^4.0.16
+        version: 4.0.16(patch_hash=59b74cc5e820ffc56209c004d0eaa22e2db7b628efc74b6a4e76d9ed6bc723d4)(@types/node@24.10.2)(@vitest/ui@4.0.16)(happy-dom@20.0.11)(jiti@2.6.1)(tsx@4.21.0)(yaml@2.8.2)
+
+  packages/filetree:
+    dependencies:
+      '@suds-cli/chapstick':
+        specifier: workspace:*
+        version: link:../chapstick
+      '@suds-cli/filesystem':
+        specifier: workspace:*
+        version: link:../filesystem
+      '@suds-cli/icons':
+        specifier: workspace:*
+        version: link:../icons
+      '@suds-cli/key':
+        specifier: workspace:*
+        version: link:../key
+      '@suds-cli/tea':
+        specifier: workspace:*
+        version: link:../tea
+    devDependencies:
+      typescript:
+        specifier: 5.8.2
+        version: 5.8.2
+      vitest:
+        specifier: ^4.0.15
         version: 4.0.16(patch_hash=59b74cc5e820ffc56209c004d0eaa22e2db7b628efc74b6a4e76d9ed6bc723d4)(@types/node@24.10.2)(@vitest/ui@4.0.16)(happy-dom@20.0.11)(jiti@2.6.1)(tsx@4.21.0)(yaml@2.8.2)
 
   packages/help:
@@ -1588,28 +1604,8 @@ packages:
     resolution: {integrity: sha512-Mr5vRIi+YbJQ2+a23XIklQCl/ORCNKr5itST4IKbS+6Ef0ottUN24/LMMvgTYaBSEsF2kPfdiqHhs3swjnUz7g==}
     engines: {node: '>=20.0.0'}
 
-  '@suds-cli/code@0.1.0-alpha.0':
-    resolution: {integrity: sha512-aDrXrRAsmMY3IlKNkdJ4wx8QFtHDWnsJ5jQ+iDAMUl63aSzKmZeUevpl08P+WgRhOEhv827klIzLBwMRPUMOEg==}
-    engines: {node: '>=20.0.0'}
-
-  '@suds-cli/cursor@0.0.1-alpha.0':
-    resolution: {integrity: sha512-c4U7el4mDK9pMu87fcCm094wMPrE8LF1ENt6dn0O0GpGBkj0XczOLr0IPv+T7CBxF1X5bQrBN5F5ZK0c1wgViA==}
-    engines: {node: '>=20.0.0'}
-
-  '@suds-cli/filepicker@0.0.1-alpha.0':
-    resolution: {integrity: sha512-cTtRsThOG1LfQjjPZthClk2PWchcfSm2+2WgYEYFqdU03jxlNeciFc8UInyU++QpFEQQOYR83e7w42hBxiVX/A==}
-    engines: {node: '>=20.0.0'}
-
-  '@suds-cli/filesystem@0.0.0':
-    resolution: {integrity: sha512-EMGxlIgQI2vsJR6zkIZScZOjvhAt44KqBNvZAZ8YLiPa/LRUMGb9r7DGoniqGkC8VMZnkLjo0kvskeK0lEgRRg==}
-    engines: {node: '>=20.0.0'}
-
   '@suds-cli/help@0.1.0-alpha.0':
     resolution: {integrity: sha512-2oDFFlEQeB227JsxVx1PDSnpeWFrWQHCjozOhxoeX7DOJzYXDtCmChfaIv31OBN/TEYTpyk4liY/RIoNTCHZYA==}
-    engines: {node: '>=20.0.0'}
-
-  '@suds-cli/icons@0.0.0':
-    resolution: {integrity: sha512-KxOu9531UOSanja9dzt6nhCKfas48bgIDCaox3wXbVwtu9zP4SP9gwZwhd5d2DVquOl/nDbQk4g3GRx6PNavbQ==}
     engines: {node: '>=20.0.0'}
 
   '@suds-cli/key@0.0.0':
@@ -1620,10 +1616,6 @@ packages:
     resolution: {integrity: sha512-+4K8oCgassn6NGNLE5ifF5O4+sow17s8cuS6aK8F9Ac/caHEPCnOEoHBrk+4dslE6AvBIN5YpMWZmnbpnGt4JQ==}
     engines: {node: '>=20.0.0'}
 
-  '@suds-cli/markdown@0.1.0-alpha.0':
-    resolution: {integrity: sha512-g67/QdDeu/5CgIAqGUPyFQ3UighVzxdMsK38zpuyVmkTK/pg3iKj9/iOvIjcbuv5x+g/O+McqJWX5ZsRq2dU6w==}
-    engines: {node: '>=20.0.0'}
-
   '@suds-cli/paginator@0.0.0':
     resolution: {integrity: sha512-HzfHEPBLWBNdxKkIazKapYs/+HvetUiITjgF9SlXt1snWVHwduRG/pk1wcrY7MGTmpTMk+gFyfKi01ZowOugcg==}
     engines: {node: '>=20.0.0'}
@@ -1632,40 +1624,16 @@ packages:
     resolution: {integrity: sha512-qURlpRhNTEASVFSAq296gg9rKRnZpwt8HhGfZNb+SA5YsdRIr/7DqEP2Klnho/fY/UcKORSliOkXDKpaeeTqPQ==}
     engines: {node: '>=20.0.0'}
 
-  '@suds-cli/runeutil@0.0.0':
-    resolution: {integrity: sha512-l/rOuMP+9zFqSucs87voEb7dtXZUt9WmcZhPQtYRL4+VPXnNncpUBEYUjciLC3WbssWzOMIQR/6ZufZCuDn7Hw==}
-    engines: {node: '>=20.0.0'}
-
   '@suds-cli/spinner@0.0.1-alpha.0':
     resolution: {integrity: sha512-ACeccPhBGIBRyWBOC73z/2zS1vMRepAvjsOuEnc77v4wCLLHV8kXy2wDdT9+JC7MlWHEUMvQZkTfXd924GaR+g==}
-    engines: {node: '>=20.0.0'}
-
-  '@suds-cli/statusbar@0.1.0-alpha.0':
-    resolution: {integrity: sha512-LcOHB95Vkx45254Q3ijXZhGTpAHZXbXaw3tNGVz8A3X2ZRS//aHxGzjvDeO4n1OKR5oEeiGliHPYBd8D9h4ejA==}
     engines: {node: '>=20.0.0'}
 
   '@suds-cli/stopwatch@0.0.0':
     resolution: {integrity: sha512-ixRMchF0XY8j3upO3KcEtShitN/WpE0bhdho9iMCJ6ShmASop2OXPNT+LqeK2lBCOdpJ7FOq85h/IG/GeX4zGQ==}
     engines: {node: '>=20.0.0'}
 
-  '@suds-cli/table@0.0.1-alpha.0':
-    resolution: {integrity: sha512-WjTJCaROnzQO4kGdBJZ9sE1glJOwu9vH/8/bfNXV8BOsd3qSpWOtleJttrKCKHYd115F+hmPoC+FLBPZq5Ecyg==}
-    engines: {node: '>=20.0.0'}
-
   '@suds-cli/tea@0.0.0':
     resolution: {integrity: sha512-XXupGlwZPAGH14lm+5vKmHyFW+ormz3tCwmi+Ac68HPLJMdoqjvGycXShn84gwu6dtwahLU4V9hh29Cnde8qkQ==}
-    engines: {node: '>=20.0.0'}
-
-  '@suds-cli/textarea@0.0.1-alpha.0':
-    resolution: {integrity: sha512-A8alWftw8ix0wh7Q2bYtFdHXxZwRM+5DfiMixkhp0ZFalD0CdXIdHi5vWwLMdqD50siegqHqWuc61CNxCPzjUA==}
-    engines: {node: '>=20.0.0'}
-
-  '@suds-cli/textinput@0.0.1-alpha.0':
-    resolution: {integrity: sha512-jWgjFwUxKlUDzHa2C1xAFeJ1BvCrK7ZuVxuez3V8L0pWDcJqx+TFLTjvE+Z8XzY8eHBPcJAabIh+Y+nTvb/k/g==}
-    engines: {node: '>=20.0.0'}
-
-  '@suds-cli/timer@0.0.0':
-    resolution: {integrity: sha512-2smZ9OhKe8pl9Ljx/z8pGT8BaKvLDqhaiIUbmI6BaWw6Kkmov9fv4+UDJYDIDJP7hgetFLxBG0gG0lY5+ZPN0g==}
     engines: {node: '>=20.0.0'}
 
   '@suds-cli/viewport@0.0.1-alpha.0':
@@ -5075,45 +5043,12 @@ snapshots:
       supports-color: 9.4.0
       terminal-reflowjs: 0.0.0-alpha.0
 
-  '@suds-cli/code@0.1.0-alpha.0':
-    dependencies:
-      '@suds-cli/chapstick': 0.1.0-alpha.0
-      '@suds-cli/filesystem': 0.0.0
-      '@suds-cli/tea': 0.0.0
-      '@suds-cli/viewport': 0.0.1-alpha.0
-      shiki: 1.29.2
-    transitivePeerDependencies:
-      - bare-abort-controller
-      - react-native-b4a
-
-  '@suds-cli/cursor@0.0.1-alpha.0':
-    dependencies:
-      '@suds-cli/chapstick': 0.1.0-alpha.0
-      '@suds-cli/tea': 0.0.0
-
-  '@suds-cli/filepicker@0.0.1-alpha.0':
-    dependencies:
-      '@suds-cli/chapstick': 0.1.0-alpha.0
-      '@suds-cli/help': 0.1.0-alpha.0
-      '@suds-cli/key': 0.0.0
-      '@suds-cli/tea': 0.0.0
-
-  '@suds-cli/filesystem@0.0.0':
-    dependencies:
-      archiver: 7.0.1
-      unzipper: 0.12.3
-    transitivePeerDependencies:
-      - bare-abort-controller
-      - react-native-b4a
-
   '@suds-cli/help@0.1.0-alpha.0':
     dependencies:
       '@suds-cli/chapstick': 0.1.0-alpha.0
       '@suds-cli/key': 0.0.0
       '@suds-cli/tea': 0.0.0
       '@suds-cli/viewport': 0.0.1-alpha.0
-
-  '@suds-cli/icons@0.0.0': {}
 
   '@suds-cli/key@0.0.0': {}
 
@@ -5127,19 +5062,6 @@ snapshots:
       '@suds-cli/tea': 0.0.0
       fuzzysort: 2.0.4
 
-  '@suds-cli/markdown@0.1.0-alpha.0':
-    dependencies:
-      '@suds-cli/chapstick': 0.1.0-alpha.0
-      '@suds-cli/filesystem': 0.0.0
-      '@suds-cli/tea': 0.0.0
-      '@suds-cli/viewport': 0.0.1-alpha.0
-      chalk: 5.6.2
-      marked: 15.0.12
-      marked-terminal: 7.3.0(marked@15.0.12)
-    transitivePeerDependencies:
-      - bare-abort-controller
-      - react-native-b4a
-
   '@suds-cli/paginator@0.0.0':
     dependencies:
       '@suds-cli/key': 0.0.0
@@ -5150,16 +5072,7 @@ snapshots:
       '@suds-cli/chapstick': 0.1.0-alpha.0
       '@suds-cli/tea': 0.0.0
 
-  '@suds-cli/runeutil@0.0.0':
-    dependencies:
-      strip-ansi: 7.1.2
-
   '@suds-cli/spinner@0.0.1-alpha.0':
-    dependencies:
-      '@suds-cli/chapstick': 0.1.0-alpha.0
-      '@suds-cli/tea': 0.0.0
-
-  '@suds-cli/statusbar@0.1.0-alpha.0':
     dependencies:
       '@suds-cli/chapstick': 0.1.0-alpha.0
       '@suds-cli/tea': 0.0.0
@@ -5168,37 +5081,7 @@ snapshots:
     dependencies:
       '@suds-cli/tea': 0.0.0
 
-  '@suds-cli/table@0.0.1-alpha.0':
-    dependencies:
-      '@suds-cli/chapstick': 0.1.0-alpha.0
-      '@suds-cli/key': 0.0.0
-      '@suds-cli/tea': 0.0.0
-
   '@suds-cli/tea@0.0.0': {}
-
-  '@suds-cli/textarea@0.0.1-alpha.0':
-    dependencies:
-      '@suds-cli/chapstick': 0.1.0-alpha.0
-      '@suds-cli/cursor': 0.0.1-alpha.0
-      '@suds-cli/key': 0.0.0
-      '@suds-cli/runeutil': 0.0.0
-      '@suds-cli/tea': 0.0.0
-      clipboardy: 4.0.0
-      grapheme-splitter: 1.0.4
-
-  '@suds-cli/textinput@0.0.1-alpha.0':
-    dependencies:
-      '@suds-cli/chapstick': 0.1.0-alpha.0
-      '@suds-cli/cursor': 0.0.1-alpha.0
-      '@suds-cli/key': 0.0.0
-      '@suds-cli/runeutil': 0.0.0
-      '@suds-cli/tea': 0.0.0
-      clipboardy: 4.0.0
-      grapheme-splitter: 1.0.4
-
-  '@suds-cli/timer@0.0.0':
-    dependencies:
-      '@suds-cli/tea': 0.0.0
 
   '@suds-cli/viewport@0.0.1-alpha.0':
     dependencies:

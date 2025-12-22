@@ -1,26 +1,24 @@
 {
   "name": "@suds-cli/examples",
-  "version": "0.0.1-alpha.0",
+  "version": "0.0.0",
+  "type": "module",
   "dependencies": {
-    "@suds-cli/chapstick": "0.1.0-alpha.0",
-    "@suds-cli/code": "0.1.0-alpha.0",
-    "@suds-cli/filepicker": "0.0.1-alpha.0",
-    "@suds-cli/help": "0.1.0-alpha.0",
-    "@suds-cli/icons": "0.0.0",
-    "@suds-cli/key": "0.0.0",
-    "@suds-cli/list": "0.0.1-alpha.0",
-    "@suds-cli/markdown": "0.1.0-alpha.0",
-    "@suds-cli/paginator": "0.0.0",
-    "@suds-cli/progress": "0.0.1-alpha.0",
-    "@suds-cli/spinner": "0.0.1-alpha.0",
-    "@suds-cli/statusbar": "0.1.0-alpha.0",
-    "@suds-cli/stopwatch": "0.0.0",
-    "@suds-cli/table": "0.0.1-alpha.0",
-    "@suds-cli/tea": "0.0.0",
-    "@suds-cli/textarea": "0.0.1-alpha.0",
-    "@suds-cli/textinput": "0.0.1-alpha.0",
-    "@suds-cli/timer": "0.0.0",
-    "@suds-cli/viewport": "0.0.1-alpha.0"
+    "@suds-cli/chapstick": "workspace:*",
+    "@suds-cli/key": "workspace:*",
+    "@suds-cli/help": "workspace:*",
+    "@suds-cli/list": "workspace:*",
+    "@suds-cli/paginator": "workspace:*",
+    "@suds-cli/progress": "workspace:*",
+    "@suds-cli/spinner": "workspace:*",
+    "@suds-cli/stopwatch": "workspace:*",
+    "@suds-cli/filepicker": "workspace:*",
+    "@suds-cli/filetree": "workspace:*",
+    "@suds-cli/table": "workspace:*",
+    "@suds-cli/timer": "workspace:*",
+    "@suds-cli/tea": "workspace:*",
+    "@suds-cli/textinput": "workspace:*",
+    "@suds-cli/textarea": "workspace:*",
+    "@suds-cli/viewport": "workspace:*"
   },
   "devDependencies": {
     "tsx": "^4.21.0"
@@ -45,6 +43,5 @@
     "textinput": "tsx textinput-demo.ts",
     "timer": "tsx timer-demo.ts",
     "viewport": "tsx viewport-demo.ts"
-  },
-  "type": "module"
+  }
 }
