@@ -50,11 +50,14 @@ describe("MarkdownModel", () => {
     const model = MarkdownModel.new({ width: 80, height: 24 });
     const content = "# Hello\n\nThis is a test.";
     const msg = new RenderMarkdownMsg(content);
-    
+
     const [updated, cmd] = model.update(msg);
-    
+
     expect(updated).not.toBe(model);
-    expect(updated.viewport.view()).toContain(content);
+    // Content is padded to viewport width, so check each line is present
+    const view = updated.viewport.view();
+    expect(view).toContain("# Hello");
+    expect(view).toContain("This is a test.");
     expect(cmd).toBeNull();
   });
 
