@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { MarkdownModel } from "../src/model.js";
+import { RenderMarkdownMsg, ErrorMsg } from "../src/messages.js";
 
 describe("MarkdownModel", () => {
   it("should create a new model", () => {
@@ -33,6 +34,41 @@ describe("MarkdownModel", () => {
   it("should init with no command", () => {
     const model = MarkdownModel.new();
     const cmd = model.init();
+    expect(cmd).toBeNull();
+  });
+
+  it("should set filename and return command", () => {
+    const model = MarkdownModel.new({ width: 80, height: 24 });
+    const [updated, cmd] = model.setFileName("test.md");
+    
+    expect(updated.fileName).toBe("test.md");
+    expect(cmd).not.toBeNull();
+    expect(typeof cmd).toBe("function");
+  });
+
+  it("should update viewport content when RenderMarkdownMsg is received", () => {
+    const model = MarkdownModel.new({ width: 80, height: 24 });
+    const content = "# Hello\n\nThis is a test.";
+    const msg = new RenderMarkdownMsg(content);
+    
+    const [updated, cmd] = model.update(msg);
+    
+    expect(updated).not.toBe(model);
+    expect(updated.viewport.view()).toContain(content);
+    expect(cmd).toBeNull();
+  });
+
+  it("should handle ErrorMsg and clear filename", () => {
+    const model = MarkdownModel.new({ width: 80, height: 24 });
+    const [modelWithFile] = model.setFileName("test.md");
+    expect(modelWithFile.fileName).toBe("test.md");
+    
+    const error = new Error("File not found");
+    const errorMsg = new ErrorMsg(error);
+    const [updated, cmd] = modelWithFile.update(errorMsg);
+    
+    expect(updated.fileName).toBe("");
+    expect(updated.viewport.view()).toContain("File not found");
     expect(cmd).toBeNull();
   });
 });

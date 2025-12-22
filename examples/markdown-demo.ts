@@ -1,7 +1,7 @@
 /**
  * Suds Demo: Markdown Viewer
  *
- * Demonstrates @suds/markdown with file rendering and scrolling.
+ * Demonstrates @suds-cli/markdown with file rendering and scrolling.
  *
  * Controls:
  *   j / ↓      - scroll down 1 line
@@ -56,7 +56,9 @@ class DemoModel implements Model<Msg, DemoModel> {
   init(): Cmd<Msg> {
     // Load the README.md file from the repository root
     const readmePath = new URL("../README.md", import.meta.url).pathname;
-    const [updated, cmd] = this.markdown.setFileName(readmePath);
+    const [, cmd] = this.markdown.setFileName(readmePath);
+    // Note: The updated model with filename set will be applied when
+    // the command resolves and RenderMarkdownMsg is received in update()
     return cmd;
   }
 

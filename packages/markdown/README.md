@@ -22,11 +22,13 @@ pnpm add @suds-cli/markdown
 import { MarkdownModel } from '@suds-cli/markdown'
 import { Program } from '@suds-cli/tea'
 
-const model = MarkdownModel.new({ active: true })
-model = model.setFileName('README.md')
+let model = MarkdownModel.new({ active: true })
+const [updatedModel, cmd] = model.setFileName('README.md')
+model = updatedModel
 
 // Handle resize
-model = model.setSize(width, height)
+const [resizedModel] = model.setSize(width, height)
+model = resizedModel
 
 // Render
 const view = model.view()
