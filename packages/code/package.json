@@ -1,6 +1,6 @@
 {
   "name": "@suds-cli/code",
-  "version": "0.0.0",
+  "version": "0.1.0-alpha.0",
   "description": "Syntax-highlighted code viewer with scrollable viewport for Suds terminal UIs",
   "type": "module",
   "main": "./dist/index.js",

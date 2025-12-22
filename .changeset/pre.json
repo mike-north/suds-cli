@@ -2,7 +2,39 @@
   "mode": "pre",
   "tag": "alpha",
   "initialVersions": {
-    "suds-cli": "0.0.0"
+    "suds-cli": "0.0.0",
+    "@suds-cli/examples": "0.0.0",
+    "@suds-cli/chapstick": "0.0.0",
+    "@suds-cli/code": "0.0.0",
+    "@suds-cli/cursor": "0.0.0",
+    "@suds-cli/filepicker": "0.0.0",
+    "@suds-cli/filesystem": "0.0.0",
+    "@suds-cli/help": "0.0.0",
+    "@suds-cli/icons": "0.0.0",
+    "@suds-cli/key": "0.0.0",
+    "@suds-cli/list": "0.0.0",
+    "@suds-cli/markdown": "0.0.0",
+    "@suds-cli/paginator": "0.0.0",
+    "@suds-cli/progress": "0.0.0",
+    "@suds-cli/runeutil": "0.0.0",
+    "@suds-cli/spinner": "0.0.0",
+    "@suds-cli/statusbar": "0.0.0",
+    "@suds-cli/stopwatch": "0.0.0",
+    "@suds-cli/table": "0.0.0",
+    "@suds-cli/tea": "0.0.0",
+    "@suds-cli/textarea": "0.0.0",
+    "@suds-cli/textinput": "0.0.0",
+    "@suds-cli/timer": "0.0.0",
+    "@suds-cli/viewport": "0.0.0",
+    "@suds-cli/scripts": "0.0.0"
   },
-  "changesets": []
+  "changesets": [
+    "add-code-demo",
+    "add-code-package",
+    "add-markdown-package",
+    "add-statusbar-component",
+    "chapstick-style-provider",
+    "fix-viewport-scrolling",
+    "help-bubble-component"
+  ]
 }

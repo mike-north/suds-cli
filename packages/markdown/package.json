@@ -1,6 +1,6 @@
 {
   "name": "@suds-cli/markdown",
-  "version": "0.0.0",
+  "version": "0.1.0-alpha.0",
   "description": "Markdown viewer component for Suds terminal UIs",
   "type": "module",
   "main": "./dist/index.js",

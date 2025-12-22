@@ -1,6 +1,6 @@
 {
   "name": "@suds-cli/help",
-  "version": "0.0.0",
+  "version": "0.1.0-alpha.0",
   "description": "Help components for Suds terminal UIs: key binding renderer and scrollable help bubble",
   "type": "module",
   "main": "./dist/index.js",

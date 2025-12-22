@@ -1,6 +1,6 @@
 {
   "name": "@suds-cli/table",
-  "version": "0.0.0",
+  "version": "0.0.1-alpha.0",
   "description": "Tabular data display with scrolling and selection for Suds",
   "type": "module",
   "main": "./dist/index.js",

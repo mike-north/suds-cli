@@ -1,6 +1,6 @@
 {
   "name": "@suds-cli/chapstick",
-  "version": "0.0.0",
+  "version": "0.1.0-alpha.0",
   "description": "TypeScript port of Lip Gloss terminal styling DSL",
   "type": "module",
   "main": "./dist/index.js",
