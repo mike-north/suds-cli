@@ -10,6 +10,7 @@
     "timer": "tsx timer-demo.ts",
     "paginator": "tsx paginator-demo.ts",
     "help-demo": "tsx help-demo.ts",
+    "help-bubble": "tsx help-bubble-demo.ts",
     "stopwatch": "tsx stopwatch-demo.ts",
     "statusbar": "tsx statusbar-demo.ts",
     "viewport": "tsx viewport-demo.ts",
