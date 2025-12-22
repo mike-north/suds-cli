@@ -47,7 +47,7 @@ class DemoModel implements Model<Msg, DemoModel> {
   init(): Cmd<Msg> {
     // Load the current file to display - just return the command
     // The model update will happen in the update handler
-    const [, cmd] = this.code.setFileName("examples/code-demo.ts");
+    const [, cmd] = this.code.setFileName("code-demo.ts");
     return cmd;
   }
 
