@@ -11,64 +11,64 @@ pnpm add @suds-cli/runeutil
 ## Quickstart
 
 ```ts
-import { newSanitizer } from "@suds-cli/runeutil";
+import { newSanitizer } from '@suds-cli/runeutil'
 
 // Default: keep newlines, expand tabs to 4 spaces
-const sanitizer = newSanitizer();
-sanitizer.sanitize("hello\tworld");  // "hello    world"
-sanitizer.sanitize("line1\nline2");  // "line1\nline2"
+const sanitizer = newSanitizer()
+sanitizer.sanitize('hello\tworld') // "hello    world"
+sanitizer.sanitize('line1\nline2') // "line1\nline2"
 
 // Strip ANSI colors
-sanitizer.sanitize("\x1b[31mred\x1b[0m");  // "red"
+sanitizer.sanitize('\x1b[31mred\x1b[0m') // "red"
 ```
 
 ### Single-line Input
 
 ```ts
 const sanitizer = newSanitizer({
-  replaceNewLine: " ",  // Convert newlines to space
-  replaceTab: "",       // Remove tabs
-});
+  replaceNewLine: ' ', // Convert newlines to space
+  replaceTab: '', // Remove tabs
+})
 
-sanitizer.sanitize("hello\nworld");  // "hello world"
-sanitizer.sanitize("col1\tcol2");    // "col1col2"
+sanitizer.sanitize('hello\nworld') // "hello world"
+sanitizer.sanitize('col1\tcol2') // "col1col2"
 ```
 
 ### Custom Tab Width
 
 ```ts
 const sanitizer = newSanitizer({
-  replaceTab: "  ",  // 2 spaces instead of 4
-});
+  replaceTab: '  ', // 2 spaces instead of 4
+})
 
-sanitizer.sanitize("a\tb");  // "a  b"
+sanitizer.sanitize('a\tb') // "a  b"
 ```
 
 ## What Gets Sanitized
 
-| Input | Action |
-|-------|--------|
-| ANSI escape sequences (`\x1b[31m`) | Stripped cleanly |
-| Newlines (`\n`, `\r`) | Replaced with `replaceNewLine` |
-| Tabs (`\t`) | Replaced with `replaceTab` |
-| Other control characters (C0, C1, DEL) | Removed |
-| Unicode replacement char (`\uFFFD`) | Removed |
-| Regular text | Passed through |
+| Input                                  | Action                         |
+| -------------------------------------- | ------------------------------ |
+| ANSI escape sequences (`\x1b[31m`)     | Stripped cleanly               |
+| Newlines (`\n`, `\r`)                  | Replaced with `replaceNewLine` |
+| Tabs (`\t`)                            | Replaced with `replaceTab`     |
+| Other control characters (C0, C1, DEL) | Removed                        |
+| Unicode replacement char (`\uFFFD`)    | Removed                        |
+| Regular text                           | Passed through                 |
 
 ## API
 
-| Export | Description |
-|--------|-------------|
-| `Sanitizer` | Class for sanitizing input strings |
-| `newSanitizer(opts?)` | Factory function |
-| `SanitizerOptions` | Options interface |
+| Export                | Description                        |
+| --------------------- | ---------------------------------- |
+| `Sanitizer`           | Class for sanitizing input strings |
+| `newSanitizer(opts?)` | Factory function                   |
+| `SanitizerOptions`    | Options interface                  |
 
 ### SanitizerOptions
 
-| Option | Type | Default | Description |
-|--------|------|---------|-------------|
-| `replaceNewLine` | `string` | `"\n"` | Replacement for `\n` and `\r` |
-| `replaceTab` | `string` | `"    "` | Replacement for `\t` |
+| Option           | Type     | Default  | Description                   |
+| ---------------- | -------- | -------- | ----------------------------- |
+| `replaceNewLine` | `string` | `"\n"`   | Replacement for `\n` and `\r` |
+| `replaceTab`     | `string` | `"    "` | Replacement for `\t`          |
 
 ## Scripts
 
@@ -80,9 +80,3 @@ sanitizer.sanitize("a\tb");  // "a  b"
 ## License
 
 MIT
-
-
-
-
-
-

@@ -1,4 +1,4 @@
-import type { Binding } from "./binding.js";
+import type { Binding } from './binding.js'
 
 /**
  * Interface for key-like objects that can be matched.
@@ -6,7 +6,7 @@ import type { Binding } from "./binding.js";
  * @public
  */
 export interface Matchable {
-  toString(): string;
+  toString(): string
 }
 
 /**
@@ -36,17 +36,16 @@ export interface Matchable {
  * @public
  */
 export function matches(key: Matchable, ...bindings: Binding[]): boolean {
-  const keyStr = key.toString();
+  const keyStr = key.toString()
   for (const binding of bindings) {
     if (!binding.enabled()) {
-      continue;
+      continue
     }
     for (const k of binding.keys()) {
       if (keyStr === k) {
-        return true;
+        return true
       }
     }
   }
-  return false;
+  return false
 }
-

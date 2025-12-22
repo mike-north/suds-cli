@@ -2,7 +2,7 @@
 
 Multi-line textarea component for Suds terminal UIs. Early port of Charmbracelet Bubbles textarea.
 
-<img src="../../examples/textarea-demo.gif" width="950" />
+<img src="../../examples/textarea-demo.gif" width="950" alt="Textarea component demo" />
 
 ## Install
 
@@ -13,30 +13,30 @@ pnpm add @suds-cli/textarea
 ## Quickstart
 
 ```ts
-import { TextareaModel } from "@suds-cli/textarea";
-import type { Cmd, Msg } from "@suds-cli/tea";
+import { TextareaModel } from '@suds-cli/textarea'
+import type { Cmd, Msg } from '@suds-cli/tea'
 
 let editor = TextareaModel.new({
-  placeholder: "Write your note...",
+  placeholder: 'Write your note...',
   width: 60,
   maxHeight: 5,
   showLineNumbers: true,
-});
+})
 
 function init(): Cmd<Msg> {
-  const [focused, cmd] = editor.focus();
-  editor = focused;
-  return cmd;
+  const [focused, cmd] = editor.focus()
+  editor = focused
+  return cmd
 }
 
 function update(msg: Msg): [typeof model, Cmd<Msg>] {
-  const [next, cmd] = editor.update(msg);
-  editor = next;
-  return [model, cmd];
+  const [next, cmd] = editor.update(msg)
+  editor = next
+  return [model, cmd]
 }
 
 function view(): string {
-  return editor.view();
+  return editor.view()
 }
 ```
 
@@ -71,7 +71,3 @@ function view(): string {
 - Horizontal scrolling and wrapping are minimal; long lines render fully.
 - Memoization from the Go version is not yet ported.
 - Selection support is not yet implemented.
-
-
-
-

@@ -1,8 +1,8 @@
-import type { FileInfo } from "./types.js";
+import type { FileInfo } from './types.js'
 
 /** Directory listing finished (success or failure). @public */
 export class DirReadMsg {
-  readonly _tag = "filepicker-dir-read";
+  readonly _tag = 'filepicker-dir-read'
 
   constructor(
     public readonly path: string,
@@ -13,9 +13,7 @@ export class DirReadMsg {
 
 /** A file or directory was selected. @public */
 export class FileSelectedMsg {
-  readonly _tag = "filepicker-file-selected";
+  readonly _tag = 'filepicker-file-selected'
 
   constructor(public readonly file: FileInfo) {}
 }
-
-

@@ -18,4 +18,3 @@
   },
   "include": ["eslint.config.mts", "**/vitest.config.mts"]
 }
-

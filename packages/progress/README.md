@@ -2,7 +2,7 @@
 
 Animated progress bar for Suds terminal UIs. Port of Charmbracelet Bubbles progress.
 
-<img src="../../examples/progress-demo.gif" width="950" />
+<img src="../../examples/progress-demo.gif" width="950" alt="Progress component demo" />
 
 ## Install
 
@@ -13,26 +13,26 @@ pnpm add @suds-cli/progress
 ## Quickstart
 
 ```ts
-import { ProgressModel, FrameMsg } from "@suds-cli/progress";
-import type { Cmd, Msg } from "@suds-cli/tea";
+import { ProgressModel, FrameMsg } from '@suds-cli/progress'
+import type { Cmd, Msg } from '@suds-cli/tea'
 
-let progress = ProgressModel.withDefaultGradient({ width: 30 });
+let progress = ProgressModel.withDefaultGradient({ width: 30 })
 
 function init(): Cmd<Msg> {
   // Start at 40%
-  const [next, cmd] = progress.setPercent(0.4);
-  progress = next;
-  return cmd;
+  const [next, cmd] = progress.setPercent(0.4)
+  progress = next
+  return cmd
 }
 
 function update(msg: Msg): [unknown, Cmd<Msg>] {
-  const [next, cmd] = progress.update(msg);
-  progress = next;
-  return [{ progress }, cmd];
+  const [next, cmd] = progress.update(msg)
+  progress = next
+  return [{ progress }, cmd]
 }
 
 function view(): string {
-  return progress.view();
+  return progress.view()
 }
 ```
 
@@ -57,6 +57,3 @@ function view(): string {
 ## License
 
 MIT
-
-
-

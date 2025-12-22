@@ -13,11 +13,10 @@ export {
   meter,
   hamburger,
   ellipsis,
-} from "./spinner.js";
+} from './spinner.js'
 
 // Messages
-export { TickMsg } from "./messages.js";
+export { TickMsg } from './messages.js'
 
 // Model
-export { SpinnerModel, type SpinnerOptions } from "./model.js";
-
+export { SpinnerModel, type SpinnerOptions } from './model.js'

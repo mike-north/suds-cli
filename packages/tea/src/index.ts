@@ -1,5 +1,5 @@
-export { Program, type ProgramOptions } from "./program.js";
-export type { Msg, Cmd, Model, ProgramResult } from "./types.js";
+export { Program, type ProgramOptions } from './program.js'
+export type { Msg, Cmd, Model, ProgramResult } from './types.js'
 
 // Messages
 export {
@@ -21,24 +21,19 @@ export {
   EnableReportFocusMsg,
   DisableReportFocusMsg,
   SetWindowTitleMsg,
-} from "./messages.js";
+} from './messages.js'
 
 // Input messages
-export { KeyMsg, KeyType, type Key, keyToString } from "./keys.js";
-export {
-  MouseMsg,
-  MouseAction,
-  MouseButton,
-  type MouseEvent,
-} from "./mouse.js";
+export { KeyMsg, KeyType, type Key, keyToString } from './keys.js'
+export { MouseMsg, MouseAction, MouseButton, type MouseEvent } from './mouse.js'
 
-export { type InputOptions } from "./input.js";
-export { type TerminalOptions } from "./terminal.js";
-export { type RendererOptions } from "./renderer.js";
-export { type EffectFn } from "./types.js";
+export { type InputOptions } from './input.js'
+export { type TerminalOptions } from './terminal.js'
+export { type RendererOptions } from './renderer.js'
+export { type EffectFn } from './types.js'
 
 // Commands
-export { batch, sequence, tick, every, quit, msg } from "./commands.js";
+export { batch, sequence, tick, every, quit, msg } from './commands.js'
 export {
   clearScreen,
   enableMouseCellMotion,
@@ -48,4 +43,4 @@ export {
   hideCursor,
   setWindowTitle,
   windowSize,
-} from "./screen.js";
+} from './screen.js'

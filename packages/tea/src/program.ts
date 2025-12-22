@@ -1,5 +1,5 @@
-import process from "node:process";
-import { startInput } from "./input.js";
+import process from 'node:process'
+import { startInput } from './input.js'
 import {
   ClearScreenMsg,
   DisableMouseMsg,
@@ -13,230 +13,230 @@ import {
   ResumeMsg,
   SetWindowTitleMsg,
   ShowCursorMsg,
-} from "./messages.js";
-import { StandardRenderer } from "./renderer.js";
-import { TerminalController } from "./terminal.js";
-import type { Cmd, Model, ModelMsg, Msg, ProgramResult } from "./types.js";
-import { WindowSizeMsg } from "./messages.js";
+} from './messages.js'
+import { StandardRenderer } from './renderer.js'
+import { TerminalController } from './terminal.js'
+import type { Cmd, Model, ModelMsg, Msg, ProgramResult } from './types.js'
+import { WindowSizeMsg } from './messages.js'
 
 /** @public Configure program runtime options. */
 export interface ProgramOptions {
-  altScreen?: boolean;
-  mouseMode?: "cell" | "all" | false;
-  input?: NodeJS.ReadableStream;
-  output?: NodeJS.WritableStream;
-  fps?: number;
-  reportFocus?: boolean;
-  bracketedPaste?: boolean;
+  altScreen?: boolean
+  mouseMode?: 'cell' | 'all' | false
+  input?: NodeJS.ReadableStream
+  output?: NodeJS.WritableStream
+  fps?: number
+  reportFocus?: boolean
+  bracketedPaste?: boolean
 }
 
 /** @public Bubble Tea-style program runner. */
 export class Program<M extends Model<Msg, M>> {
-  private model: M;
-  private readonly terminal: TerminalController;
-  private readonly renderer: StandardRenderer;
-  private readonly opts: ProgramOptions;
-  private stopInput?: () => void;
-  private running = false;
-  private queue: Msg[] = [];
-  private draining = false;
-  private result: ProgramResult<M> | null = null;
-  private resolveWait?: () => void;
+  private model: M
+  private readonly terminal: TerminalController
+  private readonly renderer: StandardRenderer
+  private readonly opts: ProgramOptions
+  private stopInput?: () => void
+  private running = false
+  private queue: Msg[] = []
+  private draining = false
+  private result: ProgramResult<M> | null = null
+  private resolveWait?: () => void
 
   constructor(model: M, options: ProgramOptions = {}) {
-    this.model = model;
-    this.opts = options;
-    this.terminal = new TerminalController(options.input, options.output);
+    this.model = model
+    this.opts = options
+    this.terminal = new TerminalController(options.input, options.output)
     this.renderer = new StandardRenderer({
       output: options.output,
       fps: options.fps,
-    });
+    })
   }
 
   async run(): Promise<ProgramResult<M>> {
-    this.running = true;
-    this.setupTerminal();
-    this.setupSignals();
-    this.renderer.start();
+    this.running = true
+    this.setupTerminal()
+    this.setupSignals()
+    this.renderer.start()
 
     try {
-      this.runCmd(this.model.init());
-      this.renderer.write(this.model.view());
-      this.startInputLoop();
+      this.runCmd(this.model.init())
+      this.renderer.write(this.model.view())
+      this.startInputLoop()
       // Wait until the program is explicitly quit
-      await this.waitUntilDone();
-      this.result = { model: this.model };
+      await this.waitUntilDone()
+      this.result = { model: this.model }
     } catch (err) {
-      this.result = { model: this.model, error: err };
+      this.result = { model: this.model, error: err }
     } finally {
-      this.shutdown();
+      this.shutdown()
     }
 
-    return this.result ?? { model: this.model };
+    return this.result ?? { model: this.model }
   }
 
   private waitUntilDone(): Promise<void> {
     return new Promise((resolve) => {
-      this.resolveWait = resolve;
+      this.resolveWait = resolve
       // If already not running, resolve immediately
       if (!this.running) {
-        resolve();
+        resolve()
       }
-    });
+    })
   }
 
   send(msg: Msg): void {
     if (!msg) {
-      return;
+      return
     }
-    this.queue.push(msg);
+    this.queue.push(msg)
     if (!this.draining) {
-      void this.drainQueue();
+      void this.drainQueue()
     }
   }
 
   quit(): void {
-    this.send(new QuitMsg());
+    this.send(new QuitMsg())
   }
 
   kill(): void {
-    this.running = false;
-    this.shutdown();
+    this.running = false
+    this.shutdown()
   }
 
   private drainQueue(): void {
     if (this.draining) {
-      return;
+      return
     }
-    this.draining = true;
+    this.draining = true
 
     while (this.running && this.queue.length > 0) {
-      const msg = this.queue.shift();
+      const msg = this.queue.shift()
       if (msg === undefined) {
-        continue;
+        continue
       }
 
-      const consumed = this.handleInternal(msg);
+      const consumed = this.handleInternal(msg)
       if (consumed) {
-        continue;
+        continue
       }
 
-      const [nextModel, cmd] = this.model.update(msg);
-      this.model = nextModel;
+      const [nextModel, cmd] = this.model.update(msg)
+      this.model = nextModel
 
-      this.runCmd(cmd);
-      this.renderer.write(this.model.view());
+      this.runCmd(cmd)
+      this.renderer.write(this.model.view())
     }
 
-    this.draining = false;
+    this.draining = false
   }
 
   private handleInternal(msg: Msg): boolean {
     if (msg instanceof QuitMsg || msg instanceof InterruptMsg) {
-      this.running = false;
+      this.running = false
       if (this.resolveWait) {
-        this.resolveWait();
+        this.resolveWait()
       }
-      return true;
+      return true
     }
     if (msg instanceof ClearScreenMsg) {
-      this.terminal.clearScreen();
-      return false;
+      this.terminal.clearScreen()
+      return false
     }
     if (msg instanceof EnterAltScreenMsg) {
-      this.terminal.enterAltScreen();
-      this.renderer.repaint();
-      return false;
+      this.terminal.enterAltScreen()
+      this.renderer.repaint()
+      return false
     }
     if (msg instanceof ExitAltScreenMsg) {
-      this.terminal.exitAltScreen();
-      this.renderer.repaint();
-      return false;
+      this.terminal.exitAltScreen()
+      this.renderer.repaint()
+      return false
     }
     if (msg instanceof EnableMouseCellMotionMsg) {
-      this.terminal.enableMouseCellMotion();
-      return false;
+      this.terminal.enableMouseCellMotion()
+      return false
     }
     if (msg instanceof EnableMouseAllMotionMsg) {
-      this.terminal.enableMouseAllMotion();
-      return false;
+      this.terminal.enableMouseAllMotion()
+      return false
     }
     if (msg instanceof DisableMouseMsg) {
-      this.terminal.disableMouse();
-      return false;
+      this.terminal.disableMouse()
+      return false
     }
     if (msg instanceof ShowCursorMsg) {
-      this.terminal.showCursor();
-      return false;
+      this.terminal.showCursor()
+      return false
     }
     if (msg instanceof HideCursorMsg) {
-      this.terminal.hideCursor();
-      return false;
+      this.terminal.hideCursor()
+      return false
     }
     if (msg instanceof SetWindowTitleMsg) {
-      this.terminal.setWindowTitle(msg.title);
-      return false;
+      this.terminal.setWindowTitle(msg.title)
+      return false
     }
     if (msg instanceof ResumeMsg) {
-      return false;
+      return false
     }
-    return false;
+    return false
   }
 
   private runCmd<T extends Msg>(cmd: Cmd<T> | undefined): void {
     if (!cmd) {
-      return;
+      return
     }
 
     const handleResult = (result: T | T[] | null | undefined) => {
       if (result === null || result === undefined) {
-        return;
+        return
       }
       if (Array.isArray(result)) {
         for (const msg of result) {
-          this.send(msg);
+          this.send(msg)
         }
       } else {
-        this.send(result);
+        this.send(result)
       }
-    };
+    }
 
     try {
-      const effect = cmd();
+      const effect = cmd()
       if (effect instanceof Promise) {
         effect.then(handleResult).catch((err) => {
           // Preserve behavior but don't block other messages
-          console.error(err);
-        });
+          console.error(err)
+        })
       } else {
-        handleResult(effect);
+        handleResult(effect)
       }
     } catch (err) {
-      console.error(err);
+      console.error(err)
     }
   }
 
   private setupTerminal(): void {
-    this.terminal.enableRawMode();
-    this.terminal.hideCursor();
+    this.terminal.enableRawMode()
+    this.terminal.hideCursor()
 
     if (this.opts.altScreen) {
-      this.terminal.enterAltScreen();
-      this.terminal.clearScreen();
+      this.terminal.enterAltScreen()
+      this.terminal.clearScreen()
     }
 
-    if (this.opts.mouseMode === "cell") {
-      this.terminal.enableMouseCellMotion();
-    } else if (this.opts.mouseMode === "all") {
-      this.terminal.enableMouseAllMotion();
+    if (this.opts.mouseMode === 'cell') {
+      this.terminal.enableMouseCellMotion()
+    } else if (this.opts.mouseMode === 'all') {
+      this.terminal.enableMouseAllMotion()
     }
 
     if (this.opts.bracketedPaste !== false) {
-      this.terminal.enableBracketedPaste();
+      this.terminal.enableBracketedPaste()
     }
 
     if (this.opts.reportFocus) {
-      this.terminal.enableReportFocus();
+      this.terminal.enableReportFocus()
     }
   }
 
@@ -244,67 +244,67 @@ export class Program<M extends Model<Msg, M>> {
     this.stopInput = startInput({
       input: this.opts.input,
       onMessage: (msg) => this.send(msg as ModelMsg<M>),
-    });
+    })
   }
 
   private setupSignals(): void {
-    const output = this.opts.output ?? process.stdout;
+    const output = this.opts.output ?? process.stdout
     const handleResize = () => {
-      const { columns, rows } = getSize(output);
-      const w = columns ?? 0;
-      const h = rows ?? 0;
-      this.send(new WindowSizeMsg(w, h));
-    };
+      const { columns, rows } = getSize(output)
+      const w = columns ?? 0
+      const h = rows ?? 0
+      this.send(new WindowSizeMsg(w, h))
+    }
 
-    process.on("SIGINT", this.onSigInt);
-    process.on("SIGTERM", this.onSigTerm);
+    process.on('SIGINT', this.onSigInt)
+    process.on('SIGTERM', this.onSigTerm)
     if (
-      "on" in output &&
-      typeof (output as NodeJS.Process["stdout"]).on === "function"
+      'on' in output &&
+      typeof (output as NodeJS.Process['stdout']).on === 'function'
     ) {
-      (output as NodeJS.Process["stdout"]).on("resize", handleResize);
+      ;(output as NodeJS.Process['stdout']).on('resize', handleResize)
     }
 
     // Initial size
-    handleResize();
+    handleResize()
 
     this.disposeSignals = () => {
-      process.off("SIGINT", this.onSigInt);
-      process.off("SIGTERM", this.onSigTerm);
+      process.off('SIGINT', this.onSigInt)
+      process.off('SIGTERM', this.onSigTerm)
       if (
-        "off" in output &&
-        typeof (output as NodeJS.Process["stdout"]).off === "function"
+        'off' in output &&
+        typeof (output as NodeJS.Process['stdout']).off === 'function'
       ) {
-        (output as NodeJS.Process["stdout"]).off("resize", handleResize);
+        ;(output as NodeJS.Process['stdout']).off('resize', handleResize)
       }
-    };
+    }
   }
 
-  private disposeSignals: (() => void) | null = null;
+  private disposeSignals: (() => void) | null = null
 
   private onSigInt = (): void => {
-    this.send(new InterruptMsg());
-  };
+    this.send(new InterruptMsg())
+  }
 
   private onSigTerm = (): void => {
-    this.send(new QuitMsg());
-  };
+    this.send(new QuitMsg())
+  }
 
   private shutdown(): void {
     if (this.disposeSignals) {
-      this.disposeSignals();
-      this.disposeSignals = null;
+      this.disposeSignals()
+      this.disposeSignals = null
     }
     if (this.stopInput) {
-      this.stopInput();
-      this.stopInput = undefined;
+      this.stopInput()
+      this.stopInput = undefined
     }
-    this.renderer.stop();
-    this.terminal.cleanup();
+    this.renderer.stop()
+    this.terminal.cleanup()
   }
 }
 
 function getSize(stream: NodeJS.WritableStream) {
-  const s = stream as { columns?: number; rows?: number };
-  return { columns: s.columns, rows: s.rows };
+  const s = stream as { columns?: number; rows?: number }
+  return { columns: s.columns, rows: s.rows }
 }

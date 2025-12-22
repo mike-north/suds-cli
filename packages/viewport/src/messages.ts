@@ -3,7 +3,7 @@
  * @public
  */
 export class SyncMsg {
-  readonly _tag = "viewport-sync";
+  readonly _tag = 'viewport-sync'
 
   constructor(
     public readonly lines: string[],
@@ -17,13 +17,10 @@ export class SyncMsg {
  * @public
  */
 export class ScrollMsg {
-  readonly _tag = "viewport-scroll";
+  readonly _tag = 'viewport-scroll'
 
   constructor(
     public readonly percent: number,
     public readonly topLine: number,
   ) {}
 }
-
-
-

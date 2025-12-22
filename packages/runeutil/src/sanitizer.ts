@@ -1,4 +1,4 @@
-import stripAnsi from "strip-ansi";
+import stripAnsi from 'strip-ansi'
 
 /**
  * Options for creating a Sanitizer.
@@ -6,9 +6,9 @@ import stripAnsi from "strip-ansi";
  */
 export interface SanitizerOptions {
   /** Replacement for newlines/carriage returns (default: newline) */
-  replaceNewLine?: string;
+  replaceNewLine?: string
   /** Replacement for tabs (default: 4 spaces) */
-  replaceTab?: string;
+  replaceTab?: string
 }
 
 /**
@@ -17,12 +17,12 @@ export interface SanitizerOptions {
  * @public
  */
 export class Sanitizer {
-  readonly #replaceNewLine: string;
-  readonly #replaceTab: string;
+  readonly #replaceNewLine: string
+  readonly #replaceTab: string
 
   constructor(options: SanitizerOptions = {}) {
-    this.#replaceNewLine = options.replaceNewLine ?? "\n";
-    this.#replaceTab = options.replaceTab ?? "    ";
+    this.#replaceNewLine = options.replaceNewLine ?? '\n'
+    this.#replaceTab = options.replaceTab ?? '    '
   }
 
   /**
@@ -37,30 +37,30 @@ export class Sanitizer {
    */
   sanitize(input: string): string {
     // First strip ANSI escape sequences
-    const stripped = stripAnsi(input);
+    const stripped = stripAnsi(input)
 
-    let result = "";
+    let result = ''
 
     for (const char of stripped) {
-      const code = char.codePointAt(0) ?? 0;
+      const code = char.codePointAt(0) ?? 0
 
       // Skip Unicode replacement character (invalid UTF-8 equivalent)
       if (code === 0xfffd) {
-        continue;
+        continue
       }
 
-      if (char === "\r" || char === "\n") {
-        result += this.#replaceNewLine;
-      } else if (char === "\t") {
-        result += this.#replaceTab;
+      if (char === '\r' || char === '\n') {
+        result += this.#replaceNewLine
+      } else if (char === '\t') {
+        result += this.#replaceTab
       } else if (isControl(code)) {
         // Skip other control characters
       } else {
-        result += char;
+        result += char
       }
     }
 
-    return result;
+    return result
   }
 }
 
@@ -70,8 +70,10 @@ export class Sanitizer {
  */
 function isControl(code: number): boolean {
   return (
-    (code >= 0x00 && code <= 0x1f) || code === 0x7f || (code >= 0x80 && code <= 0x9f)
-  );
+    (code >= 0x00 && code <= 0x1f) ||
+    code === 0x7f ||
+    (code >= 0x80 && code <= 0x9f)
+  )
 }
 
 /**
@@ -89,6 +91,5 @@ function isControl(code: number): boolean {
  * @public
  */
 export function newSanitizer(options?: SanitizerOptions): Sanitizer {
-  return new Sanitizer(options);
+  return new Sanitizer(options)
 }
-

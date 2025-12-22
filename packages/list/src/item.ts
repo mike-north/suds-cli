@@ -4,11 +4,11 @@
  */
 export interface Item {
   /** Text used for filtering. */
-  filterValue(): string;
+  filterValue(): string
   /** Title shown in the list. */
-  title(): string;
+  title(): string
   /** Optional description. */
-  description(): string;
+  description(): string
 }
 
 /**
@@ -18,20 +18,18 @@ export interface Item {
 export class DefaultItem implements Item {
   constructor(
     private readonly titleText: string,
-    private readonly descText: string = "",
+    private readonly descText: string = '',
   ) {}
 
   filterValue(): string {
-    return this.titleText;
+    return this.titleText
   }
 
   title(): string {
-    return this.titleText;
+    return this.titleText
   }
 
   description(): string {
-    return this.descText;
+    return this.descText
   }
 }
-
-

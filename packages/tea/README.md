@@ -19,41 +19,41 @@ import {
   type Model,
   type Cmd,
   type Msg,
-} from "@suds-cli/tea";
+} from '@suds-cli/tea'
 
 // Define your message types
-type AppMsg = Msg | { _tag: "increment" } | { _tag: "decrement" };
+type AppMsg = Msg | { _tag: 'increment' } | { _tag: 'decrement' }
 
 // Create a model implementing the Model interface
 class Counter implements Model<AppMsg, Counter> {
   constructor(public readonly count: number = 0) {}
 
   init(): Cmd<AppMsg> {
-    return null;
+    return null
   }
 
   update(msg: AppMsg): [Counter, Cmd<AppMsg>] {
     if (msg instanceof KeyMsg) {
       switch (msg.key.type) {
         case KeyType.Up:
-          return [new Counter(this.count + 1), null];
+          return [new Counter(this.count + 1), null]
         case KeyType.Down:
-          return [new Counter(this.count - 1), null];
+          return [new Counter(this.count - 1), null]
         case KeyType.Esc:
-          return [this, quit()];
+          return [this, quit()]
       }
     }
-    return [this, null];
+    return [this, null]
   }
 
   view(): string {
-    return `Count: ${this.count}\n\nPress ↑/↓ to change, Esc to quit`;
+    return `Count: ${this.count}\n\nPress ↑/↓ to change, Esc to quit`
   }
 }
 
 // Run the program
-const program = new Program(new Counter(), { altScreen: true });
-await program.run();
+const program = new Program(new Counter(), { altScreen: true })
+await program.run()
 ```
 
 ## Architecture
@@ -71,8 +71,8 @@ All messages must include a `_tag` discriminant for type-safe matching:
 
 ```ts
 type MyMsg =
-  | { _tag: "tick"; time: Date }
-  | { _tag: "data-loaded"; items: string[] };
+  | { _tag: 'tick'; time: Date }
+  | { _tag: 'data-loaded'; items: string[] }
 ```
 
 ### Commands
@@ -80,25 +80,25 @@ type MyMsg =
 Commands are async functions that return messages. Use the built-in helpers:
 
 ```ts
-import { batch, sequence, tick, every, msg, quit } from "@suds-cli/tea";
+import { batch, sequence, tick, every, msg, quit } from '@suds-cli/tea'
 
 // Lift a value into a command
-const notify = msg({ _tag: "notify", text: "Hello" });
+const notify = msg({ _tag: 'notify', text: 'Hello' })
 
 // Emit after delay
-const delayed = tick(1000, (time) => ({ _tag: "tick", time }));
+const delayed = tick(1000, (time) => ({ _tag: 'tick', time }))
 
 // Emit aligned to interval boundary (for clocks, animations)
-const interval = every(1000, (time) => ({ _tag: "tick", time }));
+const interval = every(1000, (time) => ({ _tag: 'tick', time }))
 
 // Run commands concurrently
-const parallel = batch(cmd1, cmd2, cmd3);
+const parallel = batch(cmd1, cmd2, cmd3)
 
 // Run commands sequentially
-const sequential = sequence(cmd1, cmd2, cmd3);
+const sequential = sequence(cmd1, cmd2, cmd3)
 
 // Graceful exit
-const exit = quit();
+const exit = quit()
 ```
 
 ## Input Handling
@@ -161,9 +161,9 @@ Enable mouse with program options:
 
 ```ts
 const program = new Program(model, {
-  mouseMode: "cell",  // Track clicks and drags
+  mouseMode: 'cell', // Track clicks and drags
   // mouseMode: "all", // Track all motion
-});
+})
 ```
 
 ## Terminal Control
@@ -180,12 +180,12 @@ import {
   enableMouseAllMotion,
   disableMouse,
   windowSize,
-} from "@suds-cli/tea";
+} from '@suds-cli/tea'
 
 // In your update function
-return [newModel, clearScreen()];
-return [newModel, setWindowTitle("My App")];
-return [newModel, batch(hideCursor(), clearScreen())];
+return [newModel, clearScreen()]
+return [newModel, setWindowTitle('My App')]
+return [newModel, batch(hideCursor(), clearScreen())]
 ```
 
 ## System Messages
@@ -213,14 +213,14 @@ update(msg: Msg): [Model, Cmd<Msg>] {
 
 ```ts
 const program = new Program(model, {
-  altScreen: true,        // Use alternate screen buffer
-  mouseMode: "cell",      // "cell" | "all" | false
-  fps: 60,                // Render frame rate
-  reportFocus: true,      // Receive focus/blur events
-  bracketedPaste: true,   // Distinguish pasted text
-  input: process.stdin,   // Custom input stream
+  altScreen: true, // Use alternate screen buffer
+  mouseMode: 'cell', // "cell" | "all" | false
+  fps: 60, // Render frame rate
+  reportFocus: true, // Receive focus/blur events
+  bracketedPaste: true, // Distinguish pasted text
+  input: process.stdin, // Custom input stream
   output: process.stdout, // Custom output stream
-});
+})
 ```
 
 ## Scripts
@@ -233,9 +233,3 @@ const program = new Program(model, {
 ## License
 
 MIT
-
-
-
-
-
-

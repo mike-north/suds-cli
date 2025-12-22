@@ -1,6 +1,6 @@
 /** Tick message for timer countdown. @public */
 export class TickMsg {
-  readonly _tag = "timer-tick";
+  readonly _tag = 'timer-tick'
 
   constructor(
     /** Unique timer ID */
@@ -14,14 +14,14 @@ export class TickMsg {
 
 /** Message emitted once when the timer times out. @public */
 export class TimeoutMsg {
-  readonly _tag = "timer-timeout";
+  readonly _tag = 'timer-timeout'
 
   constructor(public readonly id: number) {}
 }
 
 /** Message that starts or stops the timer. @public */
 export class StartStopMsg {
-  readonly _tag = "timer-start-stop";
+  readonly _tag = 'timer-start-stop'
 
   constructor(
     /** Unique timer ID */
@@ -30,6 +30,3 @@ export class StartStopMsg {
     public readonly running: boolean,
   ) {}
 }
-
-
-

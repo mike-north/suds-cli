@@ -9,32 +9,32 @@ import {
   SetWindowTitleMsg,
   ShowCursorMsg,
   WindowSizeMsg,
-} from "./messages.js";
-import type { Cmd, Msg } from "./types.js";
+} from './messages.js'
+import type { Cmd, Msg } from './types.js'
 
 /** @public Clear the terminal screen. */
-export const clearScreen = (): Cmd<Msg> => () => new ClearScreenMsg();
+export const clearScreen = (): Cmd<Msg> => () => new ClearScreenMsg()
 /** @public Enter the alternate screen buffer. */
-export const enterAltScreen = (): Cmd<Msg> => () => new EnterAltScreenMsg();
+export const enterAltScreen = (): Cmd<Msg> => () => new EnterAltScreenMsg()
 /** @public Exit the alternate screen buffer. */
-export const exitAltScreen = (): Cmd<Msg> => () => new ExitAltScreenMsg();
+export const exitAltScreen = (): Cmd<Msg> => () => new ExitAltScreenMsg()
 /** @public Enable cell-motion mouse reporting. */
 export const enableMouseCellMotion = (): Cmd<Msg> => () =>
-  new EnableMouseCellMotionMsg();
+  new EnableMouseCellMotionMsg()
 /** @public Enable all-motion mouse reporting. */
 export const enableMouseAllMotion = (): Cmd<Msg> => () =>
-  new EnableMouseAllMotionMsg();
+  new EnableMouseAllMotionMsg()
 /** @public Disable mouse reporting. */
-export const disableMouse = (): Cmd<Msg> => () => new DisableMouseMsg();
+export const disableMouse = (): Cmd<Msg> => () => new DisableMouseMsg()
 /** @public Show the cursor. */
-export const showCursor = (): Cmd<Msg> => () => new ShowCursorMsg();
+export const showCursor = (): Cmd<Msg> => () => new ShowCursorMsg()
 /** @public Hide the cursor. */
-export const hideCursor = (): Cmd<Msg> => () => new HideCursorMsg();
+export const hideCursor = (): Cmd<Msg> => () => new HideCursorMsg()
 /** @public Set the terminal window title. */
 export const setWindowTitle =
   (title: string): Cmd<Msg> =>
   () =>
-    new SetWindowTitleMsg(title);
+    new SetWindowTitleMsg(title)
 /** @public Emit the current window size. */
 export const windowSize = (): Cmd<Msg> => () =>
-  new WindowSizeMsg(process.stdout.columns ?? 0, process.stdout.rows ?? 0);
+  new WindowSizeMsg(process.stdout.columns ?? 0, process.stdout.rows ?? 0)

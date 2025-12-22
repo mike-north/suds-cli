@@ -3,7 +3,7 @@
  * @public
  */
 export class FrameMsg {
-  readonly _tag = "progress:frame";
+  readonly _tag = 'progress:frame'
 
   constructor(
     /** Unique progress ID for routing */
@@ -14,6 +14,3 @@ export class FrameMsg {
     public readonly time: Date,
   ) {}
 }
-
-
-

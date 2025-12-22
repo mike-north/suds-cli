@@ -1,5 +1,5 @@
-import { Style } from "@suds-cli/chapstick";
-import type { Binding } from "@suds-cli/key";
+import { Style } from '@suds-cli/chapstick'
+import type { Binding } from '@suds-cli/key'
 
 /**
  * Interface for components that provide help bindings.
@@ -7,9 +7,9 @@ import type { Binding } from "@suds-cli/key";
  */
 export interface KeyMap {
   /** Bindings for short (single-line) help. */
-  shortHelp(): Binding[];
+  shortHelp(): Binding[]
   /** Bindings grouped into columns for full help. */
-  fullHelp(): Binding[][];
+  fullHelp(): Binding[][]
 }
 
 /**
@@ -17,14 +17,11 @@ export interface KeyMap {
  * @public
  */
 export interface HelpStyles {
-  ellipsis: Style;
-  shortKey: Style;
-  shortDesc: Style;
-  shortSeparator: Style;
-  fullKey: Style;
-  fullDesc: Style;
-  fullSeparator: Style;
+  ellipsis: Style
+  shortKey: Style
+  shortDesc: Style
+  shortSeparator: Style
+  fullKey: Style
+  fullDesc: Style
+  fullSeparator: Style
 }
-
-
-

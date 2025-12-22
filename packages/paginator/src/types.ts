@@ -1,12 +1,12 @@
-import { Binding, newBinding } from "@suds-cli/key";
+import { Binding, newBinding } from '@suds-cli/key'
 
 /**
  * Pagination display style.
  * @public
  */
 export enum PaginatorType {
-  Arabic = "arabic",
-  Dots = "dots",
+  Arabic = 'arabic',
+  Dots = 'dots',
 }
 
 /**
@@ -14,8 +14,8 @@ export enum PaginatorType {
  * @public
  */
 export interface KeyMap {
-  prevPage: Binding;
-  nextPage: Binding;
+  prevPage: Binding
+  nextPage: Binding
 }
 
 /**
@@ -23,9 +23,6 @@ export interface KeyMap {
  * @public
  */
 export const defaultKeyMap: KeyMap = {
-  prevPage: newBinding({ keys: ["pgup", "left", "h"] }),
-  nextPage: newBinding({ keys: ["pgdown", "right", "l"] }),
-};
-
-
-
+  prevPage: newBinding({ keys: ['pgup', 'left', 'h'] }),
+  nextPage: newBinding({ keys: ['pgdown', 'right', 'l'] }),
+}

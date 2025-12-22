@@ -3,7 +3,7 @@
  * @public
  */
 export class TickMsg {
-  readonly _tag = "spinner:tick";
+  readonly _tag = 'spinner:tick'
 
   constructor(
     /** The time at which the tick occurred */
@@ -14,4 +14,3 @@ export class TickMsg {
     public readonly tag: number,
   ) {}
 }
-

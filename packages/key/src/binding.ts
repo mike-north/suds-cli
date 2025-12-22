@@ -4,9 +4,9 @@
  */
 export interface Help {
   /** Display key (e.g. "↑/k", "ctrl+c") */
-  readonly key: string;
+  readonly key: string
   /** Description (e.g. "move up", "quit") */
-  readonly desc: string;
+  readonly desc: string
 }
 
 /**
@@ -15,11 +15,11 @@ export interface Help {
  */
 export interface BindingOptions {
   /** Key strings that trigger this binding (e.g. ["k", "up"]) */
-  keys?: readonly string[];
+  keys?: readonly string[]
   /** Help text for display */
-  help?: Help;
+  help?: Help
   /** Whether the binding is disabled */
-  disabled?: boolean;
+  disabled?: boolean
 }
 
 /**
@@ -28,24 +28,24 @@ export interface BindingOptions {
  * @public
  */
 export class Binding {
-  readonly #keys: readonly string[];
-  readonly #help: Help;
-  readonly #disabled: boolean;
+  readonly #keys: readonly string[]
+  readonly #help: Help
+  readonly #disabled: boolean
 
   constructor(options: BindingOptions = {}) {
-    this.#keys = options.keys ?? [];
-    this.#help = options.help ?? { key: "", desc: "" };
-    this.#disabled = options.disabled ?? false;
+    this.#keys = options.keys ?? []
+    this.#help = options.help ?? { key: '', desc: '' }
+    this.#disabled = options.disabled ?? false
   }
 
   /** Returns the keys for this binding. */
   keys(): readonly string[] {
-    return this.#keys;
+    return this.#keys
   }
 
   /** Returns the help text for this binding. */
   help(): Help {
-    return this.#help;
+    return this.#help
   }
 
   /**
@@ -53,7 +53,7 @@ export class Binding {
    * Disabled bindings won't be matched and won't show up in help.
    */
   enabled(): boolean {
-    return !this.#disabled && this.#keys.length > 0;
+    return !this.#disabled && this.#keys.length > 0
   }
 
   /** Returns a new Binding with the given keys. */
@@ -62,7 +62,7 @@ export class Binding {
       keys,
       help: this.#help,
       disabled: this.#disabled,
-    });
+    })
   }
 
   /** Returns a new Binding with the given help text. */
@@ -71,7 +71,7 @@ export class Binding {
       keys: this.#keys,
       help: { key, desc },
       disabled: this.#disabled,
-    });
+    })
   }
 
   /** Returns a new Binding with disabled set to the given value (default: true). */
@@ -80,12 +80,12 @@ export class Binding {
       keys: this.#keys,
       help: this.#help,
       disabled,
-    });
+    })
   }
 
   /** Returns a new Binding with enabled set (inverse of disabled). */
   withEnabled(enabled = true): Binding {
-    return this.withDisabled(!enabled);
+    return this.withDisabled(!enabled)
   }
 
   /**
@@ -95,9 +95,9 @@ export class Binding {
   unbound(): Binding {
     return new Binding({
       keys: [],
-      help: { key: "", desc: "" },
+      help: { key: '', desc: '' },
       disabled: this.#disabled,
-    });
+    })
   }
 }
 
@@ -119,11 +119,5 @@ export class Binding {
  * @public
  */
 export function newBinding(options?: BindingOptions): Binding {
-  return new Binding(options);
+  return new Binding(options)
 }
-
-
-
-
-
-
