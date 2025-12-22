@@ -1,0 +1,5 @@
+# Mark auto-generated files so they're hidden by default in GitHub PRs
+# and excluded from language statistics
+
+api-reports/*.api.md linguist-generated=true
+docs/** linguist-generated=true

@@ -251,6 +251,9 @@ importers:
       '@suds-cli/tea':
         specifier: workspace:*
         version: link:../tea
+      '@suds-cli/viewport':
+        specifier: workspace:*
+        version: link:../viewport
     devDependencies:
       typescript:
         specifier: 5.8.2

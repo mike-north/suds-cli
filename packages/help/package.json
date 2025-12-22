@@ -1,7 +1,7 @@
 {
   "name": "@suds-cli/help",
   "version": "0.0.0",
-  "description": "Auto-generated help view for Suds key bindings",
+  "description": "Help components for Suds terminal UIs: key binding renderer and scrollable help bubble",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -20,7 +20,8 @@
   "dependencies": {
     "@suds-cli/tea": "workspace:*",
     "@suds-cli/key": "workspace:*",
-    "@suds-cli/chapstick": "workspace:*"
+    "@suds-cli/chapstick": "workspace:*",
+    "@suds-cli/viewport": "workspace:*"
   },
   "devDependencies": {
     "typescript": "5.8.2",

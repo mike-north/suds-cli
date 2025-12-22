@@ -6,11 +6,35 @@
 
 import type { Binding } from '@suds-cli/key';
 import { Cmd } from '@suds-cli/tea';
+import type { ColorInput } from '@suds-cli/chapstick';
 import { Msg } from '@suds-cli/tea';
 import { Style } from '@suds-cli/chapstick';
+import { ViewportModel } from '@suds-cli/viewport';
 
 // @public
 export function defaultStyles(): HelpStyles;
+
+// @public
+export interface Entry {
+    description: string;
+    key: string;
+}
+
+// @public
+export class HelpBubble {
+    readonly active: boolean;
+    readonly entries: Entry[];
+    gotoTop(): HelpBubble;
+    static new(active: boolean, title: string, titleColor: TitleColor, entries: Entry[]): HelpBubble;
+    setIsActive(active: boolean): HelpBubble;
+    setSize(width: number, height: number): HelpBubble;
+    setTitleColor(color: TitleColor): HelpBubble;
+    readonly title: string;
+    readonly titleColor: TitleColor;
+    update(msg: Msg): [HelpBubble, Cmd<Msg>];
+    view(): string;
+    readonly viewport: ViewportModel;
+}
 
 // @public
 export class HelpModel {
@@ -73,6 +97,12 @@ export interface HelpStyles {
 export interface KeyMap {
     fullHelp(): Binding[][];
     shortHelp(): Binding[];
+}
+
+// @public
+export interface TitleColor {
+    background: ColorInput;
+    foreground: ColorInput;
 }
 
 // (No @packageDocumentation comment for this package)
