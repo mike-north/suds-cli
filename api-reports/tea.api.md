@@ -372,7 +372,7 @@ export interface ProgramOptions {
     // (undocumented)
     input?: NodeJS.ReadableStream;
     // (undocumented)
-    mouseMode?: 'cell' | 'all' | false;
+    mouseMode?: "cell" | "all" | false;
     // (undocumented)
     output?: NodeJS.WritableStream;
     // (undocumented)
