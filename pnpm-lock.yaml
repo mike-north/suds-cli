@@ -98,6 +98,9 @@ importers:
       '@suds-cli/spinner':
         specifier: workspace:*
         version: link:../packages/spinner
+      '@suds-cli/statusbar':
+        specifier: workspace:*
+        version: link:../packages/statusbar
       '@suds-cli/stopwatch':
         specifier: workspace:*
         version: link:../packages/stopwatch
@@ -320,6 +323,22 @@ importers:
         version: 4.0.15(@types/node@24.10.2)(jiti@2.6.1)(tsx@4.21.0)(yaml@2.8.2)
 
   packages/spinner:
+    dependencies:
+      '@suds-cli/chapstick':
+        specifier: workspace:*
+        version: link:../chapstick
+      '@suds-cli/tea':
+        specifier: workspace:*
+        version: link:../tea
+    devDependencies:
+      typescript:
+        specifier: 5.8.2
+        version: 5.8.2
+      vitest:
+        specifier: ^4.0.15
+        version: 4.0.15(@types/node@24.10.2)(jiti@2.6.1)(tsx@4.21.0)(yaml@2.8.2)
+
+  packages/statusbar:
     dependencies:
       '@suds-cli/chapstick':
         specifier: workspace:*
