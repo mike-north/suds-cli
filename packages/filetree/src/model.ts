@@ -169,7 +169,7 @@ export class FiletreeModel {
   update(msg: Msg): [FiletreeModel, Cmd<Msg> | null] {
     // Handle directory listing message
     if (msg instanceof GetDirectoryListingMsg) {
-      const newMax = Math.min(this.height - 1, msg.items.length - 1);
+      const newMax = Math.max(0, Math.min(this.height - 1, msg.items.length - 1));
       return [
         new FiletreeModel(
           0, // reset cursor to top
@@ -214,7 +214,7 @@ export class FiletreeModel {
     if (msg instanceof WindowSizeMsg) {
       const newHeight = msg.height;
       const newWidth = msg.width;
-      const newMax = Math.min(newHeight - 1, this.files.length - 1);
+      const newMax = Math.max(0, Math.min(newHeight - 1, this.files.length - 1));
 
       return [
         new FiletreeModel(
