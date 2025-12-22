@@ -1,6 +1,5 @@
 /**
  * Markdown rendering utilities.
- * @module
  */
 
 import { Marked } from "marked";

@@ -1,6 +1,5 @@
 /**
  * Markdown viewer component.
- * @module
  */
 
 import { Style } from "@suds-cli/chapstick";

@@ -1,6 +1,5 @@
 /**
  * Message types for the markdown component.
- * @module
  */
 
 /**
