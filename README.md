@@ -4,7 +4,7 @@
 
 Suds is a **best-effort TypeScript port** of the wonderful [Bubble Tea](https://github.com/charmbracelet/bubbletea) framework and [Bubbles](https://github.com/charmbracelet/bubbles) component library from [Charm](https://charm.sh), with additional utilities inspired by [Teacup](https://github.com/mistakenelf/teacup).
 
-<img src="./examples/textarea-demo.gif" width="800" />
+<img src="./examples/textarea-demo.gif" width="800" alt="Textarea component demo" />
 
 ## Why Suds?
 
@@ -120,7 +120,7 @@ const box = new Style()
 console.log(box.render(updated.view()))
 ```
 
-```
+```text
 ╭──────────────────────────────────────────────╮
 │                                              │
 │  ████████████████████████░░░░░░░░░░░░ 65%    │
@@ -215,7 +215,7 @@ console.log(next.view())
 
 Suds follows the [Elm Architecture](https://guide.elm-lang.org/architecture/), a simple pattern for building UIs:
 
-```
+```text
 ┌─────────────────────────────────────────────┐
 │                                             │
 │   ┌─────────┐                               │

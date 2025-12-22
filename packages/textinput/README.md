@@ -2,7 +2,7 @@
 
 Single-line text input component for Suds terminal UIs. Port of Charmbracelet Bubbles textinput.
 
-<img src="../../examples/textinput-demo.gif" width="950" />
+<img src="../../examples/textinput-demo.gif" width="950" alt="Textinput component demo" />
 
 ## Install
 

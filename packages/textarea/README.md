@@ -2,7 +2,7 @@
 
 Multi-line textarea component for Suds terminal UIs. Early port of Charmbracelet Bubbles textarea.
 
-<img src="../../examples/textarea-demo.gif" width="950" />
+<img src="../../examples/textarea-demo.gif" width="950" alt="Textarea component demo" />
 
 ## Install
 

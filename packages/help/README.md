@@ -2,7 +2,7 @@
 
 Render short or full help text from your key bindings. Ported from the Charm `bubbles/help` component.
 
-<img src="../../examples/help-demo.gif" width="950" />
+<img src="../../examples/help-demo.gif" width="950" alt="Help component demo" />
 
 ```ts
 import { HelpModel } from '@suds-cli/help'

@@ -2,7 +2,7 @@
 
 Animated spinner component for Suds terminal UIs. Port of Charmbracelet Bubbles spinner.
 
-<img src="../../examples/spinner-demo.gif" width="950" />
+<img src="../../examples/spinner-demo.gif" width="950" alt="Spinner component demo" />
 
 ## Install
 
