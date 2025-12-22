@@ -31,6 +31,8 @@
   },
   "private": true,
   "scripts": {
+    "check": "pnpm check:typecheck && pnpm check:eslint",
+    "check:eslint": "eslint \"*.ts\"",
     "check:typecheck": "tsc --noEmit",
     "code": "tsx code-demo.ts",
     "filepicker": "tsx filepicker-demo.ts",
