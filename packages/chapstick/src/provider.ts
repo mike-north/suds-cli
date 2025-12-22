@@ -1,41 +1,17 @@
 import { Style } from './style.js'
-import type { ColorInput } from './types.js'
-
-/**
- * Chainable interface for creating and styling text.
- * Matches the public API of the Style class for dependency injection.
- * @public
- */
-export interface ChainableStyle {
-  bold(enabled?: boolean): ChainableStyle
-  italic(enabled?: boolean): ChainableStyle
-  underline(enabled?: boolean): ChainableStyle
-  strikethrough(enabled?: boolean): ChainableStyle
-  foreground(color: ColorInput): ChainableStyle
-  background(color: ColorInput): ChainableStyle
-  padding(all: number): ChainableStyle
-  padding(vertical: number, horizontal: number): ChainableStyle
-  padding(
-    top: number,
-    right: number,
-    bottom: number,
-    left: number,
-  ): ChainableStyle
-  render(text: string): string
-}
 
 /**
  * Common semantic styles for terminal output.
  * @public
  */
 export interface SemanticStyles {
-  success: ChainableStyle
-  error: ChainableStyle
-  warning: ChainableStyle
-  info: ChainableStyle
-  muted: ChainableStyle
-  highlight: ChainableStyle
-  header: ChainableStyle
+  success: Style
+  error: Style
+  warning: Style
+  info: Style
+  muted: Style
+  highlight: Style
+  header: Style
 }
 
 /**
@@ -45,9 +21,9 @@ export interface SemanticStyles {
  */
 export interface StyleProvider {
   /**
-   * Create a new chainable style instance.
+   * Create a new style instance.
    */
-  createStyle(): ChainableStyle
+  createStyle(): Style
   
   /**
    * Get semantic styles for common use cases.
@@ -60,7 +36,7 @@ export interface StyleProvider {
  * @public
  */
 export class ChapstickStyleProvider implements StyleProvider {
-  createStyle(): ChainableStyle {
+  createStyle(): Style {
     return new Style()
   }
 

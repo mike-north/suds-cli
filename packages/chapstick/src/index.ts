@@ -33,7 +33,6 @@ export { Style, type StyleKey } from './style.js'
 export {
   ChapstickStyleProvider,
   defaultStyleProvider,
-  type ChainableStyle,
   type SemanticStyles,
   type StyleProvider,
 } from './provider.js'

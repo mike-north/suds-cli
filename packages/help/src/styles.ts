@@ -1,5 +1,4 @@
 import { 
-  Style,
   type StyleProvider,
   defaultStyleProvider,
 } from "@suds-cli/chapstick";

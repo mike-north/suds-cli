@@ -2,7 +2,6 @@ import { describe, expect, it, vi } from 'vitest'
 import {
   ChapstickStyleProvider,
   defaultStyleProvider,
-  type ChainableStyle,
   type StyleProvider,
 } from '../src/provider.js'
 import { Style } from '../src/style.js'
@@ -73,17 +72,16 @@ describe('defaultStyleProvider', () => {
 
 describe('Mock StyleProvider for testing', () => {
   it('demonstrates easy mocking with mock provider', () => {
-    // Create a mock style that just returns text without styling
-    const mockStyle: ChainableStyle = {
-      bold: vi.fn().mockReturnThis(),
-      italic: vi.fn().mockReturnThis(),
-      underline: vi.fn().mockReturnThis(),
-      strikethrough: vi.fn().mockReturnThis(),
-      foreground: vi.fn().mockReturnThis(),
-      background: vi.fn().mockReturnThis(),
-      padding: vi.fn().mockReturnThis() as any,
-      render: vi.fn((text: string) => text),
-    }
+    // Create a mock style that tracks calls
+    const mockRender = vi.fn((text: string) => text)
+    const mockBold = vi.fn()
+    const mockForeground = vi.fn()
+    
+    const mockStyle = {
+      bold: mockBold,
+      foreground: mockForeground,
+      render: mockRender,
+    } as unknown as Style
 
     // Create a mock provider
     const mockProvider: StyleProvider = {
@@ -101,27 +99,22 @@ describe('Mock StyleProvider for testing', () => {
 
     // Use the mock provider
     const style = mockProvider.createStyle()
-    style.bold(true).foreground('#FF0000')
+    style.bold(true)
+    style.foreground('#FF0000')
     const result = style.render('test')
 
     // Verify mocking works
     expect(mockProvider.createStyle).toHaveBeenCalled()
-    expect(mockStyle.bold).toHaveBeenCalledWith(true)
-    expect(mockStyle.foreground).toHaveBeenCalledWith('#FF0000')
+    expect(mockBold).toHaveBeenCalledWith(true)
+    expect(mockForeground).toHaveBeenCalledWith('#FF0000')
     expect(result).toBe('test')
   })
 
   it('demonstrates testing with semantic styles', () => {
-    const mockStyle: ChainableStyle = {
-      bold: vi.fn().mockReturnThis(),
-      italic: vi.fn().mockReturnThis(),
-      underline: vi.fn().mockReturnThis(),
-      strikethrough: vi.fn().mockReturnThis(),
-      foreground: vi.fn().mockReturnThis(),
-      background: vi.fn().mockReturnThis(),
-      padding: vi.fn().mockReturnThis() as any,
-      render: vi.fn((text: string) => `[${text}]`),
-    }
+    const mockRender = vi.fn((text: string) => `[${text}]`)
+    const mockStyle = {
+      render: mockRender,
+    } as unknown as Style
 
     const mockProvider: StyleProvider = {
       createStyle: vi.fn(() => mockStyle),
@@ -151,6 +144,6 @@ describe('Mock StyleProvider for testing', () => {
     // Test with mock provider
     const result = displayMessage('Test message', 'success', mockProvider)
     expect(result).toBe('[Test message]')
-    expect(mockStyle.render).toHaveBeenCalledWith('Test message')
+    expect(mockRender).toHaveBeenCalledWith('Test message')
   })
 })
