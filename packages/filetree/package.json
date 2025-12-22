@@ -19,8 +19,6 @@
   },
   "dependencies": {
     "@suds-cli/chapstick": "workspace:*",
-    "@suds-cli/filesystem": "workspace:*",
-    "@suds-cli/icons": "workspace:*",
     "@suds-cli/key": "workspace:*",
     "@suds-cli/tea": "workspace:*"
   },

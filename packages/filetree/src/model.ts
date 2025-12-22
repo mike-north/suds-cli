@@ -282,7 +282,7 @@ export class FiletreeModel {
         let nextMin = this.min;
         let nextMax = this.max;
         
-        if (nextCursor < this.min) {
+        if (nextCursor < this.min && this.min > 0) {
           nextMin = this.min - 1;
           nextMax = this.max - 1;
         }
