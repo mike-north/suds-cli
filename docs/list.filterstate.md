@@ -9,5 +9,5 @@ Filtering lifecycle for the list.
 **Signature:**
 
 ```typescript
-export type FilterState = "unfiltered" | "filtering" | "applied";
+export type FilterState = 'unfiltered' | 'filtering' | 'applied';
 ```
