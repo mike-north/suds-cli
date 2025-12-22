@@ -7,5 +7,5 @@
 **Signature:**
 
 ```typescript
-mouseMode?: "cell" | "all" | false;
+mouseMode?: 'cell' | 'all' | false;
 ```

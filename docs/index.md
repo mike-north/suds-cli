@@ -28,6 +28,17 @@ Description
 </td></tr>
 <tr><td>
 
+[@suds-cli/code](./code.md)
+
+
+</td><td>
+
+Syntax-highlighted code viewer component.
+
+
+</td></tr>
+<tr><td>
+
 [@suds-cli/cursor](./cursor.md)
 
 
@@ -46,7 +57,25 @@ Description
 </td></tr>
 <tr><td>
 
+[@suds-cli/filesystem](./filesystem.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
 [@suds-cli/help](./help.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[@suds-cli/icons](./icons.md)
 
 
 </td><td>
@@ -101,6 +130,15 @@ Description
 <tr><td>
 
 [@suds-cli/spinner](./spinner.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[@suds-cli/statusbar](./statusbar.md)
 
 
 </td><td>

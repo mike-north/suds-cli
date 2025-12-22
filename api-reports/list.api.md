@@ -43,7 +43,7 @@ export const defaultKeyMap: ListKeyMap;
 export function defaultStyles(): ListStyles;
 
 // @public
-export type FilterState = "unfiltered" | "filtering" | "applied";
+export type FilterState = 'unfiltered' | 'filtering' | 'applied';
 
 // @public
 export interface Item {

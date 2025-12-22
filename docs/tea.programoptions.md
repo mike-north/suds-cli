@@ -121,7 +121,7 @@ _(Optional)_
 
 </td><td>
 
-"cell" \| "all" \| false
+'cell' \| 'all' \| false
 
 
 </td><td>
