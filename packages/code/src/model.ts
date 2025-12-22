@@ -2,7 +2,7 @@ import { Style } from "@suds-cli/chapstick";
 import { readFileContent } from "@suds-cli/filesystem";
 import { type Cmd, type Msg } from "@suds-cli/tea";
 import { ViewportModel } from "@suds-cli/viewport";
-import { getHighlighter, type Highlighter } from "shiki";
+import { getHighlighter } from "shiki";
 import path from "node:path";
 import { ErrorMsg, SyntaxMsg } from "./messages.js";
 
@@ -42,6 +42,7 @@ export async function highlight(
 
     // Load the language if needed, fallback to text
     try {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-argument
       await highlighter.loadLanguage(lang as any);
     } catch {
       // If language loading fails, use 'text' as fallback
@@ -56,6 +57,7 @@ export async function highlight(
 
     // Convert tokens to ANSI colored text
     const tokens = highlighter.codeToTokens(content, {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment
       lang: lang as any,
       theme: theme,
     });
@@ -76,7 +78,8 @@ export async function highlight(
 
     return result.trimEnd();
   } catch (error) {
-    throw new Error(`Syntax highlighting failed: ${error}`);
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    throw new Error(`Syntax highlighting failed: ${errorMessage}`);
   }
 }
 
