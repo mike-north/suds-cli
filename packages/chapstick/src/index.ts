@@ -29,5 +29,14 @@ export { width, clampWidth, wrapWidth, padLines } from './measure.js'
 // Style class
 export { Style, type StyleKey } from './style.js'
 
+// Style providers for dependency injection
+export {
+  ChapstickStyleProvider,
+  defaultStyleProvider,
+  type ChainableStyle,
+  type SemanticStyles,
+  type StyleProvider,
+} from './provider.js'
+
 // Layout utilities
 export { joinHorizontal, joinVertical, place } from './join.js'

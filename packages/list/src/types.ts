@@ -2,6 +2,7 @@ import type { Item } from "./item.js";
 import type { ItemDelegate } from "./delegate.js";
 import type { ListKeyMap } from "./keymap.js";
 import type { ListStyles } from "./styles.js";
+import type { StyleProvider } from "@suds-cli/chapstick";
 
 /** Filtering lifecycle for the list. @public */
 export type FilterState = "unfiltered" | "filtering" | "applied";
@@ -24,6 +25,8 @@ export interface ListOptions<T extends Item> {
   filteringEnabled?: boolean;
   styles?: Partial<ListStyles>;
   keyMap?: ListKeyMap;
+  /** Optional style provider for dependency injection */
+  styleProvider?: StyleProvider;
 }
 
 

@@ -1,4 +1,8 @@
-import { joinHorizontal, width as stringWidth } from "@suds-cli/chapstick";
+import { 
+  joinHorizontal,
+  width as stringWidth,
+  type StyleProvider,
+} from "@suds-cli/chapstick";
 import { type Cmd, type Msg } from "@suds-cli/tea";
 import type { Binding } from "@suds-cli/key";
 import { defaultStyles } from "./styles.js";
@@ -15,6 +19,8 @@ export interface HelpOptions {
   fullSeparator?: string;
   ellipsis?: string;
   styles?: Partial<HelpStyles>;
+  /** Optional style provider for dependency injection */
+  styleProvider?: StyleProvider;
 }
 
 /**
@@ -35,7 +41,7 @@ export class HelpModel {
     this.shortSeparator = options.shortSeparator ?? " • ";
     this.fullSeparator = options.fullSeparator ?? "    ";
     this.ellipsis = options.ellipsis ?? "…";
-    const defaults = defaultStyles();
+    const defaults = defaultStyles(options.styleProvider);
     this.styles = { ...defaults, ...options.styles };
   }
 

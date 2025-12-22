@@ -136,7 +136,7 @@ export class ListModel<T extends Item> {
 
   /** Create a new list model. */
   static new<T extends Item>(options: ListOptions<T>): ListModel<T> {
-    const styles = mergeStyles(options.styles);
+    const styles = mergeStyles(options.styles, options.styleProvider);
     const delegate =
       options.delegate instanceof DefaultDelegate
         ? options.delegate.withStyles(styles)

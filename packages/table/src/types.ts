@@ -1,4 +1,4 @@
-import type { BorderStyle } from "@suds-cli/chapstick";
+import type { BorderStyle, StyleProvider } from "@suds-cli/chapstick";
 import type { TableKeyMap } from "./keymap.js";
 import type { TableStyles } from "./styles.js";
 
@@ -22,6 +22,8 @@ export interface TableOptions {
   keyMap?: Partial<TableKeyMap>;
   bordered?: boolean;
   borderStyle?: BorderStyle;
+  /** Optional style provider for dependency injection */
+  styleProvider?: StyleProvider;
 }
 
 

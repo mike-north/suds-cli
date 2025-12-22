@@ -1,10 +1,12 @@
-import {
+import { 
   Style,
   borderStyles,
   defaultBorderStyle,
   joinHorizontal,
   width as textWidth,
   type BorderStyle,
+  type StyleProvider,
+  defaultStyleProvider,
 } from "@suds-cli/chapstick";
 import { matches } from "@suds-cli/key";
 import { KeyMsg, type Cmd, type Msg } from "@suds-cli/tea";
@@ -97,9 +99,10 @@ function mergeKeyMap(
 
 function mergeStyles(
   overrides?: Partial<TableStyles>,
-  borderStyleOverride?: BorderStyle
+  borderStyleOverride?: BorderStyle,
+  styleProvider?: StyleProvider,
 ): TableStyles {
-  const base = defaultStyles();
+  const base = defaultStyles(styleProvider);
   const merged: TableStyles = {
     ...base,
     ...overrides,
@@ -221,7 +224,7 @@ export class TableModel {
   static new(options: TableOptions): TableModel {
     const rows = [...(options.rows ?? [])];
     const bordered = options.bordered ?? false;
-    const styles = mergeStyles(options.styles, options.borderStyle);
+    const styles = mergeStyles(options.styles, options.borderStyle, options.styleProvider);
     const width =
       options.width ?? totalColumnWidth(options.columns, bordered) ?? 0;
     const autoWidth = options.width === undefined;
