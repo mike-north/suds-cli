@@ -33,6 +33,11 @@ export class NodeClipboardAdapter implements ClipboardAdapter {
   }
 
   private async loadClipboard(): Promise<ClipboardModule | null> {
+    // Don't try to load if we've already determined it's unavailable
+    if (this.available === false) {
+      return null
+    }
+
     if (this.clipboard !== null) {
       return this.clipboard
     }
@@ -41,6 +46,8 @@ export class NodeClipboardAdapter implements ClipboardAdapter {
       // Dynamic import of optional peer dependency
       const module = (await import('clipboardy')) as { default: ClipboardModule }
       this.clipboard = module.default
+      // Note: We set available=true here, but it may be set to false later if runtime fails
+      // (e.g., clipboardy installed but xsel binary missing)
       this.available = true
       return this.clipboard
     } catch {
@@ -54,7 +61,15 @@ export class NodeClipboardAdapter implements ClipboardAdapter {
     if (!clipboard) {
       throw new Error('Clipboard not available. Install clipboardy: npm install clipboardy')
     }
-    return clipboard.read()
+    try {
+      return await clipboard.read()
+    } catch {
+      // Mark as unavailable when clipboardy fails at runtime (e.g., missing xsel binary)
+      // This ensures isAvailable() returns false on subsequent checks
+      this.available = false
+      this.clipboard = null
+      throw new Error('Clipboard not available. Install clipboardy: npm install clipboardy')
+    }
   }
 
   async write(text: string): Promise<void> {
@@ -62,7 +77,15 @@ export class NodeClipboardAdapter implements ClipboardAdapter {
     if (!clipboard) {
       throw new Error('Clipboard not available. Install clipboardy: npm install clipboardy')
     }
-    await clipboard.write(text)
+    try {
+      await clipboard.write(text)
+    } catch {
+      // Mark as unavailable when clipboardy fails at runtime (e.g., missing xsel binary)
+      // This ensures isAvailable() returns false on subsequent checks
+      this.available = false
+      this.clipboard = null
+      throw new Error('Clipboard not available. Install clipboardy: npm install clipboardy')
+    }
   }
 
   isAvailable(): boolean {
