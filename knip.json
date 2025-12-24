@@ -8,6 +8,7 @@
     "supports-color",
     "syncpack"
   ],
+  "ignoreFiles": ["./examples/filetree/**/*"],
   "ignoreBinaries": ["test:graceful-degradation", "test:browser"],
   "workspaces": {
     ".": {
