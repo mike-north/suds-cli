@@ -3,10 +3,10 @@
   "description": "Syntax-highlighted code viewer with scrollable viewport for Suds terminal UIs",
   "version": "0.1.0-alpha.0",
   "dependencies": {
-    "@suds-cli/chapstick": "0.1.0-alpha.0",
-    "@suds-cli/filesystem": "0.0.0",
-    "@suds-cli/tea": "0.0.0",
-    "@suds-cli/viewport": "0.0.1-alpha.0",
+    "@suds-cli/chapstick": "workspace:*",
+    "@suds-cli/filesystem": "workspace:*",
+    "@suds-cli/tea": "workspace:*",
+    "@suds-cli/viewport": "workspace:*",
     "shiki": "^1.24.2"
   },
   "devDependencies": {

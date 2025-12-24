@@ -3,7 +3,7 @@
   "description": "Countdown timer component for Suds terminal UIs",
   "version": "0.0.0",
   "dependencies": {
-    "@suds-cli/tea": "0.0.0"
+    "@suds-cli/tea": "workspace:*"
   },
   "devDependencies": {
     "typescript": "5.8.2",

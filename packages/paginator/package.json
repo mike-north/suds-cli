@@ -3,8 +3,8 @@
   "description": "Pagination state + rendering for Suds terminal UIs",
   "version": "0.0.0",
   "dependencies": {
-    "@suds-cli/key": "0.0.0",
-    "@suds-cli/tea": "0.0.0"
+    "@suds-cli/key": "workspace:*",
+    "@suds-cli/tea": "workspace:*"
   },
   "devDependencies": {
     "typescript": "5.8.2",

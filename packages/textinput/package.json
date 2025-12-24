@@ -3,11 +3,11 @@
   "description": "Single-line text input component for Suds terminal UIs",
   "version": "0.0.1-alpha.0",
   "dependencies": {
-    "@suds-cli/chapstick": "0.1.0-alpha.0",
-    "@suds-cli/cursor": "0.0.1-alpha.0",
-    "@suds-cli/key": "0.0.0",
-    "@suds-cli/runeutil": "0.0.0",
-    "@suds-cli/tea": "0.0.0",
+    "@suds-cli/chapstick": "workspace:*",
+    "@suds-cli/cursor": "workspace:*",
+    "@suds-cli/key": "workspace:*",
+    "@suds-cli/runeutil": "workspace:*",
+    "@suds-cli/tea": "workspace:*",
     "clipboardy": "^4.0.0",
     "grapheme-splitter": "^1.0.4"
   },

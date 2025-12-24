@@ -169,17 +169,17 @@ importers:
   packages/code:
     dependencies:
       '@suds-cli/chapstick':
-        specifier: 0.1.0-alpha.0
-        version: 0.1.0-alpha.0
+        specifier: workspace:*
+        version: link:../chapstick
       '@suds-cli/filesystem':
-        specifier: 0.0.0
-        version: 0.0.0
+        specifier: workspace:*
+        version: link:../filesystem
       '@suds-cli/tea':
-        specifier: 0.0.0
-        version: 0.0.0
+        specifier: workspace:*
+        version: link:../tea
       '@suds-cli/viewport':
-        specifier: 0.0.1-alpha.0
-        version: 0.0.1-alpha.0
+        specifier: workspace:*
+        version: link:../viewport
       shiki:
         specifier: ^1.24.2
         version: 1.29.2
@@ -194,11 +194,11 @@ importers:
   packages/cursor:
     dependencies:
       '@suds-cli/chapstick':
-        specifier: 0.1.0-alpha.0
-        version: 0.1.0-alpha.0
+        specifier: workspace:*
+        version: link:../chapstick
       '@suds-cli/tea':
-        specifier: 0.0.0
-        version: 0.0.0
+        specifier: workspace:*
+        version: link:../tea
     devDependencies:
       typescript:
         specifier: 5.8.2
@@ -210,17 +210,17 @@ importers:
   packages/filepicker:
     dependencies:
       '@suds-cli/chapstick':
-        specifier: 0.1.0-alpha.0
-        version: 0.1.0-alpha.0
+        specifier: workspace:*
+        version: link:../chapstick
       '@suds-cli/help':
-        specifier: 0.1.0-alpha.0
-        version: 0.1.0-alpha.0
+        specifier: workspace:*
+        version: link:../help
       '@suds-cli/key':
-        specifier: 0.0.0
-        version: 0.0.0
+        specifier: workspace:*
+        version: link:../key
       '@suds-cli/tea':
-        specifier: 0.0.0
-        version: 0.0.0
+        specifier: workspace:*
+        version: link:../tea
     devDependencies:
       typescript:
         specifier: 5.8.2
@@ -254,17 +254,17 @@ importers:
   packages/help:
     dependencies:
       '@suds-cli/chapstick':
-        specifier: 0.1.0-alpha.0
-        version: 0.1.0-alpha.0
+        specifier: workspace:*
+        version: link:../chapstick
       '@suds-cli/key':
-        specifier: 0.0.0
-        version: 0.0.0
+        specifier: workspace:*
+        version: link:../key
       '@suds-cli/tea':
-        specifier: 0.0.0
-        version: 0.0.0
+        specifier: workspace:*
+        version: link:../tea
       '@suds-cli/viewport':
-        specifier: 0.0.1-alpha.0
-        version: 0.0.1-alpha.0
+        specifier: workspace:*
+        version: link:../viewport
     devDependencies:
       typescript:
         specifier: 5.8.2
@@ -294,23 +294,23 @@ importers:
   packages/list:
     dependencies:
       '@suds-cli/chapstick':
-        specifier: 0.1.0-alpha.0
-        version: 0.1.0-alpha.0
+        specifier: workspace:*
+        version: link:../chapstick
       '@suds-cli/help':
-        specifier: 0.1.0-alpha.0
-        version: 0.1.0-alpha.0
+        specifier: workspace:*
+        version: link:../help
       '@suds-cli/key':
-        specifier: 0.0.0
-        version: 0.0.0
+        specifier: workspace:*
+        version: link:../key
       '@suds-cli/paginator':
-        specifier: 0.0.0
-        version: 0.0.0
+        specifier: workspace:*
+        version: link:../paginator
       '@suds-cli/spinner':
-        specifier: 0.0.1-alpha.0
-        version: 0.0.1-alpha.0
+        specifier: workspace:*
+        version: link:../spinner
       '@suds-cli/tea':
-        specifier: 0.0.0
-        version: 0.0.0
+        specifier: workspace:*
+        version: link:../tea
       fuzzysort:
         specifier: 2.0.4
         version: 2.0.4
@@ -353,17 +353,17 @@ importers:
   packages/markdown:
     dependencies:
       '@suds-cli/chapstick':
-        specifier: 0.1.0-alpha.0
-        version: 0.1.0-alpha.0
+        specifier: workspace:*
+        version: link:../chapstick
       '@suds-cli/filesystem':
-        specifier: 0.0.0
-        version: 0.0.0
+        specifier: workspace:*
+        version: link:../filesystem
       '@suds-cli/tea':
-        specifier: 0.0.0
-        version: 0.0.0
+        specifier: workspace:*
+        version: link:../tea
       '@suds-cli/viewport':
-        specifier: 0.0.1-alpha.0
-        version: 0.0.1-alpha.0
+        specifier: workspace:*
+        version: link:../viewport
       chalk:
         specifier: ^5.4.1
         version: 5.6.2
@@ -384,11 +384,11 @@ importers:
   packages/paginator:
     dependencies:
       '@suds-cli/key':
-        specifier: 0.0.0
-        version: 0.0.0
+        specifier: workspace:*
+        version: link:../key
       '@suds-cli/tea':
-        specifier: 0.0.0
-        version: 0.0.0
+        specifier: workspace:*
+        version: link:../tea
     devDependencies:
       typescript:
         specifier: 5.8.2
@@ -400,11 +400,11 @@ importers:
   packages/progress:
     dependencies:
       '@suds-cli/chapstick':
-        specifier: 0.1.0-alpha.0
-        version: 0.1.0-alpha.0
+        specifier: workspace:*
+        version: link:../chapstick
       '@suds-cli/tea':
-        specifier: 0.0.0
-        version: 0.0.0
+        specifier: workspace:*
+        version: link:../tea
     devDependencies:
       typescript:
         specifier: 5.8.2
@@ -429,11 +429,11 @@ importers:
   packages/spinner:
     dependencies:
       '@suds-cli/chapstick':
-        specifier: 0.1.0-alpha.0
-        version: 0.1.0-alpha.0
+        specifier: workspace:*
+        version: link:../chapstick
       '@suds-cli/tea':
-        specifier: 0.0.0
-        version: 0.0.0
+        specifier: workspace:*
+        version: link:../tea
     devDependencies:
       typescript:
         specifier: 5.8.2
@@ -445,11 +445,11 @@ importers:
   packages/statusbar:
     dependencies:
       '@suds-cli/chapstick':
-        specifier: 0.1.0-alpha.0
-        version: 0.1.0-alpha.0
+        specifier: workspace:*
+        version: link:../chapstick
       '@suds-cli/tea':
-        specifier: 0.0.0
-        version: 0.0.0
+        specifier: workspace:*
+        version: link:../tea
     devDependencies:
       typescript:
         specifier: 5.8.2
@@ -461,8 +461,8 @@ importers:
   packages/stopwatch:
     dependencies:
       '@suds-cli/tea':
-        specifier: 0.0.0
-        version: 0.0.0
+        specifier: workspace:*
+        version: link:../tea
     devDependencies:
       typescript:
         specifier: 5.8.2
@@ -474,14 +474,14 @@ importers:
   packages/table:
     dependencies:
       '@suds-cli/chapstick':
-        specifier: 0.1.0-alpha.0
-        version: 0.1.0-alpha.0
+        specifier: workspace:*
+        version: link:../chapstick
       '@suds-cli/key':
-        specifier: 0.0.0
-        version: 0.0.0
+        specifier: workspace:*
+        version: link:../key
       '@suds-cli/tea':
-        specifier: 0.0.0
-        version: 0.0.0
+        specifier: workspace:*
+        version: link:../tea
     devDependencies:
       typescript:
         specifier: 5.8.2
@@ -505,20 +505,20 @@ importers:
   packages/textarea:
     dependencies:
       '@suds-cli/chapstick':
-        specifier: 0.1.0-alpha.0
-        version: 0.1.0-alpha.0
+        specifier: workspace:*
+        version: link:../chapstick
       '@suds-cli/cursor':
-        specifier: 0.0.1-alpha.0
-        version: 0.0.1-alpha.0
+        specifier: workspace:*
+        version: link:../cursor
       '@suds-cli/key':
-        specifier: 0.0.0
-        version: 0.0.0
+        specifier: workspace:*
+        version: link:../key
       '@suds-cli/runeutil':
-        specifier: 0.0.0
-        version: 0.0.0
+        specifier: workspace:*
+        version: link:../runeutil
       '@suds-cli/tea':
-        specifier: 0.0.0
-        version: 0.0.0
+        specifier: workspace:*
+        version: link:../tea
       clipboardy:
         specifier: ^4.0.0
         version: 4.0.0
@@ -536,20 +536,20 @@ importers:
   packages/textinput:
     dependencies:
       '@suds-cli/chapstick':
-        specifier: 0.1.0-alpha.0
-        version: 0.1.0-alpha.0
+        specifier: workspace:*
+        version: link:../chapstick
       '@suds-cli/cursor':
-        specifier: 0.0.1-alpha.0
-        version: 0.0.1-alpha.0
+        specifier: workspace:*
+        version: link:../cursor
       '@suds-cli/key':
-        specifier: 0.0.0
-        version: 0.0.0
+        specifier: workspace:*
+        version: link:../key
       '@suds-cli/runeutil':
-        specifier: 0.0.0
-        version: 0.0.0
+        specifier: workspace:*
+        version: link:../runeutil
       '@suds-cli/tea':
-        specifier: 0.0.0
-        version: 0.0.0
+        specifier: workspace:*
+        version: link:../tea
       clipboardy:
         specifier: ^4.0.0
         version: 4.0.0
@@ -567,8 +567,8 @@ importers:
   packages/timer:
     dependencies:
       '@suds-cli/tea':
-        specifier: 0.0.0
-        version: 0.0.0
+        specifier: workspace:*
+        version: link:../tea
     devDependencies:
       typescript:
         specifier: 5.8.2
@@ -580,14 +580,14 @@ importers:
   packages/viewport:
     dependencies:
       '@suds-cli/chapstick':
-        specifier: 0.1.0-alpha.0
-        version: 0.1.0-alpha.0
+        specifier: workspace:*
+        version: link:../chapstick
       '@suds-cli/key':
-        specifier: 0.0.0
-        version: 0.0.0
+        specifier: workspace:*
+        version: link:../key
       '@suds-cli/tea':
-        specifier: 0.0.0
-        version: 0.0.0
+        specifier: workspace:*
+        version: link:../tea
     devDependencies:
       typescript:
         specifier: 5.8.2

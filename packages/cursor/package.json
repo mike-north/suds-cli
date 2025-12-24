@@ -3,8 +3,8 @@
   "description": "Cursor component for Suds terminal UIs",
   "version": "0.0.1-alpha.0",
   "dependencies": {
-    "@suds-cli/chapstick": "0.1.0-alpha.0",
-    "@suds-cli/tea": "0.0.0"
+    "@suds-cli/chapstick": "workspace:*",
+    "@suds-cli/tea": "workspace:*"
   },
   "devDependencies": {
     "typescript": "5.8.2",

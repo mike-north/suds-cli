@@ -3,10 +3,10 @@
   "description": "Help components for Suds terminal UIs: key binding renderer and scrollable help bubble",
   "version": "0.1.0-alpha.0",
   "dependencies": {
-    "@suds-cli/chapstick": "0.1.0-alpha.0",
-    "@suds-cli/key": "0.0.0",
-    "@suds-cli/tea": "0.0.0",
-    "@suds-cli/viewport": "0.0.1-alpha.0"
+    "@suds-cli/chapstick": "workspace:*",
+    "@suds-cli/key": "workspace:*",
+    "@suds-cli/tea": "workspace:*",
+    "@suds-cli/viewport": "workspace:*"
   },
   "devDependencies": {
     "typescript": "5.8.2",

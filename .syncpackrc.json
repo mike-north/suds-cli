@@ -1,0 +1,16 @@
+{
+  "$schema": "https://raw.githubusercontent.com/JamieMason/syncpack/main/config.schema.json",
+  "source": [
+    "package.json",
+    "packages/*/package.json"
+  ],
+  "dependencyTypes": ["prod", "dev", "peer", "optional"],
+  "versionGroups": [
+    {
+      "label": "Ignore all @suds-cli workspace dependencies",
+      "packages": ["**"],
+      "dependencies": ["@suds-cli/**"],
+      "isIgnored": true
+    }
+  ]
+}

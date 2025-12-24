@@ -3,12 +3,12 @@
   "description": "Filterable, selectable list for Suds terminal UIs.",
   "version": "0.0.1-alpha.0",
   "dependencies": {
-    "@suds-cli/chapstick": "0.1.0-alpha.0",
-    "@suds-cli/help": "0.1.0-alpha.0",
-    "@suds-cli/key": "0.0.0",
-    "@suds-cli/paginator": "0.0.0",
-    "@suds-cli/spinner": "0.0.1-alpha.0",
-    "@suds-cli/tea": "0.0.0",
+    "@suds-cli/chapstick": "workspace:*",
+    "@suds-cli/help": "workspace:*",
+    "@suds-cli/key": "workspace:*",
+    "@suds-cli/paginator": "workspace:*",
+    "@suds-cli/spinner": "workspace:*",
+    "@suds-cli/tea": "workspace:*",
     "fuzzysort": "2.0.4"
   },
   "devDependencies": {
