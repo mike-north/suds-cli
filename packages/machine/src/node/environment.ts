@@ -1,9 +1,12 @@
 import process from 'node:process'
+import { createRequire } from 'node:module'
 import type {
   ColorSupport,
   EnvironmentAdapter,
   TerminalBackground,
 } from '../types.js'
+
+const require = createRequire(import.meta.url)
 
 /**
  * Supports-color module interface.
@@ -73,8 +76,7 @@ export class NodeEnvironmentAdapter implements EnvironmentAdapter {
     }
 
     try {
-      // Dynamic import of optional peer dependency
-      // eslint-disable-next-line @typescript-eslint/no-require-imports
+      // Dynamic require of optional peer dependency
       const module = require('supports-color') as SupportsColorModule
       this.supportsColorModule = module
       return module

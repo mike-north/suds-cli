@@ -33,7 +33,7 @@ export class BrowserSignalAdapter implements SignalAdapter {
 
   onInterrupt(handler: SignalHandler): Disposable {
     if (this.interruptHandlers.size === 0 && typeof window !== 'undefined') {
-      this.boundBeforeUnload = this.handleBeforeUnload.bind(this)
+      this.boundBeforeUnload = this.handleBeforeUnload
       window.addEventListener('beforeunload', this.boundBeforeUnload)
     }
     this.interruptHandlers.add(handler)
@@ -55,7 +55,7 @@ export class BrowserSignalAdapter implements SignalAdapter {
 
   onTerminate(handler: SignalHandler): Disposable {
     if (this.terminateHandlers.size === 0 && typeof window !== 'undefined') {
-      this.boundPageHide = this.handlePageHide.bind(this)
+      this.boundPageHide = this.handlePageHide
       window.addEventListener('pagehide', this.boundPageHide)
     }
     this.terminateHandlers.add(handler)

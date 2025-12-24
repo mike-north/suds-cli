@@ -1,4 +1,7 @@
+import { createRequire } from 'node:module'
 import type { ClipboardAdapter } from '../types.js'
+
+const require = createRequire(import.meta.url)
 
 /**
  * Clipboard interface matching the clipboardy module.
