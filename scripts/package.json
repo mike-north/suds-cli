@@ -1,21 +1,21 @@
 {
   "name": "@suds-cli/scripts",
   "version": "0.0.1-alpha.0",
+  "dependencies": {
+    "@suds-cli/chapstick": "0.1.0-alpha.0",
+    "@suds-cli/key": "0.0.0",
+    "@suds-cli/list": "0.0.1-alpha.0",
+    "@suds-cli/progress": "0.0.1-alpha.0",
+    "@suds-cli/spinner": "0.0.1-alpha.0",
+    "@suds-cli/stopwatch": "0.0.0",
+    "@suds-cli/tea": "0.0.0"
+  },
+  "devDependencies": {
+    "tsx": "^4.21.0"
+  },
   "private": true,
-  "type": "module",
   "scripts": {
     "generate-assets": "tsx generate-assets.mts"
   },
-  "dependencies": {
-    "@suds-cli/chapstick": "workspace:*",
-    "@suds-cli/key": "workspace:*",
-    "@suds-cli/list": "workspace:*",
-    "@suds-cli/progress": "workspace:*",
-    "@suds-cli/spinner": "workspace:*",
-    "@suds-cli/stopwatch": "workspace:*",
-    "@suds-cli/tea": "workspace:*"
-  },
-  "devDependencies": {
-    "tsx": "^4.7.0"
-  }
+  "type": "module"
 }

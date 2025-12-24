@@ -1,31 +1,31 @@
 {
   "name": "@suds-cli/cursor",
-  "version": "0.0.1-alpha.0",
   "description": "Cursor component for Suds terminal UIs",
-  "type": "module",
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "files": [
-    "dist"
-  ],
-  "scripts": {
-    "clean": "rm -rf dist",
-    "build": "pnpm run clean && tsc -p ./tsconfig.json",
-    "test": "vitest run",
-    "generate:api-report": "api-extractor run --local",
-    "check:api-report": "pnpm run generate:api-report",
-    "check:eslint": "pnpm run lint",
-    "lint": "eslint \"{src,test}/**/*.{ts,tsx}\""
-  },
+  "version": "0.0.1-alpha.0",
   "dependencies": {
-    "@suds-cli/tea": "workspace:*",
-    "@suds-cli/chapstick": "workspace:*"
+    "@suds-cli/chapstick": "0.1.0-alpha.0",
+    "@suds-cli/tea": "0.0.0"
   },
   "devDependencies": {
     "typescript": "5.8.2",
-    "vitest": "^4.0.15"
+    "vitest": "^4.0.16"
   },
   "engines": {
     "node": ">=20.0.0"
-  }
+  },
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/index.js",
+  "scripts": {
+    "build": "pnpm run clean && tsc -p ./tsconfig.json",
+    "check:api-report": "pnpm run generate:api-report",
+    "check:eslint": "pnpm run lint",
+    "clean": "rm -rf dist",
+    "generate:api-report": "api-extractor run --local",
+    "lint": "eslint \"{src,test}/**/*.{ts,tsx}\"",
+    "test": "vitest run"
+  },
+  "type": "module",
+  "types": "./dist/index.d.ts"
 }

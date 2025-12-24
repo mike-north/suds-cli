@@ -13,11 +13,9 @@ export default defineConfig({
     // Browser tests use happy-dom environment
     include: ['test/**/*.test.ts'],
     // Configure environment based on file pattern
-    // Note: environmentMatchGlobs is supported by Vitest but not yet in TypeScript definitions
     environmentMatchGlobs: [
       ['test/browser/**', 'happy-dom'],
       ['test/node/**', 'node'],
     ],
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  } as any,
+  },
 })

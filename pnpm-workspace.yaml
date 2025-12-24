@@ -6,3 +6,6 @@ packages:
 onlyBuiltDependencies:
   - esbuild
   - nx
+
+patchedDependencies:
+  vitest@4.0.16: patches/vitest@4.0.16.patch

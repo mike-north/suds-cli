@@ -1,0 +1,12 @@
+diff --git a/dist/chunks/reporters.d.Rsi0PyxX.d.ts b/dist/chunks/reporters.d.Rsi0PyxX.d.ts
+index 03e4ba149e8b4b700619f2ed078c714342d234bb..8a9cd8094f1d01d1b14248fc688ed067f52bdc5d 100644
+--- a/dist/chunks/reporters.d.Rsi0PyxX.d.ts
++++ b/dist/chunks/reporters.d.Rsi0PyxX.d.ts
+@@ -2493,6 +2493,7 @@ type ResolveSnapshotPathHandler = (testPath: string, snapExtension: string, cont
+ type BuiltinPool = "browser" | "threads" | "forks" | "vmThreads" | "vmForks" | "typescript";
+ type Pool = BuiltinPool | (string & {});
+ interface InlineConfig {
++	environmentMatchGlobs?: Array<[string, VitestEnvironment]>;
+ 	/**
+ 	* Name of the project. Will be used to display in the reporter.
+ 	*/
