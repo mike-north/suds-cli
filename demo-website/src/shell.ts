@@ -270,7 +270,7 @@ class ShellModel implements Model<Msg, ShellModel> {
 /**
  * Shell runner - manages the shell and demo lifecycle.
  */
-export class ShellRunner {
+class ShellRunner {
   private terminal: Terminal
   private platform: ReturnType<typeof createBrowserPlatform>
   private shellProgram: Program<ShellModel> | null = null
@@ -334,7 +334,15 @@ export class ShellRunner {
       platform: this.platform,
     })
 
-    await this.demoProgram.run()
+    let demoSucceeded = true
+    try {
+      await this.demoProgram.run()
+    } catch (err: unknown) {
+      demoSucceeded = false
+      console.error(err)
+      const message = err instanceof Error ? err.message : String(err)
+      this.terminal.write(`\r\n\x1b[31mDemo error: ${message}\x1b[0m\r\n`)
+    }
 
     // Demo finished, return to shell
     // Clear the pending demo from history
@@ -343,7 +351,9 @@ export class ShellRunner {
     )
     newHistory.push({
       command: `tsx ${demo.filename}`,
-      output: successStyle.render(`\n✓ Demo '${demo.name}' completed.\n`),
+      output: demoSucceeded
+        ? successStyle.render(`\n✓ Demo '${demo.name}' completed.\n`)
+        : errorStyle.render(`\n✗ Demo '${demo.name}' failed.\n`),
     })
 
     this.shellModel = new ShellModel('', 0, newHistory, false)
@@ -359,7 +369,13 @@ export class ShellRunner {
  */
 export function createShell(terminal: Terminal): { stop: () => void } {
   const runner = new ShellRunner(terminal)
-  runner.start().catch(console.error)
+  runner.start().catch((err: unknown) => {
+    // Log for developers
+    console.error(err)
+    // Display user-facing error in terminal
+    const message = err instanceof Error ? err.message : String(err)
+    terminal.write(`\r\n\x1b[31mError: ${message}\x1b[0m\r\n`)
+  })
 
   return {
     stop: () => runner.stop(),
