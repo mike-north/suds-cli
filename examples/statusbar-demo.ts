@@ -21,6 +21,7 @@ import {
 import { StatusbarModel, Height } from '@boba-cli/statusbar'
 import { Style, joinVertical } from '@boba-cli/chapstick'
 import { newBinding, matches } from '@boba-cli/key'
+import { createNodePlatform } from '@boba-cli/machine/node'
 
 // Keybindings
 const keys = {
@@ -85,7 +86,7 @@ class DemoModel implements Model<Msg, DemoModel> {
 // Run the demo
 async function main() {
   console.clear()
-  const program = new Program(new DemoModel(), { altScreen: true })
+  const program = new Program(new DemoModel(), { altScreen: true, platform: createNodePlatform() })
   await program.run()
 }
 

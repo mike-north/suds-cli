@@ -17,7 +17,7 @@
 import { Style } from '@boba-cli/chapstick'
 import { newBinding, matches } from '@boba-cli/key'
 import { CodeModel } from '@boba-cli/code'
-import { NodeFileSystemAdapter, NodePathAdapter } from '@boba-cli/machine/node'
+import { NodeFileSystemAdapter, NodePathAdapter, createNodePlatform } from '@boba-cli/machine/node'
 import {
   KeyMsg,
   Program,
@@ -90,7 +90,7 @@ class DemoModel implements Model<Msg, DemoModel> {
 
 async function main(): Promise<void> {
   console.clear()
-  const program = new Program(new DemoModel())
+  const program = new Program(new DemoModel(), { platform: createNodePlatform() })
   await program.run()
 }
 

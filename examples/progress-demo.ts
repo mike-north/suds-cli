@@ -24,6 +24,7 @@ import {
 import { newBinding, matches } from '@boba-cli/key'
 import { Style } from '@boba-cli/chapstick'
 import { ProgressModel } from '@boba-cli/progress'
+import { createNodePlatform } from '@boba-cli/machine/node'
 
 const keys = {
   inc: newBinding({ keys: ['+', '='] }).withHelp('+', 'increase 10%'),
@@ -147,7 +148,7 @@ class DemoModel implements Model<Msg, DemoModel> {
 
 async function main() {
   console.clear()
-  const program = new Program(new DemoModel())
+  const program = new Program(new DemoModel(), { platform: createNodePlatform() })
   await program.run()
 }
 

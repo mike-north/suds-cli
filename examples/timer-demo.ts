@@ -20,6 +20,7 @@ import {
 import { TimerModel, TickMsg, TimeoutMsg, StartStopMsg } from '@boba-cli/timer'
 import { Style } from '@boba-cli/chapstick'
 import { newBinding, matches } from '@boba-cli/key'
+import { createNodePlatform } from '@boba-cli/machine/node'
 
 const keys = {
   // Space renders as " " from KeyMsg.toString()
@@ -123,7 +124,7 @@ class TimerDemo implements Model<Msg, TimerDemo> {
 
 async function main() {
   console.clear()
-  const program = new Program(new TimerDemo())
+  const program = new Program(new TimerDemo(), { platform: createNodePlatform() })
   await program.run()
 }
 

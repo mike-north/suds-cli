@@ -1,4 +1,4 @@
-import type { PlatformAdapter } from '@boba-cli/machine'
+import { type PlatformAdapter } from '@boba-cli/machine'
 import { startInput } from './input.js'
 import {
   ClearScreenMsg,
@@ -23,19 +23,35 @@ import { WindowSizeMsg } from './messages.js'
 export interface ProgramOptions {
   altScreen?: boolean
   mouseMode?: 'cell' | 'all' | false
-  platform?: PlatformAdapter
+  /**
+   * The platform adapter to use.
+   *
+   * @remarks
+   * For Node.js, use `createNodePlatform()` from `@boba-cli/machine/node`.
+   * For browser with xterm.js, use `createBrowserPlatform({ terminal })` from `@boba-cli/machine/browser`.
+   */
+  platform: PlatformAdapter
   fps?: number
   reportFocus?: boolean
   bracketedPaste?: boolean
 }
 
-/** @public Bubble Tea-style program runner. */
+/**
+ * Bubble Tea-style program runner.
+ *
+ * @remarks
+ * Requires a platform adapter to be provided via options.
+ * Use `createNodePlatform()` from `@boba-cli/machine/node` for Node.js,
+ * or `createBrowserPlatform({ terminal })` from `@boba-cli/machine/browser` for browsers.
+ *
+ * @public
+ */
 export class Program<M extends Model<Msg, M>> {
   private model: M
-  private readonly terminal: TerminalController
-  private readonly renderer: StandardRenderer
+  private terminal: TerminalController
+  private renderer: StandardRenderer
   private readonly opts: ProgramOptions
-  private readonly platform: PlatformAdapter | undefined
+  private readonly platform: PlatformAdapter
   private stopInput?: () => void
   private running = false
   private queue: Msg[] = []
@@ -43,14 +59,14 @@ export class Program<M extends Model<Msg, M>> {
   private result: ProgramResult<M> | null = null
   private resolveWait?: () => void
 
-  constructor(model: M, options: ProgramOptions = {}) {
+  constructor(model: M, options: ProgramOptions) {
     this.model = model
     this.opts = options
     this.platform = options.platform
-    this.terminal = new TerminalController(options.platform)
+    this.terminal = new TerminalController(this.platform)
     this.renderer = new StandardRenderer({
-      platform: options.platform,
-      fps: options.fps,
+      platform: this.platform,
+      fps: this.opts.fps,
     })
   }
 
@@ -251,27 +267,23 @@ export class Program<M extends Model<Msg, M>> {
   private setupSignals(): void {
     const disposables: (() => void)[] = []
 
-    // Set up signal handlers if platform adapter is available
-    if (this.platform) {
-      const intDisposable = this.platform.signals.onInterrupt(this.onSigInt)
-      const termDisposable = this.platform.signals.onTerminate(this.onSigTerm)
-      disposables.push(
-        () => intDisposable.dispose(),
-        () => termDisposable.dispose(),
-      )
+    const intDisposable = this.platform.signals.onInterrupt(this.onSigInt)
+    const termDisposable = this.platform.signals.onTerminate(this.onSigTerm)
+    disposables.push(
+      () => intDisposable.dispose(),
+      () => termDisposable.dispose(),
+    )
 
-      // Set up resize handler
-      const handleResize = (size: { columns: number; rows: number }) => {
-        this.send(new WindowSizeMsg(size.columns, size.rows))
-      }
-      const resizeDisposable =
-        this.platform.terminal.onResize(handleResize)
-      disposables.push(() => resizeDisposable.dispose())
-
-      // Send initial size
-      const initialSize = this.platform.terminal.getSize()
-      this.send(new WindowSizeMsg(initialSize.columns, initialSize.rows))
+    // Set up resize handler
+    const handleResize = (size: { columns: number; rows: number }) => {
+      this.send(new WindowSizeMsg(size.columns, size.rows))
     }
+    const resizeDisposable = this.platform.terminal.onResize(handleResize)
+    disposables.push(() => resizeDisposable.dispose())
+
+    // Send initial size
+    const initialSize = this.platform.terminal.getSize()
+    this.send(new WindowSizeMsg(initialSize.columns, initialSize.rows))
 
     this.disposeSignals = () => {
       for (const dispose of disposables) {
@@ -301,8 +313,6 @@ export class Program<M extends Model<Msg, M>> {
     }
     this.renderer.stop()
     this.terminal.cleanup()
-    if (this.platform) {
-      this.platform.dispose()
-    }
+    this.platform.dispose()
   }
 }

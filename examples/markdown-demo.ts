@@ -17,7 +17,7 @@
 import { Style } from '@boba-cli/chapstick'
 import { newBinding, matches } from '@boba-cli/key'
 import { MarkdownModel } from '@boba-cli/markdown'
-import { NodeFileSystemAdapter } from '@boba-cli/machine/node'
+import { NodeFileSystemAdapter, createNodePlatform } from '@boba-cli/machine/node'
 import {
   KeyMsg,
   Program,
@@ -102,7 +102,7 @@ class DemoModel implements Model<Msg, DemoModel> {
 
 async function main(): Promise<void> {
   console.clear()
-  const program = new Program(new DemoModel())
+  const program = new Program(new DemoModel(), { platform: createNodePlatform() })
   await program.run()
 }
 

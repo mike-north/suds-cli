@@ -21,6 +21,7 @@ import {
   text,
   Style,
 } from '@boba-cli/dsl'
+import { createNodePlatform } from '@boba-cli/machine/node'
 
 // Styles
 const spinnerStyle = new Style().foreground('#50fa7b')
@@ -45,7 +46,7 @@ const app = createApp()
 
 async function main() {
   console.clear()
-  await app.run()
+  await app.run({ platform: createNodePlatform() })
 }
 
 main().catch(console.error)

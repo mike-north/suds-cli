@@ -131,3 +131,6 @@ export {
 
 // Style utilities
 export { createAlwaysEnabledStyle, createStyle } from './style/index.js'
+
+// Platform detection
+export { isBrowserEnvironment, isNodeEnvironment } from './detect.js'

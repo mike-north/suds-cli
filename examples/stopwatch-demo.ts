@@ -25,6 +25,7 @@ import {
 } from '@boba-cli/stopwatch'
 import { Style } from '@boba-cli/chapstick'
 import { newBinding, matches } from '@boba-cli/key'
+import { createNodePlatform } from '@boba-cli/machine/node'
 
 const keys = {
   toggle: newBinding({ keys: ['space'] }).withHelp('space', 'start/stop'),
@@ -111,7 +112,7 @@ class StopwatchDemo implements Model<Msg, StopwatchDemo> {
 
 async function main() {
   console.clear()
-  const program = new Program(new StopwatchDemo())
+  const program = new Program(new StopwatchDemo(), { platform: createNodePlatform() })
   await program.run()
 }
 

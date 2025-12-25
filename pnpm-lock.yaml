@@ -373,6 +373,9 @@ importers:
       '@boba-cli/key':
         specifier: workspace:*
         version: link:../key
+      '@boba-cli/machine':
+        specifier: workspace:*
+        version: link:../machine
       '@boba-cli/spinner':
         specifier: workspace:*
         version: link:../spinner
@@ -831,6 +834,9 @@ importers:
       '@boba-cli/list':
         specifier: workspace:*
         version: link:../packages/list
+      '@boba-cli/machine':
+        specifier: workspace:*
+        version: link:../packages/machine
       '@boba-cli/progress':
         specifier: workspace:*
         version: link:../packages/progress
