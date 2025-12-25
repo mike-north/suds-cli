@@ -17,6 +17,7 @@
 import { Style } from '@suds-cli/chapstick'
 import { newBinding, matches } from '@suds-cli/key'
 import { CodeModel } from '@suds-cli/code'
+import { NodeFileSystemAdapter, NodePathAdapter } from '@suds-cli/machine/node'
 import {
   KeyMsg,
   Program,
@@ -37,11 +38,14 @@ const gotoTopBinding = newBinding({ keys: ['g', 'G'] }).withHelp('g', 'top')
 const headerStyle = new Style().bold(true).foreground('#8be9fd')
 const helpStyle = new Style().foreground('#6272a4').italic(true)
 
+const filesystem = new NodeFileSystemAdapter()
+const path = new NodePathAdapter()
+
 class DemoModel implements Model<Msg, DemoModel> {
   readonly code: CodeModel
 
   constructor(code?: CodeModel) {
-    this.code = code ?? CodeModel.new({ active: true })
+    this.code = code ?? CodeModel.new({ filesystem, path, active: true })
   }
 
   init(): Cmd<Msg> {

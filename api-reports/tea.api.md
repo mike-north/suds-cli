@@ -4,6 +4,8 @@
 
 ```ts
 
+import type { PlatformAdapter } from '@suds-cli/machine';
+
 // @public
 export function batch<M extends Msg>(...cmds: Array<Cmd<M>>): Cmd<M>;
 
@@ -102,9 +104,9 @@ export class HideCursorMsg {
 // @public
 export interface InputOptions {
     // (undocumented)
-    input?: NodeJS.ReadableStream;
-    // (undocumented)
     onMessage: (msg: Msg) => void;
+    // (undocumented)
+    platform?: PlatformAdapter;
 }
 
 // @public
@@ -370,11 +372,9 @@ export interface ProgramOptions {
     // (undocumented)
     fps?: number;
     // (undocumented)
-    input?: NodeJS.ReadableStream;
-    // (undocumented)
     mouseMode?: 'cell' | 'all' | false;
     // (undocumented)
-    output?: NodeJS.WritableStream;
+    platform?: PlatformAdapter;
     // (undocumented)
     reportFocus?: boolean;
 }
@@ -399,7 +399,7 @@ export interface RendererOptions {
     // (undocumented)
     fps?: number;
     // (undocumented)
-    output?: NodeJS.WritableStream;
+    platform?: PlatformAdapter;
 }
 
 // @public
@@ -441,16 +441,14 @@ export class SuspendMsg {
 // @public
 export interface TerminalOptions {
     // (undocumented)
-    input?: NodeJS.ReadableStream;
-    // (undocumented)
-    output?: NodeJS.WritableStream;
+    platform?: PlatformAdapter;
 }
 
 // @public
 export function tick<M extends Msg>(ms: number, fn: (t: Date) => M): Cmd<M>;
 
 // @public
-export const windowSize: () => Cmd<Msg>;
+export const windowSize: (platform?: PlatformAdapter) => Cmd<Msg>;
 
 // @public
 export class WindowSizeMsg {

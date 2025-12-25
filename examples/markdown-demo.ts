@@ -17,6 +17,7 @@
 import { Style } from '@suds-cli/chapstick'
 import { newBinding, matches } from '@suds-cli/key'
 import { MarkdownModel } from '@suds-cli/markdown'
+import { NodeFileSystemAdapter } from '@suds-cli/machine/node'
 import {
   KeyMsg,
   Program,
@@ -39,6 +40,8 @@ const viewportStyle = new Style()
   .borderForeground('#bd93f9')
   .padding(0, 1)
 
+const filesystem = new NodeFileSystemAdapter()
+
 class DemoModel implements Model<Msg, DemoModel> {
   readonly markdown: MarkdownModel
 
@@ -46,6 +49,7 @@ class DemoModel implements Model<Msg, DemoModel> {
     this.markdown =
       markdown ??
       MarkdownModel.new({
+        filesystem,
         active: true,
         width: 72,
         height: 16,

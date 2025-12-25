@@ -4,6 +4,11 @@
 
 ```ts
 
+import type { ColorSupport } from '@suds-cli/machine';
+import type { EnvironmentAdapter } from '@suds-cli/machine';
+import type { StyleFn } from '@suds-cli/machine';
+import type { TerminalBackground } from '@suds-cli/machine';
+
 // @public
 export type Align = HAlign;
 
@@ -33,6 +38,17 @@ export interface BorderStyle {
 export const borderStyles: Record<BorderStyleName, BorderStyle>;
 
 // @public
+export class ChapstickStyleProvider implements StyleProvider {
+    constructor(env: EnvironmentAdapter, styleFn: StyleFn);
+    // (undocumented)
+    readonly context: StyleContext;
+    // (undocumented)
+    createStyle(): Style;
+    // (undocumented)
+    get semanticStyles(): SemanticStyles;
+}
+
+// @public
 export function clampWidth(text: string, maxWidth?: number): string;
 
 // @public
@@ -41,26 +57,19 @@ export type ColorInput = string | {
     dark?: string;
 };
 
+export { ColorSupport }
+
 // @public
-export interface ColorSupport {
-    // (undocumented)
-    has16m: boolean;
-    // (undocumented)
-    has256: boolean;
-    // (undocumented)
-    hasBasic: boolean;
-    // (undocumented)
-    level: number;
-}
+export function createDefaultContext(): StyleContext;
 
 // @public
 export const defaultBorderStyle: BorderStyle;
 
 // @public
-export function getColorSupport(): ColorSupport;
+export function getColorSupport(env: EnvironmentAdapter): ColorSupport;
 
 // @public
-export function getTerminalBackground(): TerminalBackground;
+export function getTerminalBackground(env: EnvironmentAdapter): TerminalBackground;
 
 // @public
 export type HAlign = 'left' | 'center' | 'right';
@@ -84,7 +93,25 @@ export function padLines(text: string, left?: number, right?: number): string;
 export function place(width: number, height: number, hAlign: HAlign, vAlign: VAlign, content: string): string;
 
 // @public
-export function resolveColor(input?: ColorInput): string | undefined;
+export function resolveColor(input: ColorInput | undefined, env: EnvironmentAdapter): string | undefined;
+
+// @public
+export interface SemanticStyles {
+    // (undocumented)
+    error: Style;
+    // (undocumented)
+    header: Style;
+    // (undocumented)
+    highlight: Style;
+    // (undocumented)
+    info: Style;
+    // (undocumented)
+    muted: Style;
+    // (undocumented)
+    success: Style;
+    // (undocumented)
+    warning: Style;
+}
 
 // @public
 export interface Spacing {
@@ -100,7 +127,7 @@ export interface Spacing {
 
 // @public
 export class Style {
-    constructor(options?: StyleOptions, setKeys?: Set<StyleKey>);
+    constructor(options?: StyleOptions, setKeys?: Set<StyleKey>, context?: StyleContext);
     // @deprecated
     align(value: HAlign): Style;
     alignHorizontal(value: HAlign): Style;
@@ -141,6 +168,7 @@ export class Style {
     // (undocumented)
     padding(top: number, right: number, bottom: number, left: number): Style;
     render(text: string): string;
+    renderWithContext(text: string, ctx: StyleContext): string;
     // (undocumented)
     strikethrough(value?: boolean): Style;
     // (undocumented)
@@ -148,6 +176,13 @@ export class Style {
     unset(...keys: StyleKey[]): Style;
     // (undocumented)
     width(value: number): Style;
+    withContext(context: StyleContext): Style;
+}
+
+// @public
+export interface StyleContext {
+    readonly env: EnvironmentAdapter;
+    readonly styleFn: StyleFn;
 }
 
 // @public
@@ -192,7 +227,13 @@ export interface StyleOptions {
 }
 
 // @public
-export type TerminalBackground = 'dark' | 'light' | 'unknown';
+export interface StyleProvider {
+    readonly context: StyleContext;
+    createStyle(): Style;
+    readonly semanticStyles: SemanticStyles;
+}
+
+export { TerminalBackground }
 
 // @public
 export type VAlign = 'top' | 'center' | 'bottom';

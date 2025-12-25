@@ -18,6 +18,7 @@ import { join } from 'node:path'
 
 import { Style } from '@suds-cli/chapstick'
 import { newBinding, matches } from '@suds-cli/key'
+import { NodeFileSystemAdapter, NodePathAdapter } from '@suds-cli/machine/node'
 import {
   KeyMsg,
   Program,
@@ -27,6 +28,9 @@ import {
   type Msg,
 } from '@suds-cli/tea'
 import { FileSelectedMsg, FilepickerModel } from '@suds-cli/filepicker'
+
+const filesystem = new NodeFileSystemAdapter()
+const pathAdapter = new NodePathAdapter()
 
 const quitBinding = newBinding({ keys: ['q', 'Q', 'ctrl+c'] }).withHelp(
   'q',
@@ -84,7 +88,12 @@ class DemoModel implements Model<Msg, DemoModel> {
     this.demoDir = demoDir
     this.picker =
       picker ??
-      FilepickerModel.new({ showHidden: false, currentDir: demoDir })[0]
+      FilepickerModel.new({
+        filesystem,
+        path: pathAdapter,
+        showHidden: false,
+        currentDir: demoDir,
+      })[0]
     this.status = status
   }
 

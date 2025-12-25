@@ -103,6 +103,9 @@ importers:
       '@suds-cli/list':
         specifier: workspace:*
         version: link:../packages/list
+      '@suds-cli/machine':
+        specifier: workspace:*
+        version: link:../packages/machine
       '@suds-cli/markdown':
         specifier: workspace:*
         version: link:../packages/markdown

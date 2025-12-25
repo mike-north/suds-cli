@@ -4,92 +4,80 @@
 
 ```ts
 
-// @public
-export function copyDirectory(name: string): Promise<string>;
+import { DirectoryEntry } from '@suds-cli/machine';
+import type { FileSystemAdapter } from '@suds-cli/machine';
+import type { PathAdapter } from '@suds-cli/machine';
 
 // @public
-export function copyFile(name: string): Promise<string>;
+export function copyDirectory(fs: FileSystemAdapter, path: PathAdapter, name: string): Promise<string>;
 
 // @public
-export function createDirectory(name: string): Promise<void>;
+export function copyFile(fs: FileSystemAdapter, path: PathAdapter, name: string): Promise<string>;
 
 // @public
-export function createFile(name: string): Promise<void>;
+export function createDirectory(fs: FileSystemAdapter, name: string): Promise<void>;
+
+// @public
+export function createFile(fs: FileSystemAdapter, name: string): Promise<void>;
 
 // @public
 export const CurrentDirectory = ".";
 
 // @public
-export function deleteDirectory(name: string): Promise<void>;
+export function deleteDirectory(fs: FileSystemAdapter, name: string): Promise<void>;
 
 // @public
-export function deleteFile(name: string): Promise<void>;
+export function deleteFile(fs: FileSystemAdapter, name: string): Promise<void>;
 
 // @public
 export const DirectoriesListingType = "directories";
 
-// @public
-export interface DirectoryEntry {
-    // (undocumented)
-    isDirectory: () => boolean;
-    // (undocumented)
-    isFile: () => boolean;
-    // (undocumented)
-    isSymbolicLink: () => boolean;
-    // (undocumented)
-    name: string;
-}
+export { DirectoryEntry }
 
 // @public
 export const FilesListingType = "files";
 
 // @public
-export function findFilesByName(name: string, dir: string): Promise<{
+export function findFilesByName(fs: FileSystemAdapter, path: PathAdapter, name: string, dir: string): Promise<{
     paths: string[];
     entries: DirectoryEntry[];
 }>;
 
 // @public
-export function getDirectoryItemSize(itemPath: string): Promise<number>;
+export function getDirectoryItemSize(fs: FileSystemAdapter, path: PathAdapter, itemPath: string): Promise<number>;
 
 // @public
-export function getDirectoryListing(dir: string, showHidden?: boolean): Promise<DirectoryEntry[]>;
+export function getDirectoryListing(fs: FileSystemAdapter, dir: string, showHidden?: boolean): Promise<DirectoryEntry[]>;
 
 // @public
-export function getDirectoryListingByType(dir: string, listingType: typeof DirectoriesListingType | typeof FilesListingType, showHidden?: boolean): Promise<DirectoryEntry[]>;
+export function getDirectoryListingByType(fs: FileSystemAdapter, dir: string, listingType: typeof DirectoriesListingType | typeof FilesListingType, showHidden?: boolean): Promise<DirectoryEntry[]>;
 
 // @public
-export function getHomeDirectory(): string;
+export function getHomeDirectory(fs: FileSystemAdapter): string;
 
 // @public
-export function getWorkingDirectory(): string;
+export function getWorkingDirectory(fs: FileSystemAdapter): string;
 
 // @public
 export const HomeDirectory = "~";
 
 // @public
-export function moveDirectoryItem(src: string, dst: string): Promise<void>;
+export function moveDirectoryItem(fs: FileSystemAdapter, src: string, dst: string): Promise<void>;
 
 // @public
 export const PreviousDirectory = "..";
 
 // @public
-export function readFileContent(name: string): Promise<string>;
+export function readFileContent(fs: FileSystemAdapter, name: string): Promise<string>;
 
 // @public
-export function renameDirectoryItem(src: string, dst: string): Promise<void>;
+export function renameDirectoryItem(fs: FileSystemAdapter, src: string, dst: string): Promise<void>;
 
 // @public
 export const RootDirectory = "/";
 
 // @public
-export function unzip(name: string): Promise<string>;
-
-// @public
-export function writeToFile(filePath: string, content: string): Promise<void>;
-
-// @public
-export function zip(name: string): Promise<string>;
+export function writeToFile(fs: FileSystemAdapter, filePath: string, content: string): Promise<void>;
 
 // (No @packageDocumentation comment for this package)
 
