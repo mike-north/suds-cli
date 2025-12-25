@@ -1,3 +1,4 @@
+import type { PlatformAdapter } from '@suds-cli/machine'
 import {
   ClearScreenMsg,
   DisableMouseMsg,
@@ -35,6 +36,17 @@ export const setWindowTitle =
   (title: string): Cmd<Msg> =>
   () =>
     new SetWindowTitleMsg(title)
-/** @public Emit the current window size. */
-export const windowSize = (): Cmd<Msg> => () =>
-  new WindowSizeMsg(process.stdout.columns ?? 0, process.stdout.rows ?? 0)
+/**
+ * @public
+ * Emit the current window size.
+ * @param platform - Optional platform adapter to get terminal size from
+ */
+export const windowSize =
+  (platform?: PlatformAdapter): Cmd<Msg> =>
+  () => {
+    if (platform) {
+      const size = platform.terminal.getSize()
+      return new WindowSizeMsg(size.columns, size.rows)
+    }
+    return new WindowSizeMsg(0, 0)
+  }

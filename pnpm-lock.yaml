@@ -149,15 +149,12 @@ importers:
 
   packages/chapstick:
     dependencies:
-      chalk:
-        specifier: ^5.4.1
-        version: 5.6.2
+      '@suds-cli/machine':
+        specifier: workspace:*
+        version: link:../machine
       string-width:
         specifier: ^7.2.0
         version: 7.2.0
-      supports-color:
-        specifier: ^9.0.0
-        version: 9.4.0
       terminal-reflowjs:
         specifier: 0.0.0-alpha.0
         version: 0.0.0-alpha.0
@@ -180,6 +177,9 @@ importers:
       '@suds-cli/filesystem':
         specifier: workspace:*
         version: link:../filesystem
+      '@suds-cli/machine':
+        specifier: workspace:*
+        version: link:../machine
       '@suds-cli/tea':
         specifier: workspace:*
         version: link:../tea
@@ -227,6 +227,9 @@ importers:
       '@suds-cli/key':
         specifier: workspace:*
         version: link:../key
+      '@suds-cli/machine':
+        specifier: workspace:*
+        version: link:../machine
       '@suds-cli/tea':
         specifier: workspace:*
         version: link:../tea
@@ -243,19 +246,10 @@ importers:
 
   packages/filesystem:
     dependencies:
-      archiver:
-        specifier: ^7.0.1
-        version: 7.0.1
-      unzipper:
-        specifier: ^0.12.3
-        version: 0.12.3
+      '@suds-cli/machine':
+        specifier: workspace:*
+        version: link:../machine
     devDependencies:
-      '@types/archiver':
-        specifier: ^6.0.2
-        version: 6.0.4
-      '@types/unzipper':
-        specifier: ^0.10.10
-        version: 0.10.11
       typescript:
         specifier: 5.8.2
         version: 5.8.2
@@ -271,6 +265,9 @@ importers:
       '@suds-cli/key':
         specifier: workspace:*
         version: link:../key
+      '@suds-cli/machine':
+        specifier: workspace:*
+        version: link:../machine
       '@suds-cli/tea':
         specifier: workspace:*
         version: link:../tea
@@ -365,12 +362,21 @@ importers:
         specifier: ^9.0.0
         version: 9.4.0
     devDependencies:
+      '@types/archiver':
+        specifier: ^6.0.4
+        version: 6.0.4
       '@types/node':
         specifier: ^24.10.2
         version: 24.10.2
+      '@types/unzipper':
+        specifier: ^0.10.11
+        version: 0.10.11
       '@vitest/ui':
         specifier: ^4.0.16
         version: 4.0.16(vitest@4.0.16)
+      archiver:
+        specifier: ^7.0.1
+        version: 7.0.1
       clipboardy:
         specifier: ^4.0.0
         version: 4.0.0
@@ -380,6 +386,9 @@ importers:
       typescript:
         specifier: 5.8.2
         version: 5.8.2
+      unzipper:
+        specifier: ^0.12.3
+        version: 0.12.3
       vitest:
         specifier: ^4.0.16
         version: 4.0.16(patch_hash=59b74cc5e820ffc56209c004d0eaa22e2db7b628efc74b6a4e76d9ed6bc723d4)(@types/node@24.10.2)(@vitest/ui@4.0.16)(happy-dom@20.0.11)(jiti@2.6.1)(tsx@4.21.0)(yaml@2.8.2)
@@ -392,15 +401,15 @@ importers:
       '@suds-cli/filesystem':
         specifier: workspace:*
         version: link:../filesystem
+      '@suds-cli/machine':
+        specifier: workspace:*
+        version: link:../machine
       '@suds-cli/tea':
         specifier: workspace:*
         version: link:../tea
       '@suds-cli/viewport':
         specifier: workspace:*
         version: link:../viewport
-      chalk:
-        specifier: ^5.4.1
-        version: 5.6.2
       marked:
         specifier: ^15.0.0
         version: 15.0.12
@@ -525,6 +534,10 @@ importers:
         version: 4.0.16(patch_hash=59b74cc5e820ffc56209c004d0eaa22e2db7b628efc74b6a4e76d9ed6bc723d4)(@types/node@24.10.2)(@vitest/ui@4.0.16)(happy-dom@20.0.11)(jiti@2.6.1)(tsx@4.21.0)(yaml@2.8.2)
 
   packages/tea:
+    dependencies:
+      '@suds-cli/machine':
+        specifier: workspace:*
+        version: link:../machine
     devDependencies:
       '@types/node':
         specifier: ^24.10.2

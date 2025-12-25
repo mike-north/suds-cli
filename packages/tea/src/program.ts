@@ -1,4 +1,4 @@
-import process from 'node:process'
+import type { PlatformAdapter } from '@suds-cli/machine'
 import { startInput } from './input.js'
 import {
   ClearScreenMsg,
@@ -23,8 +23,7 @@ import { WindowSizeMsg } from './messages.js'
 export interface ProgramOptions {
   altScreen?: boolean
   mouseMode?: 'cell' | 'all' | false
-  input?: NodeJS.ReadableStream
-  output?: NodeJS.WritableStream
+  platform?: PlatformAdapter
   fps?: number
   reportFocus?: boolean
   bracketedPaste?: boolean
@@ -36,6 +35,7 @@ export class Program<M extends Model<Msg, M>> {
   private readonly terminal: TerminalController
   private readonly renderer: StandardRenderer
   private readonly opts: ProgramOptions
+  private readonly platform: PlatformAdapter | undefined
   private stopInput?: () => void
   private running = false
   private queue: Msg[] = []
@@ -46,9 +46,10 @@ export class Program<M extends Model<Msg, M>> {
   constructor(model: M, options: ProgramOptions = {}) {
     this.model = model
     this.opts = options
-    this.terminal = new TerminalController(options.input, options.output)
+    this.platform = options.platform
+    this.terminal = new TerminalController(options.platform)
     this.renderer = new StandardRenderer({
-      output: options.output,
+      platform: options.platform,
       fps: options.fps,
     })
   }
@@ -242,40 +243,39 @@ export class Program<M extends Model<Msg, M>> {
 
   private startInputLoop(): void {
     this.stopInput = startInput({
-      input: this.opts.input,
+      platform: this.platform,
       onMessage: (msg) => this.send(msg as ModelMsg<M>),
     })
   }
 
   private setupSignals(): void {
-    const output = this.opts.output ?? process.stdout
-    const handleResize = () => {
-      const { columns, rows } = getSize(output)
-      const w = columns ?? 0
-      const h = rows ?? 0
-      this.send(new WindowSizeMsg(w, h))
-    }
+    const disposables: (() => void)[] = []
 
-    process.on('SIGINT', this.onSigInt)
-    process.on('SIGTERM', this.onSigTerm)
-    if (
-      'on' in output &&
-      typeof (output as NodeJS.Process['stdout']).on === 'function'
-    ) {
-      ;(output as NodeJS.Process['stdout']).on('resize', handleResize)
-    }
+    // Set up signal handlers if platform adapter is available
+    if (this.platform) {
+      const intDisposable = this.platform.signals.onInterrupt(this.onSigInt)
+      const termDisposable = this.platform.signals.onTerminate(this.onSigTerm)
+      disposables.push(
+        () => intDisposable.dispose(),
+        () => termDisposable.dispose(),
+      )
 
-    // Initial size
-    handleResize()
+      // Set up resize handler
+      const handleResize = (size: { columns: number; rows: number }) => {
+        this.send(new WindowSizeMsg(size.columns, size.rows))
+      }
+      const resizeDisposable =
+        this.platform.terminal.onResize(handleResize)
+      disposables.push(() => resizeDisposable.dispose())
+
+      // Send initial size
+      const initialSize = this.platform.terminal.getSize()
+      this.send(new WindowSizeMsg(initialSize.columns, initialSize.rows))
+    }
 
     this.disposeSignals = () => {
-      process.off('SIGINT', this.onSigInt)
-      process.off('SIGTERM', this.onSigTerm)
-      if (
-        'off' in output &&
-        typeof (output as NodeJS.Process['stdout']).off === 'function'
-      ) {
-        ;(output as NodeJS.Process['stdout']).off('resize', handleResize)
+      for (const dispose of disposables) {
+        dispose()
       }
     }
   }
@@ -301,10 +301,8 @@ export class Program<M extends Model<Msg, M>> {
     }
     this.renderer.stop()
     this.terminal.cleanup()
+    if (this.platform) {
+      this.platform.dispose()
+    }
   }
-}
-
-function getSize(stream: NodeJS.WritableStream) {
-  const s = stream as { columns?: number; rows?: number }
-  return { columns: s.columns, rows: s.rows }
 }

@@ -1,6 +1,5 @@
-import fs from 'node:fs/promises'
-import path from 'node:path'
 import type { Cmd } from '@suds-cli/tea'
+import type { FileSystemAdapter, PathAdapter } from '@suds-cli/machine'
 import type { DirectoryItem } from './types.js'
 import { GetDirectoryListingMsg, ErrorMsg } from './messages.js'
 
@@ -95,18 +94,35 @@ function isPermissionError(
 
 /**
  * Creates a command to asynchronously fetch directory contents.
+ * @param filesystem - FileSystem adapter for file operations
+ * @param path - Path adapter for path operations
  * @param dir - Directory path to list
  * @param showHidden - Whether to show hidden files
  * @returns Command that will emit GetDirectoryListingMsg or ErrorMsg
  * @public
  */
 export function getDirectoryListingCmd(
+  filesystem: FileSystemAdapter,
+  path: PathAdapter,
   dir: string,
   showHidden: boolean,
 ): Cmd<GetDirectoryListingMsg | ErrorMsg> {
   return async () => {
     try {
-      const entries = await fs.readdir(dir, { withFileTypes: true })
+      const result = await filesystem.readdir(dir, { withFileTypes: true })
+
+      // Type guard to ensure we got DirectoryEntry[]
+      if (typeof result[0] === 'string') {
+        throw new Error('Expected DirectoryEntry array but got string array')
+      }
+
+      const entries = result as Array<{
+        readonly name: string
+        isDirectory(): boolean
+        isFile(): boolean
+        isSymbolicLink(): boolean
+      }>
+
       const items: DirectoryItem[] = []
 
       for (const entry of entries) {
@@ -118,7 +134,7 @@ export function getDirectoryListingCmd(
         const itemPath = path.join(dir, entry.name)
 
         try {
-          const stats = await fs.stat(itemPath)
+          const stats = await filesystem.stat(itemPath)
           const extension = entry.isDirectory() ? '' : path.extname(entry.name)
 
           // Format details: "2024-01-15 10:30:00 -rw-r--r-- 1.2K"

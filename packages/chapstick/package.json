@@ -3,9 +3,8 @@
   "description": "TypeScript port of Lip Gloss terminal styling DSL",
   "version": "0.1.0-alpha.0",
   "dependencies": {
-    "chalk": "^5.4.1",
+    "@suds-cli/machine": "workspace:*",
     "string-width": "^7.2.0",
-    "supports-color": "^9.0.0",
     "terminal-reflowjs": "0.0.0-alpha.0"
   },
   "devDependencies": {

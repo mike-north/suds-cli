@@ -4,9 +4,11 @@
     "@vitest/coverage-v8",
     "@commitlint/cli",
     "@commitlint/types",
+    "archiver",
     "clipboardy",
     "supports-color",
-    "syncpack"
+    "syncpack",
+    "unzipper"
   ],
   "ignoreFiles": ["./examples/filetree/**/*"],
   "ignoreBinaries": ["test:graceful-degradation", "test:browser"],

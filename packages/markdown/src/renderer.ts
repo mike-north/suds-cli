@@ -4,8 +4,8 @@
 
 import { Marked } from 'marked'
 import { markedTerminal } from 'marked-terminal'
-import { getTerminalBackground } from '@suds-cli/chapstick'
-import chalk from 'chalk'
+import type { EnvironmentAdapter, TerminalBackground } from '@suds-cli/machine'
+import { createAlwaysEnabledStyle } from '@suds-cli/machine'
 
 /**
  * Options for rendering markdown.
@@ -16,6 +16,14 @@ export interface RenderMarkdownOptions {
    * Width for word wrapping. Defaults to 80.
    */
   width?: number
+  /**
+   * Terminal background mode. Defaults to 'dark'.
+   */
+  background?: TerminalBackground
+  /**
+   * Environment adapter for detecting terminal capabilities.
+   */
+  env?: EnvironmentAdapter
 }
 
 /**
@@ -32,10 +40,13 @@ export function renderMarkdown(
   options: RenderMarkdownOptions = {},
 ): string {
   const width = options.width ?? 80
-  const background = getTerminalBackground()
+  const background = options.background ?? options.env?.getTerminalBackground() ?? 'dark'
 
   // Use appropriate colors for terminal background
   const isDark = background !== 'light'
+
+  // Create a style function with full color support for markdown rendering
+  const style = createAlwaysEnabledStyle()
 
   // Create marked instance with terminal renderer
   const marked = new Marked(
@@ -44,21 +55,21 @@ export function renderMarkdown(
       width,
       reflowText: true,
       // Headings - brighter on dark backgrounds
-      firstHeading: isDark ? chalk.cyan.bold : chalk.blue.bold,
-      heading: isDark ? chalk.cyan.bold : chalk.blue.bold,
+      firstHeading: isDark ? style.cyan.bold : style.blue.bold,
+      heading: isDark ? style.cyan.bold : style.blue.bold,
       // Code blocks
-      code: isDark ? chalk.white : chalk.gray,
-      blockquote: isDark ? chalk.white : chalk.gray,
+      code: isDark ? style.white : style.gray,
+      blockquote: isDark ? style.white : style.gray,
       // Emphasis
-      strong: chalk.bold,
-      em: chalk.italic,
+      strong: style.bold,
+      em: style.italic,
       // Lists
-      listitem: chalk.reset,
+      listitem: style,
       // Links
-      link: isDark ? chalk.blueBright : chalk.blue,
+      link: isDark ? style.blueBright : style.blue,
       // Other elements
-      hr: chalk.gray,
-      paragraph: chalk.reset,
+      hr: style.gray,
+      paragraph: style,
     }),
   )
 

@@ -1,7 +1,8 @@
 import { describe, expect, test } from 'vitest'
+import { encodeString } from '@suds-cli/machine'
 import { MouseAction, MouseButton, parseMouse } from '../src/mouse.js'
 
-const toBuf = (s: string) => Buffer.from(s, 'utf8')
+const toBuf = (s: string) => encodeString(s)
 
 describe('parseMouse (SGR)', () => {
   test('parses left press', () => {

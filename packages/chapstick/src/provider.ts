@@ -1,4 +1,5 @@
-import { Style } from './style.js'
+import type { EnvironmentAdapter, StyleFn } from '@suds-cli/machine'
+import { Style, StyleContext } from './style.js'
 
 /**
  * Common semantic styles for terminal output.
@@ -29,33 +30,43 @@ export interface StyleProvider {
    * Get semantic styles for common use cases.
    */
   readonly semanticStyles: SemanticStyles
+
+  /**
+   * Get the style context used by this provider.
+   */
+  readonly context: StyleContext
 }
 
 /**
- * Default implementation using Chapstick's Style class.
+ * Implementation using Chapstick's Style class with injected adapters.
  * @public
  */
 export class ChapstickStyleProvider implements StyleProvider {
+  readonly context: StyleContext
+
+  /**
+   * Create a new style provider.
+   * @param env - Environment adapter for detecting terminal capabilities
+   * @param styleFn - Style function for applying ANSI styling
+   */
+  constructor(env: EnvironmentAdapter, styleFn: StyleFn) {
+    this.context = { env, styleFn }
+  }
+
   createStyle(): Style {
-    return new Style()
+    return new Style({}, undefined, this.context)
   }
 
   get semanticStyles(): SemanticStyles {
+    const ctx = this.context
     return {
-      success: new Style().bold(true).foreground('#50FA7B'),
-      error: new Style().bold(true).foreground('#FF5555'),
-      warning: new Style().bold(true).foreground('#F1FA8C'),
-      info: new Style().foreground('#8BE9FD'),
-      muted: new Style().foreground('#6272A4'),
-      highlight: new Style().background('#44475A').foreground('#F8F8F2'),
-      header: new Style().bold(true).foreground('#00D9FF').padding(0, 1),
+      success: new Style({}, undefined, ctx).bold(true).foreground('#50FA7B'),
+      error: new Style({}, undefined, ctx).bold(true).foreground('#FF5555'),
+      warning: new Style({}, undefined, ctx).bold(true).foreground('#F1FA8C'),
+      info: new Style({}, undefined, ctx).foreground('#8BE9FD'),
+      muted: new Style({}, undefined, ctx).foreground('#6272A4'),
+      highlight: new Style({}, undefined, ctx).background('#44475A').foreground('#F8F8F2'),
+      header: new Style({}, undefined, ctx).bold(true).foreground('#00D9FF').padding(0, 1),
     }
   }
 }
-
-/**
- * Default style provider instance.
- * Use this when you need a style provider but don't want to create a new instance.
- * @public
- */
-export const defaultStyleProvider = new ChapstickStyleProvider()

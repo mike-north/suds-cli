@@ -4,20 +4,31 @@
  */
 
 import type {
+  ArchiveAdapter,
   ClipboardAdapter,
   Disposable,
   EnvironmentAdapter,
+  FileSystemAdapter,
+  PathAdapter,
   PlatformAdapter,
   SignalAdapter,
+  StyleAdapter,
   TerminalAdapter,
 } from '../types.js'
+import { createStyle } from '../style/index.js'
+import { NodeArchiveAdapter } from './archive.js'
 import { NodeClipboardAdapter } from './clipboard.js'
 import { NodeEnvironmentAdapter } from './environment.js'
+import { NodeFileSystemAdapter } from './filesystem.js'
+import { NodePathAdapter } from './path.js'
 import { NodeSignalAdapter } from './signals.js'
 import { NodeTerminalAdapter } from './terminal.js'
 
+export { NodeArchiveAdapter } from './archive.js'
 export { NodeClipboardAdapter } from './clipboard.js'
 export { NodeEnvironmentAdapter } from './environment.js'
+export { NodeFileSystemAdapter } from './filesystem.js'
+export { NodePathAdapter } from './path.js'
 export { NodeSignalAdapter } from './signals.js'
 export { NodeTerminalAdapter } from './terminal.js'
 
@@ -34,7 +45,7 @@ export interface NodePlatformOptions {
 
 /**
  * Complete Node.js platform adapter.
- * Combines terminal, signal, clipboard, and environment adapters.
+ * Combines terminal, signal, clipboard, environment, filesystem, path, archive, and style adapters.
  * @public
  */
 export class NodePlatformAdapter implements PlatformAdapter {
@@ -42,6 +53,10 @@ export class NodePlatformAdapter implements PlatformAdapter {
   readonly signals: SignalAdapter
   readonly clipboard: ClipboardAdapter
   readonly environment: EnvironmentAdapter
+  readonly filesystem: FileSystemAdapter
+  readonly path: PathAdapter
+  readonly archive: ArchiveAdapter
+  readonly style: StyleAdapter
 
   private disposed = false
   private readonly disposables: Disposable[] = []
@@ -58,11 +73,26 @@ export class NodePlatformAdapter implements PlatformAdapter {
     const signalAdapter = new NodeSignalAdapter()
     const clipboardAdapter = new NodeClipboardAdapter()
     const environmentAdapter = new NodeEnvironmentAdapter()
+    const filesystemAdapter = new NodeFileSystemAdapter()
+    const pathAdapter = new NodePathAdapter()
+    const archiveAdapter = new NodeArchiveAdapter()
+
+    // Create style adapter using environment's color support
+    const colorSupport = environmentAdapter.getColorSupport()
+    const styleAdapter: StyleAdapter = {
+      style: createStyle(colorSupport),
+      enabled: colorSupport.level > 0,
+      level: colorSupport.level,
+    }
 
     this.terminal = terminalAdapter
     this.signals = signalAdapter
     this.clipboard = clipboardAdapter
     this.environment = environmentAdapter
+    this.filesystem = filesystemAdapter
+    this.path = pathAdapter
+    this.archive = archiveAdapter
+    this.style = styleAdapter
 
     this.disposables.push(terminalAdapter, signalAdapter)
   }

@@ -1,4 +1,5 @@
-import { Buffer } from 'node:buffer'
+import type { Disposable, PlatformAdapter } from '@suds-cli/machine'
+import { allocBytes, concatBytes, encodeString } from '@suds-cli/machine'
 import { BlurMsg, FocusMsg } from './messages.js'
 import { KeyMsg, KeyType, parseKey } from './keys.js'
 import { parseMouse } from './mouse.js'
@@ -6,7 +7,7 @@ import type { Msg } from './types.js'
 
 /** @public Options for the input reader. */
 export interface InputOptions {
-  input?: NodeJS.ReadableStream
+  platform?: PlatformAdapter
   onMessage: (msg: Msg) => void
 }
 
@@ -14,24 +15,29 @@ const BRACKET_PASTE_START = '\u001b[200~'
 const BRACKET_PASTE_END = '\u001b[201~'
 
 export function startInput(options: InputOptions): () => void {
-  const input = options.input ?? process.stdin
-  let buffer: Buffer = Buffer.alloc(0)
+  if (!options.platform) {
+    // No platform adapter available, return no-op cleanup
+    return () => {}
+  }
 
-  const onData = (data: Buffer | string) => {
-    const chunk = typeof data === 'string' ? Buffer.from(data, 'utf8') : data
-    buffer = Buffer.concat([buffer, chunk])
+  let buffer: Uint8Array = allocBytes(0)
+  let disposable: Disposable | null = null
+
+  const onData = (data: Uint8Array) => {
+    buffer = concatBytes(buffer, data)
     buffer = consumeBuffer(buffer, options.onMessage)
   }
 
-  input.on('data', onData)
-  input.resume()
+  disposable = options.platform.terminal.onInput(onData)
 
   return () => {
-    input.off('data', onData)
+    if (disposable) {
+      disposable.dispose()
+    }
   }
 }
 
-function consumeBuffer(buffer: Buffer, push: (msg: Msg) => void): Buffer {
+function consumeBuffer(buffer: Uint8Array, push: (msg: Msg) => void): Uint8Array {
   let offset = 0
 
   while (offset < buffer.length) {
@@ -57,7 +63,7 @@ type DetectResult =
   | { needMore: true }
 
 function detectOne(
-  buffer: Buffer,
+  buffer: Uint8Array,
   allowMoreData: boolean,
 ): DetectResult | undefined {
   if (buffer.length === 0) {
@@ -92,7 +98,7 @@ function detectOne(
   return { msg: new KeyMsg(key.key), length: key.length }
 }
 
-function detectFocus(buffer: Buffer): DetectResult | undefined {
+function detectFocus(buffer: Uint8Array): DetectResult | undefined {
   // Focus in: ESC [ I, Focus out: ESC [ O (exactly three bytes)
   if (buffer.length === 3 && buffer[0] === 0x1b && buffer[1] === 0x5b) {
     if (buffer[2] === 0x49) {
@@ -106,10 +112,11 @@ function detectFocus(buffer: Buffer): DetectResult | undefined {
 }
 
 function detectBracketedPaste(
-  buffer: Buffer,
+  buffer: Uint8Array,
   allowMoreData: boolean,
 ): DetectResult | undefined {
-  const asString = buffer.toString('utf8')
+  const decoder = new TextDecoder('utf-8', { fatal: false })
+  const asString = decoder.decode(buffer)
   if (!asString.startsWith(BRACKET_PASTE_START)) {
     return undefined
   }
@@ -121,10 +128,8 @@ function detectBracketedPaste(
     return allowMoreData ? { needMore: true } : undefined
   }
   const content = asString.slice(BRACKET_PASTE_START.length, endIndex)
-  const length = Buffer.byteLength(
-    BRACKET_PASTE_START + content + BRACKET_PASTE_END,
-    'utf8',
-  )
+  const fullString = BRACKET_PASTE_START + content + BRACKET_PASTE_END
+  const length = encodeString(fullString).length
   const key: Msg = new KeyMsg({
     type: KeyType.Runes,
     runes: content,

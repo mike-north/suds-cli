@@ -1,5 +1,4 @@
-import { readdir, stat } from 'fs/promises'
-import { join } from 'node:path'
+import type { FileSystemAdapter, PathAdapter } from '@suds-cli/machine'
 import type { FileInfo } from './types.js'
 
 /**
@@ -7,19 +6,34 @@ import type { FileInfo } from './types.js'
  * @public
  */
 export async function readDirectory(
+  filesystem: FileSystemAdapter,
+  pathAdapter: PathAdapter,
   path: string,
   showHidden: boolean,
   dirFirst = true,
 ): Promise<FileInfo[]> {
-  const entries = await readdir(path, { withFileTypes: true })
+  const result = await filesystem.readdir(path, { withFileTypes: true })
+
+  // Type guard to ensure we got DirectoryEntry[]
+  if (typeof result[0] === 'string') {
+    throw new Error('Expected DirectoryEntry array but got string array')
+  }
+
+  const entries = result as Array<{
+    readonly name: string
+    isDirectory(): boolean
+    isFile(): boolean
+    isSymbolicLink(): boolean
+  }>
+
   const files: FileInfo[] = []
 
   for (const entry of entries) {
     const isHidden = isHiddenUnix(entry.name)
     if (!showHidden && isHidden) continue
 
-    const fullPath = join(path, entry.name)
-    const stats = await stat(fullPath)
+    const fullPath = pathAdapter.join(path, entry.name)
+    const stats = await filesystem.stat(fullPath)
 
     files.push({
       name: entry.name,

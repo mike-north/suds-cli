@@ -1,55 +1,49 @@
+import type { PlatformAdapter, TerminalAdapter } from '@suds-cli/machine'
+import {
+  CURSOR_SHOW,
+  CURSOR_HIDE,
+  CLEAR_SCREEN,
+  CURSOR_HOME,
+  ALT_SCREEN_ON,
+  ALT_SCREEN_OFF,
+  MOUSE_CELL_ON,
+  MOUSE_ALL_ON,
+  MOUSE_SGR_ON,
+  MOUSE_CELL_OFF,
+  MOUSE_ALL_OFF,
+  MOUSE_SGR_OFF,
+  BRACKETED_PASTE_ON,
+  BRACKETED_PASTE_OFF,
+  REPORT_FOCUS_ON,
+  REPORT_FOCUS_OFF,
+} from '@suds-cli/machine'
+
 /** @public Options for the terminal controller. */
 export interface TerminalOptions {
-  input?: NodeJS.ReadableStream
-  output?: NodeJS.WritableStream
+  platform?: PlatformAdapter
 }
-
-const CURSOR_SHOW = '\u001b[?25h'
-const CURSOR_HIDE = '\u001b[?25l'
-const CLEAR_SCREEN = '\u001b[2J'
-const CURSOR_HOME = '\u001b[H'
-const ALT_SCREEN_ON = '\u001b[?1049h'
-const ALT_SCREEN_OFF = '\u001b[?1049l'
-const MOUSE_CELL_ON = '\u001b[?1002h'
-const MOUSE_ALL_ON = '\u001b[?1003h'
-const MOUSE_SGR_ON = '\u001b[?1006h'
-const MOUSE_CELL_OFF = '\u001b[?1002l'
-const MOUSE_ALL_OFF = '\u001b[?1003l'
-const MOUSE_SGR_OFF = '\u001b[?1006l'
-const BRACKETED_PASTE_ON = '\u001b[?2004h'
-const BRACKETED_PASTE_OFF = '\u001b[?2004l'
-const REPORT_FOCUS_ON = '\u001b[?1004h'
-const REPORT_FOCUS_OFF = '\u001b[?1004l'
 
 export class TerminalController {
   private rawMode = false
   private altScreen = false
   private bracketedPaste = false
   private focusReporting = false
+  private readonly terminal: TerminalAdapter | null
 
-  constructor(
-    private readonly input: NodeJS.ReadableStream = process.stdin,
-    private readonly output: NodeJS.WritableStream = process.stdout,
-  ) {}
+  constructor(platform?: PlatformAdapter) {
+    this.terminal = platform?.terminal ?? null
+  }
 
   enableRawMode(): void {
-    const asTty = this.input as NodeJS.ReadStream
-    if (
-      typeof asTty.isTTY === 'boolean' &&
-      asTty.isTTY &&
-      typeof asTty.setRawMode === 'function'
-    ) {
-      asTty.setRawMode(true)
-      asTty.resume()
+    if (this.terminal && !this.rawMode) {
+      this.terminal.enableRawMode()
       this.rawMode = true
     }
   }
 
   disableRawMode(): void {
-    const asTty = this.input as NodeJS.ReadStream
-    if (this.rawMode && typeof asTty.setRawMode === 'function') {
-      asTty.setRawMode(false)
-      asTty.pause()
+    if (this.terminal && this.rawMode) {
+      this.terminal.disableRawMode()
       this.rawMode = false
     }
   }
@@ -135,6 +129,8 @@ export class TerminalController {
     if (data.length === 0) {
       return
     }
-    this.output.write(data)
+    if (this.terminal) {
+      this.terminal.write(data)
+    }
   }
 }

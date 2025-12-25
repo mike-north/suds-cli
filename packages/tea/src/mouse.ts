@@ -1,4 +1,4 @@
-import { Buffer } from 'node:buffer'
+import { decodeString } from '@suds-cli/machine'
 
 /** @public Mouse action type. */
 export enum MouseAction {
@@ -55,7 +55,7 @@ const mouseEventX10Len = 6
 const x10MouseByteOffset = 32
 
 export function parseMouse(
-  buffer: Buffer,
+  buffer: Uint8Array,
   allowMoreData: boolean,
 ): { msg: MouseMsg; length: number } | { needMore: true } | undefined {
   if (buffer.length < 3 || buffer[0] !== 0x1b || buffer[1] !== 0x5b) {
@@ -71,7 +71,7 @@ export function parseMouse(
   }
 
   if (buffer[2] === 0x3c) {
-    const slice = buffer.toString('utf8')
+    const slice = decodeString(buffer)
     const match = mouseSGRRegex.exec(slice.slice(3))
     if (!match) {
       return allowMoreData ? { needMore: true } : undefined
@@ -107,7 +107,7 @@ function parseSGRMouseEvent(seq: string): MouseEvent {
   return event
 }
 
-function parseX10MouseEvent(buf: Buffer): MouseEvent {
+function parseX10MouseEvent(buf: Uint8Array): MouseEvent {
   const buttonByte = buf[3] ?? 0
   const c1 = buf[4] ?? 0
   const c2 = buf[5] ?? 0

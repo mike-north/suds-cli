@@ -1,20 +1,23 @@
 import { describe, expect, it, vi } from 'vitest'
 import {
   ChapstickStyleProvider,
-  defaultStyleProvider,
   type StyleProvider,
 } from '../src/provider.js'
 import { Style } from '../src/style.js'
+import { createMockEnv, createNoopStyleFn } from './test-helpers.js'
 
 describe('ChapstickStyleProvider', () => {
+  const mockEnv = createMockEnv()
+  const mockStyleFn = createNoopStyleFn()
+
   it('creates a new style instance', () => {
-    const provider = new ChapstickStyleProvider()
+    const provider = new ChapstickStyleProvider(mockEnv, mockStyleFn)
     const style = provider.createStyle()
     expect(style).toBeInstanceOf(Style)
   })
 
   it('provides semantic styles', () => {
-    const provider = new ChapstickStyleProvider()
+    const provider = new ChapstickStyleProvider(mockEnv, mockStyleFn)
     const { semanticStyles } = provider
 
     expect(semanticStyles.success).toBeInstanceOf(Style)
@@ -27,7 +30,7 @@ describe('ChapstickStyleProvider', () => {
   })
 
   it('semantic styles are properly configured', () => {
-    const provider = new ChapstickStyleProvider()
+    const provider = new ChapstickStyleProvider(mockEnv, mockStyleFn)
     const { semanticStyles } = provider
 
     // Test that success style is bold
@@ -43,7 +46,7 @@ describe('ChapstickStyleProvider', () => {
   })
 
   it('creates independent style instances', () => {
-    const provider = new ChapstickStyleProvider()
+    const provider = new ChapstickStyleProvider(mockEnv, mockStyleFn)
     const style1 = provider.createStyle()
     const style2 = provider.createStyle()
 
@@ -53,20 +56,12 @@ describe('ChapstickStyleProvider', () => {
     // The other should not be affected
     expect(style1).not.toBe(style2)
   })
-})
 
-describe('defaultStyleProvider', () => {
-  it('is a singleton instance', () => {
-    expect(defaultStyleProvider).toBeInstanceOf(ChapstickStyleProvider)
-  })
-
-  it('can be used for default parameters', () => {
-    function someFunction(provider: StyleProvider = defaultStyleProvider) {
-      return provider.createStyle()
-    }
-
-    const style = someFunction()
-    expect(style).toBeInstanceOf(Style)
+  it('exposes context for advanced usage', () => {
+    const provider = new ChapstickStyleProvider(mockEnv, mockStyleFn)
+    expect(provider.context).toBeDefined()
+    expect(provider.context.env).toBe(mockEnv)
+    expect(provider.context.styleFn).toBe(mockStyleFn)
   })
 })
 
@@ -95,6 +90,7 @@ describe('Mock StyleProvider for testing', () => {
         highlight: mockStyle,
         header: mockStyle,
       },
+      context: { env: createMockEnv(), styleFn: createNoopStyleFn() },
     }
 
     // Use the mock provider
@@ -111,6 +107,10 @@ describe('Mock StyleProvider for testing', () => {
   })
 
   it('demonstrates testing with semantic styles', () => {
+    const mockEnv = createMockEnv()
+    const mockStyleFn = createNoopStyleFn()
+    const realProvider = new ChapstickStyleProvider(mockEnv, mockStyleFn)
+
     const mockRender = vi.fn((text: string) => `[${text}]`)
     const mockStyle = {
       render: mockRender,
@@ -127,13 +127,14 @@ describe('Mock StyleProvider for testing', () => {
         highlight: mockStyle,
         header: mockStyle,
       },
+      context: realProvider.context,
     }
 
     // Function that uses semantic styles
     function displayMessage(
       message: string,
       type: 'success' | 'error',
-      provider: StyleProvider = defaultStyleProvider,
+      provider: StyleProvider,
     ): string {
       const style =
         type === 'success'

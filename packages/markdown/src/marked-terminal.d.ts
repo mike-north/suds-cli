@@ -1,25 +1,25 @@
 declare module 'marked-terminal' {
   import type { MarkedExtension } from 'marked'
-  import type { Chalk } from 'chalk'
+  import type { StyleFn } from '@suds-cli/machine'
 
   export interface MarkedTerminalOptions {
-    code?: Chalk
-    blockquote?: Chalk
-    html?: Chalk
-    heading?: Chalk
-    firstHeading?: Chalk
-    hr?: Chalk
-    listitem?: Chalk
-    list?: Chalk
-    table?: Chalk
-    paragraph?: Chalk
-    strong?: Chalk
-    em?: Chalk
-    codespan?: Chalk
-    del?: Chalk
-    link?: Chalk
-    href?: Chalk
-    text?: Chalk
+    code?: StyleFn
+    blockquote?: StyleFn
+    html?: StyleFn
+    heading?: StyleFn
+    firstHeading?: StyleFn
+    hr?: StyleFn
+    listitem?: StyleFn
+    list?: StyleFn
+    table?: StyleFn
+    paragraph?: StyleFn
+    strong?: StyleFn
+    em?: StyleFn
+    codespan?: StyleFn
+    del?: StyleFn
+    link?: StyleFn
+    href?: StyleFn
+    text?: StyleFn
     unescape?: boolean
     emoji?: boolean
     width?: number

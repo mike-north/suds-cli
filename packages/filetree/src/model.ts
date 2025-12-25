@@ -1,5 +1,6 @@
 import { matches } from '@suds-cli/key'
 import { type Cmd, type Msg, KeyMsg, WindowSizeMsg } from '@suds-cli/tea'
+import type { FileSystemAdapter, PathAdapter } from '@suds-cli/machine'
 import type { DirectoryItem } from './types.js'
 import { defaultKeyMap, type FiletreeKeyMap } from './keymap.js'
 import { mergeStyles, type FiletreeStyles } from './styles.js'
@@ -11,6 +12,10 @@ import { GetDirectoryListingMsg, ErrorMsg } from './messages.js'
  * @public
  */
 export interface FiletreeOptions {
+  /** FileSystem adapter for file operations */
+  filesystem: FileSystemAdapter
+  /** Path adapter for path operations */
+  path: PathAdapter
   /** Initial directory to display */
   currentDir?: string
   /** Whether to show hidden files */
@@ -66,6 +71,12 @@ export class FiletreeModel {
   /** Last error, if any */
   readonly error: Error | null
 
+  /** FileSystem adapter */
+  readonly filesystem: FileSystemAdapter
+
+  /** Path adapter */
+  readonly path: PathAdapter
+
   private constructor(
     cursor: number,
     files: DirectoryItem[],
@@ -79,6 +90,8 @@ export class FiletreeModel {
     currentDir: string,
     showHidden: boolean,
     error: Error | null,
+    filesystem: FileSystemAdapter,
+    path: PathAdapter,
   ) {
     this.cursor = cursor
     this.files = files
@@ -92,6 +105,8 @@ export class FiletreeModel {
     this.currentDir = currentDir
     this.showHidden = showHidden
     this.error = error
+    this.filesystem = filesystem
+    this.path = path
   }
 
   /**
@@ -100,8 +115,8 @@ export class FiletreeModel {
    * @returns A new FiletreeModel instance
    * @public
    */
-  static new(options: FiletreeOptions = {}): FiletreeModel {
-    const currentDir = options.currentDir ?? process.cwd()
+  static new(options: FiletreeOptions): FiletreeModel {
+    const currentDir = options.currentDir ?? options.filesystem.cwd()
     const showHidden = options.showHidden ?? false
     const keyMap = options.keyMap ?? defaultKeyMap
     const styles = mergeStyles(options.styles)
@@ -121,6 +136,8 @@ export class FiletreeModel {
       currentDir,
       showHidden,
       null, // error
+      options.filesystem,
+      options.path,
     )
   }
 
@@ -130,7 +147,12 @@ export class FiletreeModel {
    * @public
    */
   init(): Cmd<GetDirectoryListingMsg | ErrorMsg> {
-    return getDirectoryListingCmd(this.currentDir, this.showHidden)
+    return getDirectoryListingCmd(
+      this.filesystem,
+      this.path,
+      this.currentDir,
+      this.showHidden,
+    )
   }
 
   /**
@@ -157,6 +179,8 @@ export class FiletreeModel {
       this.currentDir,
       this.showHidden,
       this.error,
+      this.filesystem,
+      this.path,
     )
   }
 
@@ -187,6 +211,8 @@ export class FiletreeModel {
           this.currentDir,
           this.showHidden,
           null, // clear error
+          this.filesystem,
+          this.path,
         ),
         null,
       ]
@@ -208,6 +234,8 @@ export class FiletreeModel {
           this.currentDir,
           this.showHidden,
           msg.error,
+          this.filesystem,
+          this.path,
         ),
         null,
       ]
@@ -233,6 +261,8 @@ export class FiletreeModel {
           this.currentDir,
           this.showHidden,
           this.error,
+          this.filesystem,
+          this.path,
         ),
         null,
       ]
@@ -272,6 +302,8 @@ export class FiletreeModel {
             this.currentDir,
             this.showHidden,
             this.error,
+            this.filesystem,
+            this.path,
           ),
           null,
         ]
@@ -304,6 +336,8 @@ export class FiletreeModel {
             this.currentDir,
             this.showHidden,
             this.error,
+            this.filesystem,
+            this.path,
           ),
           null,
         ]

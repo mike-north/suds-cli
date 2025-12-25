@@ -1,9 +1,9 @@
 import { Style } from '@suds-cli/chapstick'
 import { readFileContent } from '@suds-cli/filesystem'
 import { type Cmd, type Msg } from '@suds-cli/tea'
+import type { FileSystemAdapter, PathAdapter } from '@suds-cli/machine'
 import { ViewportModel } from '@suds-cli/viewport'
 import { getHighlighter } from 'shiki'
-import path from 'node:path'
 import { ErrorMsg, SyntaxMsg } from './messages.js'
 
 /**
@@ -11,6 +11,10 @@ import { ErrorMsg, SyntaxMsg } from './messages.js'
  * @public
  */
 export interface CodeOptions {
+  /** Filesystem adapter for file operations */
+  filesystem: FileSystemAdapter
+  /** Path adapter for path operations */
+  path: PathAdapter
   active?: boolean
   syntaxTheme?: string
   width?: number
@@ -95,11 +99,16 @@ function hexToRgb(hex: string): string {
 /**
  * Read file content and highlight it asynchronously.
  */
-function readFileContentCmd(fileName: string, syntaxTheme: string): Cmd<Msg> {
+function readFileContentCmd(
+  fsAdapter: FileSystemAdapter,
+  pathAdapter: PathAdapter,
+  fileName: string,
+  syntaxTheme: string,
+): Cmd<Msg> {
   return async (): Promise<Msg> => {
     try {
-      const content = await readFileContent(fileName)
-      const extension = path.extname(fileName)
+      const content = await readFileContent(fsAdapter, fileName)
+      const extension = pathAdapter.extname(fileName)
       const highlightedContent = await highlight(
         content,
         extension,
@@ -124,6 +133,8 @@ export class CodeModel {
   readonly filename: string
   readonly highlightedContent: string
   readonly syntaxTheme: string
+  readonly filesystem: FileSystemAdapter
+  readonly path: PathAdapter
 
   private constructor(options: {
     viewport: ViewportModel
@@ -131,12 +142,16 @@ export class CodeModel {
     filename: string
     highlightedContent: string
     syntaxTheme: string
+    filesystem: FileSystemAdapter
+    path: PathAdapter
   }) {
     this.viewport = options.viewport
     this.active = options.active
     this.filename = options.filename
     this.highlightedContent = options.highlightedContent
     this.syntaxTheme = options.syntaxTheme
+    this.filesystem = options.filesystem
+    this.path = options.path
   }
 
   /**
@@ -144,7 +159,7 @@ export class CodeModel {
    * @param options - Configuration options
    * @returns A new CodeModel instance
    */
-  static new(options: CodeOptions = {}): CodeModel {
+  static new(options: CodeOptions): CodeModel {
     return new CodeModel({
       viewport: ViewportModel.new({
         width: options.width ?? 0,
@@ -154,6 +169,8 @@ export class CodeModel {
       filename: '',
       highlightedContent: '',
       syntaxTheme: options.syntaxTheme ?? 'dracula',
+      filesystem: options.filesystem,
+      path: options.path,
     })
   }
 
@@ -167,6 +184,8 @@ export class CodeModel {
       filename: string
       highlightedContent: string
       syntaxTheme: string
+      filesystem: FileSystemAdapter
+      path: PathAdapter
     }>,
   ): CodeModel {
     return new CodeModel({
@@ -175,6 +194,8 @@ export class CodeModel {
       filename: partial.filename ?? this.filename,
       highlightedContent: partial.highlightedContent ?? this.highlightedContent,
       syntaxTheme: partial.syntaxTheme ?? this.syntaxTheme,
+      filesystem: partial.filesystem ?? this.filesystem,
+      path: partial.path ?? this.path,
     })
   }
 
@@ -185,7 +206,7 @@ export class CodeModel {
    */
   setFileName(filename: string): [CodeModel, Cmd<Msg>] {
     const updated = this.with({ filename })
-    return [updated, readFileContentCmd(filename, this.syntaxTheme)]
+    return [updated, readFileContentCmd(this.filesystem, this.path, filename, this.syntaxTheme)]
   }
 
   /**

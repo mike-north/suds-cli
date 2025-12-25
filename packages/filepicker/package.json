@@ -6,6 +6,7 @@
     "@suds-cli/chapstick": "workspace:*",
     "@suds-cli/help": "workspace:*",
     "@suds-cli/key": "workspace:*",
+    "@suds-cli/machine": "workspace:*",
     "@suds-cli/tea": "workspace:*"
   },
   "devDependencies": {

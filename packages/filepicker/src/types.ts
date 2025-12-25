@@ -1,6 +1,7 @@
 import { Style } from '@suds-cli/chapstick'
 import type { KeyMap as HelpKeyMap } from '@suds-cli/help'
 import type { Binding } from '@suds-cli/key'
+import type { FileSystemAdapter, PathAdapter } from '@suds-cli/machine'
 
 /** Metadata for a file system entry. @public */
 export interface FileInfo {
@@ -40,6 +41,10 @@ export interface FilepickerStyles {
 
 /** Options for constructing a {@link FilepickerModel}. @public */
 export interface FilepickerOptions {
+  /** FileSystem adapter for file operations */
+  filesystem: FileSystemAdapter
+  /** Path adapter for path operations */
+  path: PathAdapter
   currentDir?: string
   allowedTypes?: string[]
   showHidden?: boolean

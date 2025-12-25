@@ -1,7 +1,7 @@
 import { Style } from '@suds-cli/chapstick'
 import { matches } from '@suds-cli/key'
 import { msg, type Cmd, type Msg, KeyMsg } from '@suds-cli/tea'
-import { dirname } from 'node:path'
+import type { FileSystemAdapter, PathAdapter } from '@suds-cli/machine'
 import { readDirectory } from './fs.js'
 import { defaultKeyMap } from './keymap.js'
 import { DirReadMsg, FileSelectedMsg } from './messages.js'
@@ -25,6 +25,8 @@ type FilepickerState = {
   allowedTypes: string[]
   styles: FilepickerStyles
   keyMap: FilepickerKeyMap
+  filesystem: FileSystemAdapter
+  path: PathAdapter
 }
 
 function defaultStyles(): FilepickerStyles {
@@ -63,6 +65,8 @@ export class FilepickerModel {
   readonly allowedTypes: string[]
   readonly styles: FilepickerStyles
   readonly keyMap: FilepickerKeyMap
+  readonly filesystem: FileSystemAdapter
+  readonly path: PathAdapter
 
   private constructor(state: FilepickerState) {
     this.currentDir = state.currentDir
@@ -77,13 +81,15 @@ export class FilepickerModel {
     this.allowedTypes = state.allowedTypes
     this.styles = state.styles
     this.keyMap = state.keyMap
+    this.filesystem = state.filesystem
+    this.path = state.path
   }
 
   /** Create a new model and command to read the directory. */
-  static new(options: FilepickerOptions = {}): [FilepickerModel, Cmd<Msg>] {
+  static new(options: FilepickerOptions): [FilepickerModel, Cmd<Msg>] {
     const styles = { ...defaultStyles(), ...(options.styles ?? {}) }
     const model = new FilepickerModel({
-      currentDir: options.currentDir ?? process.cwd(),
+      currentDir: options.currentDir ?? options.filesystem.cwd(),
       files: [],
       cursor: 0,
       selectedFile: null,
@@ -95,6 +101,8 @@ export class FilepickerModel {
       allowedTypes: options.allowedTypes ?? [],
       styles,
       keyMap: options.keyMap ?? defaultKeyMap,
+      filesystem: options.filesystem,
+      path: options.path,
     })
     return model.refresh()
   }
@@ -106,7 +114,7 @@ export class FilepickerModel {
 
   /** Go to the parent directory. */
   back(): [FilepickerModel, Cmd<Msg>] {
-    const parent = dirname(this.currentDir)
+    const parent = this.path.dirname(this.currentDir)
     const model = this.with({ currentDir: parent, cursor: 0 })
     return model.refresh()
   }
@@ -131,6 +139,8 @@ export class FilepickerModel {
     const cmd: Cmd<Msg> = async () => {
       try {
         const files = await readDirectory(
+          this.filesystem,
+          this.path,
           this.currentDir,
           this.showHidden,
           this.dirFirst,
@@ -272,6 +282,8 @@ export class FilepickerModel {
       allowedTypes: this.allowedTypes,
       styles: this.styles,
       keyMap: this.keyMap,
+      filesystem: this.filesystem,
+      path: this.path,
       ...patch,
     })
   }

@@ -1,4 +1,4 @@
-import { Buffer } from 'node:buffer'
+import { decodeFirstRune, decodeString, byteLength } from '@suds-cli/machine'
 
 /** @public Known key types parsed from terminal input. */
 export enum KeyType {
@@ -263,17 +263,17 @@ export function keyToString(key: Key): string {
 }
 
 export function parseKey(
-  buffer: Buffer,
+  buffer: Uint8Array,
   allowMoreData: boolean,
 ): { key: Key; length: number } | { needMore: true } | undefined {
   if (buffer.length === 0) {
     return allowMoreData ? { needMore: true } : undefined
   }
-  const input = buffer.toString('utf8')
+  const input = decodeString(buffer)
 
   for (const [seq, key] of sequences) {
     if (input.startsWith(seq)) {
-      return { key, length: Buffer.byteLength(seq, 'utf8') }
+      return { key, length: byteLength(seq) }
     }
     if (allowMoreData && seq.startsWith(input)) {
       return { needMore: true }
@@ -281,11 +281,10 @@ export function parseKey(
   }
 
   if (buffer[0] === 0x1b && buffer.length > 1) {
-    const [, altLength] = decodeRune(buffer.subarray(1))
-    if (altLength > 0) {
-      const runeStr = buffer.subarray(1, 1 + altLength).toString('utf8')
+    const [rune, altLength] = decodeFirstRune(buffer, 1)
+    if (altLength > 0 && rune !== null) {
       return {
-        key: { type: KeyType.Runes, runes: runeStr, alt: true, paste: false },
+        key: { type: KeyType.Runes, runes: rune, alt: true, paste: false },
         length: 1 + altLength,
       }
     }
@@ -305,7 +304,7 @@ export function parseKey(
     }
   }
 
-  const [rune, runeLength] = decodeRune(buffer)
+  const [rune, runeLength] = decodeFirstRune(buffer)
   if (runeLength === 0 || rune === null) {
     return allowMoreData ? { needMore: true } : undefined
   }
@@ -321,17 +320,4 @@ export function parseKey(
     key: { type: KeyType.Runes, runes: rune, alt: false, paste: false },
     length: runeLength,
   }
-}
-
-function decodeRune(buffer: Buffer): [string | null, number] {
-  const codePoint = buffer.toString('utf8', 0, 4)
-  if (codePoint.length === 0) {
-    return [null, 0]
-  }
-  const firstChar = codePoint[0] ?? null
-  if (firstChar === null) {
-    return [null, 0]
-  }
-  const length = Buffer.from(firstChar, 'utf8').length
-  return [firstChar, length]
 }

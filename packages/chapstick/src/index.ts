@@ -27,7 +27,14 @@ export {
 export { width, clampWidth, wrapWidth, padLines } from './measure.js'
 
 // Style class
-export { Style, type StyleKey } from './style.js'
+export { Style, createDefaultContext, type StyleKey, type StyleContext } from './style.js'
+
+// Provider
+export {
+  ChapstickStyleProvider,
+  type SemanticStyles,
+  type StyleProvider,
+} from './provider.js'
 
 // Layout utilities
 export { joinHorizontal, joinVertical, place } from './join.js'

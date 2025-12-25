@@ -1,17 +1,20 @@
 import { describe, it, expect } from 'vitest'
 import { MarkdownModel } from '../src/model.js'
 import { RenderMarkdownMsg, ErrorMsg } from '../src/messages.js'
+import { NodeFileSystemAdapter } from '@suds-cli/machine/node'
 
 describe('MarkdownModel', () => {
+  const filesystem = new NodeFileSystemAdapter()
+
   it('should create a new model', () => {
-    const model = MarkdownModel.new({ active: true })
+    const model = MarkdownModel.new({ filesystem, active: true })
     expect(model).toBeDefined()
     expect(model.active).toBe(true)
     expect(model.fileName).toBe('')
   })
 
   it('should set active state', () => {
-    const model = MarkdownModel.new({ active: false })
+    const model = MarkdownModel.new({ filesystem, active: false })
     expect(model.active).toBe(false)
 
     const activeModel = model.setIsActive(true)
@@ -19,26 +22,26 @@ describe('MarkdownModel', () => {
   })
 
   it('should set size', () => {
-    const model = MarkdownModel.new()
+    const model = MarkdownModel.new({ filesystem })
     const [updated] = model.setSize(80, 24)
     expect(updated.viewport.width).toBe(80)
     expect(updated.viewport.height).toBe(24)
   })
 
   it('should go to top', () => {
-    const model = MarkdownModel.new({ width: 80, height: 24 })
+    const model = MarkdownModel.new({ filesystem, width: 80, height: 24 })
     const scrolledModel = model.gotoTop()
     expect(scrolledModel.viewport.yOffset).toBe(0)
   })
 
   it('should init with no command', () => {
-    const model = MarkdownModel.new()
+    const model = MarkdownModel.new({ filesystem })
     const cmd = model.init()
     expect(cmd).toBeNull()
   })
 
   it('should set filename and return command', () => {
-    const model = MarkdownModel.new({ width: 80, height: 24 })
+    const model = MarkdownModel.new({ filesystem, width: 80, height: 24 })
     const [updated, cmd] = model.setFileName('test.md')
 
     expect(updated.fileName).toBe('test.md')
@@ -47,7 +50,7 @@ describe('MarkdownModel', () => {
   })
 
   it('should update viewport content when RenderMarkdownMsg is received', () => {
-    const model = MarkdownModel.new({ width: 80, height: 24 })
+    const model = MarkdownModel.new({ filesystem, width: 80, height: 24 })
     const content = '# Hello\n\nThis is a test.'
     const msg = new RenderMarkdownMsg(content)
 
@@ -62,7 +65,7 @@ describe('MarkdownModel', () => {
   })
 
   it('should handle ErrorMsg and clear filename', () => {
-    const model = MarkdownModel.new({ width: 80, height: 24 })
+    const model = MarkdownModel.new({ filesystem, width: 80, height: 24 })
     const [modelWithFile] = model.setFileName('test.md')
     expect(modelWithFile.fileName).toBe('test.md')
 

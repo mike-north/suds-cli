@@ -3,10 +3,14 @@ import { FiletreeModel } from '../src/model.js'
 import { GetDirectoryListingMsg } from '../src/messages.js'
 import { convertBytesToSizeString } from '../src/fs.js'
 import { KeyMsg, KeyType } from '@suds-cli/tea'
+import { NodeFileSystemAdapter, NodePathAdapter } from '@suds-cli/machine/node'
 
 describe('FiletreeModel', () => {
+  const filesystem = new NodeFileSystemAdapter()
+  const path = new NodePathAdapter()
+
   it('should create a new model with defaults', () => {
-    const model = FiletreeModel.new()
+    const model = FiletreeModel.new({ filesystem, path })
     expect(model.cursor).toBe(0)
     expect(model.files).toEqual([])
     expect(model.active).toBe(true)
@@ -14,6 +18,8 @@ describe('FiletreeModel', () => {
 
   it('should create a model with custom options', () => {
     const model = FiletreeModel.new({
+      filesystem,
+      path,
       currentDir: '/tmp',
       showHidden: true,
       width: 100,
@@ -27,7 +33,7 @@ describe('FiletreeModel', () => {
   })
 
   it('should set active state', () => {
-    const model = FiletreeModel.new()
+    const model = FiletreeModel.new({ filesystem, path })
     const inactive = model.setIsActive(false)
 
     expect(model.active).toBe(true)
@@ -35,7 +41,7 @@ describe('FiletreeModel', () => {
   })
 
   it('should handle directory listing message', () => {
-    const model = FiletreeModel.new()
+    const model = FiletreeModel.new({ filesystem, path })
     const items = [
       {
         name: 'file1.txt',
@@ -64,7 +70,7 @@ describe('FiletreeModel', () => {
   })
 
   it('should navigate down', () => {
-    const model = FiletreeModel.new()
+    const model = FiletreeModel.new({ filesystem, path })
     const items = [
       {
         name: 'file1.txt',
@@ -95,7 +101,7 @@ describe('FiletreeModel', () => {
   })
 
   it('should navigate up', () => {
-    const model = FiletreeModel.new()
+    const model = FiletreeModel.new({ filesystem, path })
     const items = [
       {
         name: 'file1.txt',
@@ -129,7 +135,7 @@ describe('FiletreeModel', () => {
   })
 
   it('should get selected file', () => {
-    const model = FiletreeModel.new()
+    const model = FiletreeModel.new({ filesystem, path })
     const items = [
       {
         name: 'file1.txt',

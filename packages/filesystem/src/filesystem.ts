@@ -1,10 +1,8 @@
-import fs from 'node:fs/promises'
-import fsSync from 'node:fs'
-import path from 'node:path'
-import os from 'node:os'
-import archiver from 'archiver'
-import unzipper from 'unzipper'
-import { createWriteStream, createReadStream } from 'node:fs'
+import type {
+  DirectoryEntry,
+  FileSystemAdapter,
+  PathAdapter,
+} from '@suds-cli/machine'
 
 /**
  * Directory shortcuts.
@@ -43,14 +41,16 @@ export const DirectoriesListingType = 'directories'
 export const FilesListingType = 'files'
 
 /**
- * Generates a timestamped filename for a copy or archive operation.
+ * Generates a timestamped filename for a copy operation.
  * @param filePath - The original file path
- * @param extension - The extension to use (e.g., "" for copy, ".zip" for zip)
+ * @param extension - The extension to use (e.g., "" for copy)
+ * @param path - Path adapter for path operations
  * @returns The new filename with timestamp
  */
 function generateTimestampedFilename(
   filePath: string,
   extension: string,
+  path: PathAdapter,
 ): string {
   const timestamp = Math.floor(Date.now() / 1000)
   const ext = path.extname(filePath)
@@ -70,7 +70,7 @@ function generateTimestampedFilename(
     // Regular file with extension, copying (preserve original extension)
     output = path.join(dirname, `${basename}_${timestamp}${ext}`)
   } else if (ext !== '' && extension !== '') {
-    // Regular file with extension, archiving (replace with new extension)
+    // Regular file with extension, with new extension (replace with new extension)
     output = path.join(dirname, `${basename}_${timestamp}${extension}`)
   } else {
     // File without extension
@@ -81,28 +81,21 @@ function generateTimestampedFilename(
 }
 
 /**
- * Directory entry type matching Node.js fs.Dirent.
- * @public
- */
-export interface DirectoryEntry {
-  name: string
-  isDirectory: () => boolean
-  isFile: () => boolean
-  isSymbolicLink: () => boolean
-}
-
-/**
  * Returns a list of files and directories within a given directory.
+ * @param fs - FileSystem adapter
  * @param dir - The directory path to list
  * @param showHidden - Whether to include hidden files (starting with .)
  * @returns Array of directory entries
  * @public
  */
 export async function getDirectoryListing(
+  fs: FileSystemAdapter,
   dir: string,
   showHidden: boolean = false,
 ): Promise<DirectoryEntry[]> {
-  const entries = await fs.readdir(dir, { withFileTypes: true })
+  const entries = (await fs.readdir(dir, {
+    withFileTypes: true,
+  })) as DirectoryEntry[]
 
   if (!showHidden) {
     return entries.filter((entry) => !entry.name.startsWith('.'))
@@ -113,6 +106,7 @@ export async function getDirectoryListing(
 
 /**
  * Returns a directory listing based on type (directories | files).
+ * @param fs - FileSystem adapter
  * @param dir - The directory path to list
  * @param listingType - Type of listing: "directories" or "files"
  * @param showHidden - Whether to include hidden files (starting with .)
@@ -120,11 +114,14 @@ export async function getDirectoryListing(
  * @public
  */
 export async function getDirectoryListingByType(
+  fs: FileSystemAdapter,
   dir: string,
   listingType: typeof DirectoriesListingType | typeof FilesListingType,
   showHidden: boolean = false,
 ): Promise<DirectoryEntry[]> {
-  const entries = await fs.readdir(dir, { withFileTypes: true })
+  const entries = (await fs.readdir(dir, {
+    withFileTypes: true,
+  })) as DirectoryEntry[]
 
   return entries.filter((entry) => {
     const isHidden = entry.name.startsWith('.')
@@ -145,53 +142,67 @@ export async function getDirectoryListingByType(
 
 /**
  * Returns the user's home directory.
+ * @param fs - FileSystem adapter
  * @returns The home directory path
  * @public
  */
-export function getHomeDirectory(): string {
-  return os.homedir()
+export function getHomeDirectory(fs: FileSystemAdapter): string {
+  return fs.homedir()
 }
 
 /**
  * Returns the current working directory.
+ * @param fs - FileSystem adapter
  * @returns The current working directory path
  * @public
  */
-export function getWorkingDirectory(): string {
-  return process.cwd()
+export function getWorkingDirectory(fs: FileSystemAdapter): string {
+  return fs.cwd()
 }
 
 /**
  * Returns the contents of a file.
+ * @param fs - FileSystem adapter
  * @param name - The file path to read
  * @returns The file contents as a string
  * @public
  */
-export async function readFileContent(name: string): Promise<string> {
+export async function readFileContent(
+  fs: FileSystemAdapter,
+  name: string,
+): Promise<string> {
   const content = await fs.readFile(name, 'utf-8')
   return content
 }
 
 /**
  * Calculates size of a directory or file.
+ * @param fs - FileSystem adapter
+ * @param path - Path adapter
  * @param itemPath - The path to calculate size for
  * @returns The size in bytes
  * @public
  */
-export async function getDirectoryItemSize(itemPath: string): Promise<number> {
+export async function getDirectoryItemSize(
+  fs: FileSystemAdapter,
+  path: PathAdapter,
+  itemPath: string,
+): Promise<number> {
   const stats = await fs.stat(itemPath)
 
-  if (!stats.isDirectory()) {
+  if (!stats.isDirectory) {
     return stats.size
   }
 
   let totalSize = 0
-  const entries = await fs.readdir(itemPath, { withFileTypes: true })
+  const entries = (await fs.readdir(itemPath, {
+    withFileTypes: true,
+  })) as DirectoryEntry[]
 
   for (const entry of entries) {
     const fullPath = path.join(itemPath, entry.name)
     if (entry.isDirectory()) {
-      totalSize += await getDirectoryItemSize(fullPath)
+      totalSize += await getDirectoryItemSize(fs, path, fullPath)
     } else {
       const fileStats = await fs.stat(fullPath)
       totalSize += fileStats.size
@@ -203,12 +214,16 @@ export async function getDirectoryItemSize(itemPath: string): Promise<number> {
 
 /**
  * Search for files by name.
+ * @param fs - FileSystem adapter
+ * @param path - Path adapter
  * @param name - The name or partial name to search for
  * @param dir - The directory to search in
  * @returns Object containing arrays of paths and entries
  * @public
  */
 export async function findFilesByName(
+  fs: FileSystemAdapter,
+  path: PathAdapter,
   name: string,
   dir: string,
 ): Promise<{ paths: string[]; entries: DirectoryEntry[] }> {
@@ -217,7 +232,9 @@ export async function findFilesByName(
 
   async function search(searchDir: string): Promise<void> {
     try {
-      const items = await fs.readdir(searchDir, { withFileTypes: true })
+      const items = (await fs.readdir(searchDir, {
+        withFileTypes: true,
+      })) as DirectoryEntry[]
 
       for (const item of items) {
         const fullPath = path.join(searchDir, item.name)
@@ -244,54 +261,70 @@ export async function findFilesByName(
 
 /**
  * Creates a new file.
+ * @param fs - FileSystem adapter
  * @param name - The file path to create
  * @public
  */
-export async function createFile(name: string): Promise<void> {
-  const handle = await fs.open(name, 'w')
-  await handle.close()
+export async function createFile(
+  fs: FileSystemAdapter,
+  name: string,
+): Promise<void> {
+  // Create an empty file by writing an empty string
+  await fs.writeFile(name, '')
 }
 
 /**
  * Creates a new directory.
  * Note: Parent directories must exist. Use recursive operations if you need to create nested directories.
+ * @param fs - FileSystem adapter
  * @param name - The directory path to create
  * @public
  */
-export async function createDirectory(name: string): Promise<void> {
-  try {
-    await fs.access(name)
-    // Directory already exists
-  } catch {
+export async function createDirectory(
+  fs: FileSystemAdapter,
+  name: string,
+): Promise<void> {
+  const exists = await fs.exists(name)
+  if (!exists) {
     await fs.mkdir(name, { recursive: false })
   }
 }
 
 /**
  * Deletes a file.
+ * @param fs - FileSystem adapter
  * @param name - The file path to delete
  * @public
  */
-export async function deleteFile(name: string): Promise<void> {
+export async function deleteFile(
+  fs: FileSystemAdapter,
+  name: string,
+): Promise<void> {
   await fs.unlink(name)
 }
 
 /**
  * Deletes a directory recursively.
+ * @param fs - FileSystem adapter
  * @param name - The directory path to delete
  * @public
  */
-export async function deleteDirectory(name: string): Promise<void> {
-  await fs.rm(name, { recursive: true, force: true })
+export async function deleteDirectory(
+  fs: FileSystemAdapter,
+  name: string,
+): Promise<void> {
+  await fs.rmdir(name, { recursive: true, force: true })
 }
 
 /**
  * Renames a file or directory.
+ * @param fs - FileSystem adapter
  * @param src - The source path
  * @param dst - The destination path
  * @public
  */
 export async function renameDirectoryItem(
+  fs: FileSystemAdapter,
   src: string,
   dst: string,
 ): Promise<void> {
@@ -300,11 +333,13 @@ export async function renameDirectoryItem(
 
 /**
  * Moves a file or directory.
+ * @param fs - FileSystem adapter
  * @param src - The source path
  * @param dst - The destination path
  * @public
  */
 export async function moveDirectoryItem(
+  fs: FileSystemAdapter,
   src: string,
   dst: string,
 ): Promise<void> {
@@ -313,12 +348,18 @@ export async function moveDirectoryItem(
 
 /**
  * Copies a file with timestamp suffix.
+ * @param fs - FileSystem adapter
+ * @param path - Path adapter
  * @param name - The file path to copy
  * @returns The new file path
  * @public
  */
-export async function copyFile(name: string): Promise<string> {
-  const output = generateTimestampedFilename(name, '')
+export async function copyFile(
+  fs: FileSystemAdapter,
+  path: PathAdapter,
+  name: string,
+): Promise<string> {
+  const output = generateTimestampedFilename(name, '', path)
 
   await fs.copyFile(name, output)
   return output
@@ -326,20 +367,28 @@ export async function copyFile(name: string): Promise<string> {
 
 /**
  * Copies a directory recursively with timestamp suffix.
+ * @param fs - FileSystem adapter
+ * @param path - Path adapter
  * @param name - The directory path to copy
  * @returns The new directory path
  * @public
  */
-export async function copyDirectory(name: string): Promise<string> {
+export async function copyDirectory(
+  fs: FileSystemAdapter,
+  path: PathAdapter,
+  name: string,
+): Promise<string> {
   const timestamp = Math.floor(Date.now() / 1000)
   const output = `${name}_${timestamp}`
 
   async function copyRecursive(src: string, dest: string): Promise<void> {
     const stats = await fs.stat(src)
 
-    if (stats.isDirectory()) {
+    if (stats.isDirectory) {
       await fs.mkdir(dest, { recursive: true })
-      const entries = await fs.readdir(src, { withFileTypes: true })
+      const entries = (await fs.readdir(src, {
+        withFileTypes: true,
+      })) as DirectoryEntry[]
 
       for (const entry of entries) {
         const srcPath = path.join(src, entry.name)
@@ -362,73 +411,15 @@ export async function copyDirectory(name: string): Promise<string> {
 
 /**
  * Writes content to a file.
+ * @param fs - FileSystem adapter
  * @param filePath - The file path to write to
  * @param content - The content to write
  * @public
  */
 export async function writeToFile(
+  fs: FileSystemAdapter,
   filePath: string,
   content: string,
 ): Promise<void> {
-  await fs.writeFile(filePath, content, 'utf-8')
-}
-
-/**
- * Zips a file or directory.
- * @param name - The path to zip
- * @returns The output zip file path
- * @public
- */
-export async function zip(name: string): Promise<string> {
-  const output = generateTimestampedFilename(name, '.zip')
-
-  return new Promise((resolve, reject) => {
-    const outputStream = createWriteStream(output)
-    const archive = archiver('zip', { zlib: { level: 9 } })
-
-    outputStream.on('close', () => {
-      resolve(output)
-    })
-
-    archive.on('error', (err) => {
-      reject(err)
-    })
-
-    archive.pipe(outputStream)
-
-    const stats = fsSync.statSync(name)
-
-    if (stats.isDirectory()) {
-      archive.directory(name, false)
-    } else {
-      archive.file(name, { name: path.basename(name) })
-    }
-
-    void archive.finalize()
-  })
-}
-
-/**
- * Extracts a zip archive.
- * @param name - The zip file path to extract
- * @returns The output directory path
- * @public
- */
-export async function unzip(name: string): Promise<string> {
-  const ext = path.extname(name)
-  const basename = path.basename(name, ext)
-  const dirname = path.dirname(name)
-
-  const output = path.join(dirname, basename)
-
-  return new Promise((resolve, reject) => {
-    createReadStream(name)
-      .pipe(unzipper.Extract({ path: output }))
-      .on('close', () => {
-        resolve(output)
-      })
-      .on('error', (err) => {
-        reject(err)
-      })
-  })
+  await fs.writeFile(filePath, content)
 }

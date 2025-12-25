@@ -5,9 +5,9 @@
   "dependencies": {
     "@suds-cli/chapstick": "workspace:*",
     "@suds-cli/filesystem": "workspace:*",
+    "@suds-cli/machine": "workspace:*",
     "@suds-cli/tea": "workspace:*",
     "@suds-cli/viewport": "workspace:*",
-    "chalk": "^5.4.1",
     "marked": "^15.0.0",
     "marked-terminal": "^7.3.0"
   },

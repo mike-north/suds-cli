@@ -13,7 +13,7 @@ npm install @suds-cli/machine
 For Node.js usage:
 
 ```bash
-npm install clipboardy supports-color
+npm install clipboardy supports-color archiver unzipper
 ```
 
 For browser usage:
@@ -59,6 +59,32 @@ const colorSupport = platform.environment.getColorSupport()
 if (colorSupport.has16m) {
   // Use true color
 }
+
+// Create zip archive (requires archiver package)
+if (platform.archive.isAvailable()) {
+  await platform.archive.zip('/path/to/source', '/path/to/output.zip')
+}
+
+// Extract zip archive (requires unzipper package)
+if (platform.archive.isAvailable()) {
+  await platform.archive.unzip('/path/to/archive.zip', '/path/to/output')
+}
+
+// File system operations
+const content = await platform.filesystem.readFile('/path/to/file.txt')
+await platform.filesystem.writeFile('/path/to/output.txt', 'Hello!')
+const exists = await platform.filesystem.exists('/path/to/file.txt')
+
+// Path operations
+const fullPath = platform.path.join('dir', 'subdir', 'file.txt')
+const baseName = platform.path.basename('/path/to/file.txt') // 'file.txt'
+const dirName = platform.path.dirname('/path/to/file.txt') // '/path/to'
+
+// Terminal styling
+const { style } = platform.style
+console.log(style.red.bold('Error!'))
+console.log(style.green('Success'))
+console.log(style.blue.underline('Link'))
 
 // Clean up when done
 platform.dispose()
@@ -179,6 +205,10 @@ Complete platform adapter combining all platform-specific functionality:
 - `signals: SignalAdapter` - Signal handling adapter
 - `clipboard: ClipboardAdapter` - Clipboard operations adapter
 - `environment: EnvironmentAdapter` - Environment access adapter
+- `filesystem: FileSystemAdapter` - File system operations adapter
+- `path: PathAdapter` - Path operations adapter
+- `archive: ArchiveAdapter` - Archive (zip/unzip) operations adapter
+- `style: StyleAdapter` - Terminal text styling adapter
 - `dispose(): void` - Clean up all resources
 
 #### `TerminalAdapter`
@@ -215,6 +245,54 @@ Environment access interface:
 - `get(name: string): string | undefined` - Get environment variable
 - `getColorSupport(): ColorSupport` - Detect color support level
 - `getTerminalBackground(): TerminalBackground` - Detect dark/light mode
+
+#### `FileSystemAdapter`
+
+File system operations interface:
+
+- `readdir(path, options?): Promise<DirectoryEntry[] | string[]>` - Read directory contents
+- `stat(path): Promise<FileStat>` - Get file/directory stats
+- `readFile(path, encoding?): Promise<string>` - Read file contents as text
+- `writeFile(path, content): Promise<void>` - Write text to a file
+- `exists(path): Promise<boolean>` - Check if path exists
+- `mkdir(path, options?): Promise<void>` - Create directory
+- `unlink(path): Promise<void>` - Delete file
+- `rmdir(path, options?): Promise<void>` - Remove directory
+- `rename(src, dst): Promise<void>` - Rename/move file or directory
+- `copyFile(src, dst): Promise<void>` - Copy file
+- `cwd(): string` - Get current working directory
+- `homedir(): string` - Get user's home directory
+
+#### `PathAdapter`
+
+Path operations interface:
+
+- `join(...segments): string` - Join path segments
+- `dirname(path): string` - Get directory name
+- `basename(path, ext?): string` - Get base name
+- `extname(path): string` - Get file extension
+- `resolve(...segments): string` - Resolve to absolute path
+- `isAbsolute(path): boolean` - Check if path is absolute
+- `normalize(path): string` - Normalize path
+- `sep: string` - Platform-specific path separator
+
+#### `ArchiveAdapter`
+
+Archive operations interface:
+
+- `zip(sourceDir, destPath): Promise<void>` - Create zip archive from directory
+- `unzip(archivePath, destDir): Promise<void>` - Extract zip archive
+- `isAvailable(): boolean` - Check if archiving is supported
+
+**Note:** Archive operations require the `archiver` and `unzipper` packages to be installed in Node.js environments. Browser environments do not support archive operations.
+
+#### `StyleAdapter`
+
+Terminal text styling interface:
+
+- `style: StyleFn` - Chainable style function
+- `enabled: boolean` - Whether styling is enabled
+- `level: number` - Color support level (0-3)
 
 ### Types
 

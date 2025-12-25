@@ -2,10 +2,12 @@
 
 Filesystem utility functions for Suds terminal UIs. This package provides a collection of helper functions for working with the filesystem, ported from the [teacup](https://github.com/mistakenelf/teacup) Go library.
 
+This package uses `@suds-cli/machine` abstractions to ensure browser compatibility and platform independence.
+
 ## Installation
 
 ```bash
-npm install @suds-cli/filesystem
+npm install @suds-cli/filesystem @suds-cli/machine
 ```
 
 ## Features
@@ -22,225 +24,266 @@ npm install @suds-cli/filesystem
 - `DirectoriesListingType` - Filter for directories only
 - `FilesListingType` - Filter for files only
 
+## Usage
+
+All functions require `FileSystemAdapter` and/or `PathAdapter` instances from `@suds-cli/machine`. This design allows the package to work in both Node.js and browser environments.
+
+```typescript
+import { NodeFileSystemAdapter, NodePathAdapter } from '@suds-cli/machine/node'
+import { getDirectoryListing } from '@suds-cli/filesystem'
+
+// Create adapter instances
+const fs = new NodeFileSystemAdapter()
+const path = new NodePathAdapter()
+
+// Use with functions
+const entries = await getDirectoryListing(fs, '/path/to/dir')
+```
+
 ## API
 
 ### Directory Listing
 
-#### `getDirectoryListing(dir: string, showHidden?: boolean): Promise<DirectoryEntry[]>`
+#### `getDirectoryListing(fs: FileSystemAdapter, dir: string, showHidden?: boolean): Promise<DirectoryEntry[]>`
 
 Returns a list of files and directories within a given directory.
 
 ```typescript
+import { NodeFileSystemAdapter } from '@suds-cli/machine/node'
 import { getDirectoryListing } from '@suds-cli/filesystem'
 
-const entries = await getDirectoryListing('/path/to/dir')
-const allEntries = await getDirectoryListing('/path/to/dir', true) // includes hidden files
+const fs = new NodeFileSystemAdapter()
+const entries = await getDirectoryListing(fs, '/path/to/dir')
+const allEntries = await getDirectoryListing(fs, '/path/to/dir', true) // includes hidden files
 ```
 
-#### `getDirectoryListingByType(dir: string, listingType: string, showHidden?: boolean): Promise<DirectoryEntry[]>`
+#### `getDirectoryListingByType(fs: FileSystemAdapter, dir: string, listingType: string, showHidden?: boolean): Promise<DirectoryEntry[]>`
 
 Returns a directory listing filtered by type (directories or files).
 
 ```typescript
+import { NodeFileSystemAdapter } from '@suds-cli/machine/node'
 import {
   getDirectoryListingByType,
   DirectoriesListingType,
   FilesListingType,
 } from '@suds-cli/filesystem'
 
+const fs = new NodeFileSystemAdapter()
 const dirs = await getDirectoryListingByType(
+  fs,
   '/path/to/dir',
   DirectoriesListingType,
 )
-const files = await getDirectoryListingByType('/path/to/dir', FilesListingType)
+const files = await getDirectoryListingByType(fs, '/path/to/dir', FilesListingType)
 ```
 
 ### Directory Navigation
 
-#### `getHomeDirectory(): string`
+#### `getHomeDirectory(fs: FileSystemAdapter): string`
 
 Returns the user's home directory.
 
 ```typescript
+import { NodeFileSystemAdapter } from '@suds-cli/machine/node'
 import { getHomeDirectory } from '@suds-cli/filesystem'
 
-const home = getHomeDirectory()
+const fs = new NodeFileSystemAdapter()
+const home = getHomeDirectory(fs)
 ```
 
-#### `getWorkingDirectory(): string`
+#### `getWorkingDirectory(fs: FileSystemAdapter): string`
 
 Returns the current working directory.
 
 ```typescript
+import { NodeFileSystemAdapter } from '@suds-cli/machine/node'
 import { getWorkingDirectory } from '@suds-cli/filesystem'
 
-const cwd = getWorkingDirectory()
+const fs = new NodeFileSystemAdapter()
+const cwd = getWorkingDirectory(fs)
 ```
 
 ### File Reading
 
-#### `readFileContent(name: string): Promise<string>`
+#### `readFileContent(fs: FileSystemAdapter, name: string): Promise<string>`
 
 Returns the contents of a file as a string.
 
 ```typescript
+import { NodeFileSystemAdapter } from '@suds-cli/machine/node'
 import { readFileContent } from '@suds-cli/filesystem'
 
-const content = await readFileContent('/path/to/file.txt')
+const fs = new NodeFileSystemAdapter()
+const content = await readFileContent(fs, '/path/to/file.txt')
 ```
 
 ### Size Calculation
 
-#### `getDirectoryItemSize(path: string): Promise<number>`
+#### `getDirectoryItemSize(fs: FileSystemAdapter, path: PathAdapter, itemPath: string): Promise<number>`
 
 Calculates the size of a directory or file in bytes.
 
 ```typescript
+import { NodeFileSystemAdapter, NodePathAdapter } from '@suds-cli/machine/node'
 import { getDirectoryItemSize } from '@suds-cli/filesystem'
 
-const size = await getDirectoryItemSize('/path/to/item')
+const fs = new NodeFileSystemAdapter()
+const path = new NodePathAdapter()
+const size = await getDirectoryItemSize(fs, path, '/path/to/item')
 console.log(`Size: ${size} bytes`)
 ```
 
 ### File Search
 
-#### `findFilesByName(name: string, dir: string): Promise<{ paths: string[]; entries: DirectoryEntry[] }>`
+#### `findFilesByName(fs: FileSystemAdapter, path: PathAdapter, name: string, dir: string): Promise<{ paths: string[]; entries: DirectoryEntry[] }>`
 
 Searches for files by name (supports partial matches).
 
 ```typescript
+import { NodeFileSystemAdapter, NodePathAdapter } from '@suds-cli/machine/node'
 import { findFilesByName } from '@suds-cli/filesystem'
 
-const { paths, entries } = await findFilesByName('*.txt', '/path/to/search')
+const fs = new NodeFileSystemAdapter()
+const path = new NodePathAdapter()
+const { paths, entries } = await findFilesByName(fs, path, '*.txt', '/path/to/search')
 ```
 
 ### File Operations
 
-#### `createFile(name: string): Promise<void>`
+#### `createFile(fs: FileSystemAdapter, name: string): Promise<void>`
 
 Creates a new file.
 
 ```typescript
+import { NodeFileSystemAdapter } from '@suds-cli/machine/node'
 import { createFile } from '@suds-cli/filesystem'
 
-await createFile('/path/to/newfile.txt')
+const fs = new NodeFileSystemAdapter()
+await createFile(fs, '/path/to/newfile.txt')
 ```
 
-#### `deleteFile(name: string): Promise<void>`
+#### `deleteFile(fs: FileSystemAdapter, name: string): Promise<void>`
 
 Deletes a file.
 
 ```typescript
+import { NodeFileSystemAdapter } from '@suds-cli/machine/node'
 import { deleteFile } from '@suds-cli/filesystem'
 
-await deleteFile('/path/to/file.txt')
+const fs = new NodeFileSystemAdapter()
+await deleteFile(fs, '/path/to/file.txt')
 ```
 
-#### `writeToFile(path: string, content: string): Promise<void>`
+#### `writeToFile(fs: FileSystemAdapter, filePath: string, content: string): Promise<void>`
 
 Writes content to a file (overwrites if exists).
 
 ```typescript
+import { NodeFileSystemAdapter } from '@suds-cli/machine/node'
 import { writeToFile } from '@suds-cli/filesystem'
 
-await writeToFile('/path/to/file.txt', 'Hello, World!')
+const fs = new NodeFileSystemAdapter()
+await writeToFile(fs, '/path/to/file.txt', 'Hello, World!')
 ```
 
-#### `copyFile(name: string): Promise<string>`
+#### `copyFile(fs: FileSystemAdapter, path: PathAdapter, name: string): Promise<string>`
 
 Copies a file with a timestamp suffix and returns the new file path.
 
 ```typescript
+import { NodeFileSystemAdapter, NodePathAdapter } from '@suds-cli/machine/node'
 import { copyFile } from '@suds-cli/filesystem'
 
-const newPath = await copyFile('/path/to/file.txt')
+const fs = new NodeFileSystemAdapter()
+const path = new NodePathAdapter()
+const newPath = await copyFile(fs, path, '/path/to/file.txt')
 // Returns: /path/to/file_1234567890.txt
 ```
 
 ### Directory Operations
 
-#### `createDirectory(name: string): Promise<void>`
+#### `createDirectory(fs: FileSystemAdapter, name: string): Promise<void>`
 
 Creates a new directory.
 
 ```typescript
+import { NodeFileSystemAdapter } from '@suds-cli/machine/node'
 import { createDirectory } from '@suds-cli/filesystem'
 
-await createDirectory('/path/to/newdir')
+const fs = new NodeFileSystemAdapter()
+await createDirectory(fs, '/path/to/newdir')
 ```
 
-#### `deleteDirectory(name: string): Promise<void>`
+#### `deleteDirectory(fs: FileSystemAdapter, name: string): Promise<void>`
 
 Deletes a directory recursively.
 
 ```typescript
+import { NodeFileSystemAdapter } from '@suds-cli/machine/node'
 import { deleteDirectory } from '@suds-cli/filesystem'
 
-await deleteDirectory('/path/to/dir')
+const fs = new NodeFileSystemAdapter()
+await deleteDirectory(fs, '/path/to/dir')
 ```
 
-#### `copyDirectory(name: string): Promise<string>`
+#### `copyDirectory(fs: FileSystemAdapter, path: PathAdapter, name: string): Promise<string>`
 
 Copies a directory recursively with a timestamp suffix and returns the new directory path.
 
 ```typescript
+import { NodeFileSystemAdapter, NodePathAdapter } from '@suds-cli/machine/node'
 import { copyDirectory } from '@suds-cli/filesystem'
 
-const newPath = await copyDirectory('/path/to/dir')
+const fs = new NodeFileSystemAdapter()
+const path = new NodePathAdapter()
+const newPath = await copyDirectory(fs, path, '/path/to/dir')
 // Returns: /path/to/dir_1234567890
 ```
 
 ### Rename and Move Operations
 
-#### `renameDirectoryItem(src: string, dst: string): Promise<void>`
+#### `renameDirectoryItem(fs: FileSystemAdapter, src: string, dst: string): Promise<void>`
 
 Renames a file or directory.
 
 ```typescript
+import { NodeFileSystemAdapter } from '@suds-cli/machine/node'
 import { renameDirectoryItem } from '@suds-cli/filesystem'
 
-await renameDirectoryItem('/path/to/old.txt', '/path/to/new.txt')
+const fs = new NodeFileSystemAdapter()
+await renameDirectoryItem(fs, '/path/to/old.txt', '/path/to/new.txt')
 ```
 
-#### `moveDirectoryItem(src: string, dst: string): Promise<void>`
+#### `moveDirectoryItem(fs: FileSystemAdapter, src: string, dst: string): Promise<void>`
 
 Moves a file or directory to a new location.
 
 ```typescript
+import { NodeFileSystemAdapter } from '@suds-cli/machine/node'
 import { moveDirectoryItem } from '@suds-cli/filesystem'
 
-await moveDirectoryItem('/path/to/file.txt', '/new/path/file.txt')
+const fs = new NodeFileSystemAdapter()
+await moveDirectoryItem(fs, '/path/to/file.txt', '/new/path/file.txt')
 ```
 
-### Archive Operations
+## Archive Operations
 
-#### `zip(name: string): Promise<string>`
-
-Creates a zip archive of a file or directory and returns the zip file path.
+Archive operations (zip/unzip) have been moved to `@suds-cli/machine`. Use the `ArchiveAdapter` from that package:
 
 ```typescript
-import { zip } from '@suds-cli/filesystem'
+import { NodeArchiveAdapter } from '@suds-cli/machine/node'
 
-const zipPath = await zip('/path/to/file.txt')
-// Returns: /path/to/file_1234567890.zip
-```
-
-#### `unzip(name: string): Promise<string>`
-
-Extracts a zip archive and returns the output directory path.
-
-```typescript
-import { unzip } from '@suds-cli/filesystem'
-
-const extractPath = await unzip('/path/to/archive.zip')
-// Returns: /path/to/archive
+const archive = new NodeArchiveAdapter()
+await archive.zip('/path/to/source', '/path/to/output.zip')
+await archive.unzip('/path/to/archive.zip', '/path/to/extract')
 ```
 
 ## Types
 
 ### `DirectoryEntry`
 
-Represents a directory entry with the following methods:
+Represents a directory entry with the following properties and methods:
 
 - `name: string` - The name of the entry
 - `isDirectory(): boolean` - Returns true if the entry is a directory
@@ -249,7 +292,7 @@ Represents a directory entry with the following methods:
 
 ## Cross-Platform Compatibility
 
-All functions are designed to work across Windows, macOS, and Linux. Path handling is done using Node.js's `path` module to ensure cross-platform compatibility.
+All functions use `@suds-cli/machine` adapters to ensure compatibility across Node.js and browser environments. The adapters handle platform-specific implementation details, allowing this package to provide a consistent API regardless of the runtime environment.
 
 ## License
 

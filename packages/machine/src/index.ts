@@ -32,15 +32,22 @@
 
 // Core types
 export type {
+  ArchiveAdapter,
   ClipboardAdapter,
   ColorSupport,
+  DirectoryEntry,
   Disposable,
   EnvironmentAdapter,
+  FileStat,
+  FileSystemAdapter,
   InputHandler,
+  PathAdapter,
   PlatformAdapter,
   ResizeHandler,
   SignalAdapter,
   SignalHandler,
+  StyleAdapter,
+  StyleFn,
   TerminalAdapter,
   TerminalBackground,
   TerminalSize,
@@ -121,3 +128,6 @@ export {
   setScrollRegion,
   setWindowTitle,
 } from './sequences.js'
+
+// Style utilities
+export { createAlwaysEnabledStyle, createStyle } from './style/index.js'

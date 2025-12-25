@@ -1,21 +1,21 @@
-const CURSOR_HOME = '\u001b[H'
-const CLEAR_SCREEN = '\u001b[2J'
+import type { PlatformAdapter, TerminalAdapter } from '@suds-cli/machine'
+import { CURSOR_HOME, CLEAR_SCREEN } from '@suds-cli/machine'
 
 /** @public Options for the standard renderer. */
 export interface RendererOptions {
-  output?: NodeJS.WritableStream
+  platform?: PlatformAdapter
   fps?: number
 }
 
 export class StandardRenderer {
   private nextFrame: string | null = null
   private lastFrame = ''
-  private ticker: NodeJS.Timeout | null = null
-  private readonly output: NodeJS.WritableStream
+  private ticker: ReturnType<typeof setInterval> | null = null
+  private readonly terminal: TerminalAdapter | null
   private readonly frameInterval: number
 
   constructor(options: RendererOptions = {}) {
-    this.output = options.output ?? process.stdout
+    this.terminal = options.platform?.terminal ?? null
     const fps = Math.min(Math.max(options.fps ?? 60, 1), 120)
     this.frameInterval = Math.round(1000 / fps)
   }
@@ -53,6 +53,8 @@ export class StandardRenderer {
     }
     this.lastFrame = frame
     // Clear the full screen before writing the next frame to avoid leftover characters
-    this.output.write(`${CLEAR_SCREEN}${CURSOR_HOME}${frame}`)
+    if (this.terminal) {
+      this.terminal.write(`${CLEAR_SCREEN}${CURSOR_HOME}${frame}`)
+    }
   }
 }

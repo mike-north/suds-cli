@@ -3,11 +3,15 @@
   "description": "Platform abstraction layer for Suds terminal UIs",
   "version": "0.0.0",
   "devDependencies": {
+    "@types/archiver": "^6.0.4",
     "@types/node": "^24.10.2",
+    "@types/unzipper": "^0.10.11",
     "@vitest/ui": "^4.0.16",
+    "archiver": "^7.0.1",
     "clipboardy": "^4.0.0",
     "happy-dom": "^20.0.11",
     "typescript": "5.8.2",
+    "unzipper": "^0.12.3",
     "vitest": "^4.0.16"
   },
   "engines": {
@@ -26,14 +30,22 @@
   "main": "./dist/index.js",
   "peerDependencies": {
     "@xterm/xterm": "^5.0.0",
+    "archiver": "^7.0.0",
     "clipboardy": "^4.0.0",
-    "supports-color": "^9.0.0"
+    "supports-color": "^9.0.0",
+    "unzipper": "^0.12.0"
   },
   "peerDependenciesMeta": {
+    "archiver": {
+      "optional": true
+    },
     "clipboardy": {
       "optional": true
     },
     "supports-color": {
+      "optional": true
+    },
+    "unzipper": {
       "optional": true
     },
     "@xterm/xterm": {

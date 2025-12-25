@@ -14,6 +14,13 @@ export const ALT_SCREEN_OFF = "\u001B[?1049l";
 export const ALT_SCREEN_ON = "\u001B[?1049h";
 
 // @public
+export interface ArchiveAdapter {
+    isAvailable(): boolean;
+    unzip(archivePath: string, destDir: string): Promise<void>;
+    zip(sourceDir: string, destPath: string): Promise<void>;
+}
+
+// @public
 export const BEL = "\u0007";
 
 // @public
@@ -86,6 +93,12 @@ export function concatBytes(...arrays: Uint8Array[]): Uint8Array;
 export function copyBytes(bytes: Uint8Array): Uint8Array;
 
 // @public
+export function createAlwaysEnabledStyle(): StyleFn;
+
+// @public
+export function createStyle(colorSupport: ColorSupport): StyleFn;
+
+// @public
 export const CSI = "\u001B[";
 
 // @public
@@ -128,6 +141,14 @@ export function decodeString(bytes: Uint8Array): string;
 export const DIM = "\u001B[2m";
 
 // @public
+export interface DirectoryEntry {
+    isDirectory(): boolean;
+    isFile(): boolean;
+    isSymbolicLink(): boolean;
+    readonly name: string;
+}
+
+// @public
 interface Disposable_2 {
     dispose(): void;
 }
@@ -151,6 +172,39 @@ export function fg256(colorIndex: number): string;
 
 // @public
 export function fgRGB(r: number, g: number, b: number): string;
+
+// @public
+export interface FileStat {
+    readonly isDirectory: boolean;
+    readonly isFile: boolean;
+    readonly isSymbolicLink: boolean;
+    readonly mode: number;
+    readonly mtime: Date;
+    readonly size: number;
+}
+
+// @public
+export interface FileSystemAdapter {
+    copyFile(src: string, dst: string): Promise<void>;
+    cwd(): string;
+    exists(path: string): Promise<boolean>;
+    homedir(): string;
+    mkdir(path: string, options?: {
+        recursive?: boolean;
+    }): Promise<void>;
+    readdir(path: string, options?: {
+        withFileTypes?: boolean;
+    }): Promise<DirectoryEntry[] | string[]>;
+    readFile(path: string, encoding?: string): Promise<string>;
+    rename(src: string, dst: string): Promise<void>;
+    rmdir(path: string, options?: {
+        recursive?: boolean;
+        force?: boolean;
+    }): Promise<void>;
+    stat(path: string): Promise<FileStat>;
+    unlink(path: string): Promise<void>;
+    writeFile(path: string, content: string): Promise<void>;
+}
 
 // @public
 export const FOCUS_IN = "\u001B[I";
@@ -195,10 +249,26 @@ export const MOUSE_SGR_ON = "\u001B[?1006h";
 export const OSC = "\u001B]";
 
 // @public
+export interface PathAdapter {
+    basename(path: string, ext?: string): string;
+    dirname(path: string): string;
+    extname(path: string): string;
+    isAbsolute(path: string): boolean;
+    join(...segments: string[]): string;
+    normalize(path: string): string;
+    resolve(...segments: string[]): string;
+    readonly sep: string;
+}
+
+// @public
 export interface PlatformAdapter extends Disposable_2 {
+    readonly archive: ArchiveAdapter;
     readonly clipboard: ClipboardAdapter;
     readonly environment: EnvironmentAdapter;
+    readonly filesystem: FileSystemAdapter;
+    readonly path: PathAdapter;
     readonly signals: SignalAdapter;
+    readonly style: StyleAdapter;
     readonly terminal: TerminalAdapter;
 }
 
@@ -255,6 +325,113 @@ export function startsWithString(bytes: Uint8Array, prefix: string): boolean;
 
 // @public
 export const STRIKETHROUGH = "\u001B[9m";
+
+// @public
+export interface StyleAdapter {
+    readonly enabled: boolean;
+    readonly level: number;
+    readonly style: StyleFn;
+}
+
+// @public
+export interface StyleFn {
+    // (undocumented)
+    (text: string): string;
+    // (undocumented)
+    ansi256(code: number): StyleFn;
+    // (undocumented)
+    bgAnsi256(code: number): StyleFn;
+    // (undocumented)
+    readonly bgBlack: StyleFn;
+    // (undocumented)
+    readonly bgBlackBright: StyleFn;
+    // (undocumented)
+    readonly bgBlue: StyleFn;
+    // (undocumented)
+    readonly bgBlueBright: StyleFn;
+    // (undocumented)
+    readonly bgCyan: StyleFn;
+    // (undocumented)
+    readonly bgCyanBright: StyleFn;
+    // (undocumented)
+    readonly bgGreen: StyleFn;
+    // (undocumented)
+    readonly bgGreenBright: StyleFn;
+    // (undocumented)
+    bgHex(color: string): StyleFn;
+    // (undocumented)
+    readonly bgMagenta: StyleFn;
+    // (undocumented)
+    readonly bgMagentaBright: StyleFn;
+    // (undocumented)
+    readonly bgRed: StyleFn;
+    // (undocumented)
+    readonly bgRedBright: StyleFn;
+    // (undocumented)
+    bgRgb(r: number, g: number, b: number): StyleFn;
+    // (undocumented)
+    readonly bgWhite: StyleFn;
+    // (undocumented)
+    readonly bgWhiteBright: StyleFn;
+    // (undocumented)
+    readonly bgYellow: StyleFn;
+    // (undocumented)
+    readonly bgYellowBright: StyleFn;
+    // (undocumented)
+    readonly black: StyleFn;
+    // (undocumented)
+    readonly blackBright: StyleFn;
+    // (undocumented)
+    readonly blue: StyleFn;
+    // (undocumented)
+    readonly blueBright: StyleFn;
+    // (undocumented)
+    readonly bold: StyleFn;
+    // (undocumented)
+    readonly cyan: StyleFn;
+    // (undocumented)
+    readonly cyanBright: StyleFn;
+    // (undocumented)
+    readonly dim: StyleFn;
+    // (undocumented)
+    readonly gray: StyleFn;
+    // (undocumented)
+    readonly green: StyleFn;
+    // (undocumented)
+    readonly greenBright: StyleFn;
+    // (undocumented)
+    readonly grey: StyleFn;
+    // (undocumented)
+    hex(color: string): StyleFn;
+    // (undocumented)
+    readonly hidden: StyleFn;
+    // (undocumented)
+    readonly inverse: StyleFn;
+    // (undocumented)
+    readonly italic: StyleFn;
+    // (undocumented)
+    readonly magenta: StyleFn;
+    // (undocumented)
+    readonly magentaBright: StyleFn;
+    // (undocumented)
+    readonly red: StyleFn;
+    // (undocumented)
+    readonly redBright: StyleFn;
+    // (undocumented)
+    rgb(r: number, g: number, b: number): StyleFn;
+    // (undocumented)
+    readonly strikethrough: StyleFn;
+    // (undocumented)
+    readonly underline: StyleFn;
+    // (undocumented)
+    readonly white: StyleFn;
+    // (undocumented)
+    readonly whiteBright: StyleFn;
+    // (undocumented)
+    readonly yellow: StyleFn;
+    // (undocumented)
+    readonly yellowBright: StyleFn;
+}
 
 // @public
 export interface TerminalAdapter extends Disposable_2 {

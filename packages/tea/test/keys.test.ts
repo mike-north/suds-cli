@@ -1,7 +1,8 @@
 import { describe, expect, test } from 'vitest'
+import { encodeString } from '@suds-cli/machine'
 import { KeyType, parseKey } from '../src/keys.js'
 
-const toBuf = (s: string) => Buffer.from(s, 'utf8')
+const toBuf = (s: string) => encodeString(s)
 
 describe('parseKey', () => {
   test('parses arrow up escape sequence', () => {
@@ -45,7 +46,7 @@ describe('parseKey', () => {
   })
 
   test('parses ctrl+c as break', () => {
-    const result = parseKey(Buffer.from([3]), false)
+    const result = parseKey(new Uint8Array([3]), false)
     expect(result && !('needMore' in result)).toBe(true)
     if (result && !('needMore' in result)) {
       expect(result.key.type).toBe(KeyType.Break)

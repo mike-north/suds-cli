@@ -1,38 +1,66 @@
-import { describe, expect, test, vi, beforeEach, afterEach } from 'vitest'
+import { describe, expect, test } from 'vitest'
 import {
   getColorSupport,
   resolveColor,
   getTerminalBackground,
 } from '../src/colors.js'
+import type { ColorSupport, EnvironmentAdapter, TerminalBackground } from '@suds-cli/machine'
+
+// Mock environment adapter for testing
+function createMockEnv(options: {
+  colorSupport?: ColorSupport
+  terminalBackground?: TerminalBackground
+  env?: Record<string, string>
+} = {}): EnvironmentAdapter {
+  const colorSupport = options.colorSupport ?? {
+    level: 3,
+    hasBasic: true,
+    has256: true,
+    has16m: true,
+  }
+  const terminalBackground = options.terminalBackground ?? 'dark'
+
+  return {
+    get: (name: string) => options.env?.[name],
+    getColorSupport: () => colorSupport,
+    getTerminalBackground: () => terminalBackground,
+  }
+}
 
 describe('colors', () => {
   describe('resolveColor', () => {
+    const mockEnv = createMockEnv({ terminalBackground: 'dark' })
+
     test('returns undefined when no input', () => {
-      expect(resolveColor()).toBeUndefined()
+      expect(resolveColor(undefined, mockEnv)).toBeUndefined()
     })
 
     test('passes through string colors', () => {
-      expect(resolveColor('red')).toBe('red')
-      expect(resolveColor('#ff0000')).toBe('#ff0000')
-      expect(resolveColor('rgb(255, 0, 0)')).toBe('rgb(255, 0, 0)')
+      expect(resolveColor('red', mockEnv)).toBe('red')
+      expect(resolveColor('#ff0000', mockEnv)).toBe('#ff0000')
+      expect(resolveColor('rgb(255, 0, 0)', mockEnv)).toBe('rgb(255, 0, 0)')
     })
 
     test('handles adaptive colors with both light and dark', () => {
       const color = { light: '#ffffff', dark: '#000000' }
-      const result = resolveColor(color)
-      // Result depends on terminal background detection
-      expect(result === '#ffffff' || result === '#000000').toBe(true)
+      const darkEnv = createMockEnv({ terminalBackground: 'dark' })
+      const lightEnv = createMockEnv({ terminalBackground: 'light' })
+
+      expect(resolveColor(color, darkEnv)).toBe('#000000')
+      expect(resolveColor(color, lightEnv)).toBe('#ffffff')
     })
 
     test('falls back to available color when one is missing', () => {
-      expect(resolveColor({ dark: '#000000' })).toBe('#000000')
-      expect(resolveColor({ light: '#ffffff' })).toBe('#ffffff')
+      const darkEnv = createMockEnv({ terminalBackground: 'dark' })
+      expect(resolveColor({ dark: '#000000' }, darkEnv)).toBe('#000000')
+      expect(resolveColor({ light: '#ffffff' }, darkEnv)).toBe('#ffffff') // falls back
     })
   })
 
   describe('getColorSupport', () => {
     test('exposes capability fields', () => {
-      const support = getColorSupport()
+      const env = createMockEnv()
+      const support = getColorSupport(env)
       expect(support).toHaveProperty('level')
       expect(support).toHaveProperty('hasBasic')
       expect(support).toHaveProperty('has256')
@@ -44,7 +72,8 @@ describe('colors', () => {
     })
 
     test('level determines capability flags', () => {
-      const support = getColorSupport()
+      const env = createMockEnv()
+      const support = getColorSupport(env)
       if (support.level >= 1) {
         expect(support.hasBasic).toBe(true)
       }
@@ -58,36 +87,19 @@ describe('colors', () => {
   })
 
   describe('getTerminalBackground', () => {
-    const originalEnv = { ...process.env }
-
-    beforeEach(() => {
-      // Clear relevant env vars
-      delete process.env.COLORFGBG
-      delete process.env.TERM_BACKGROUND
-      delete process.env.TERM_PROGRAM
+    test('detects dark terminal', () => {
+      const env = createMockEnv({ terminalBackground: 'dark' })
+      expect(getTerminalBackground(env)).toBe('dark')
     })
 
-    afterEach(() => {
-      // Restore original env
-      process.env = { ...originalEnv }
+    test('detects light terminal', () => {
+      const env = createMockEnv({ terminalBackground: 'light' })
+      expect(getTerminalBackground(env)).toBe('light')
     })
 
-    test('detects dark from COLORFGBG', () => {
-      process.env.COLORFGBG = '15;0'
-      // Need to re-import to pick up env changes, so just test the return type
-      const result = getTerminalBackground()
-      expect(['dark', 'light', 'unknown']).toContain(result)
-    })
-
-    test('detects from TERM_BACKGROUND', () => {
-      process.env.TERM_BACKGROUND = 'dark'
-      const result = getTerminalBackground()
-      expect(['dark', 'light', 'unknown']).toContain(result)
-    })
-
-    test('returns valid TerminalBackground type', () => {
-      const result = getTerminalBackground()
-      expect(['dark', 'light', 'unknown']).toContain(result)
+    test('returns unknown when not determinable', () => {
+      const env = createMockEnv({ terminalBackground: 'unknown' })
+      expect(getTerminalBackground(env)).toBe('unknown')
     })
   })
 })

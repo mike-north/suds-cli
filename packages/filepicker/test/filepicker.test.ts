@@ -3,6 +3,7 @@ import { sortFiles } from '../src/fs.js'
 import { DirReadMsg } from '../src/messages.js'
 import { FilepickerModel } from '../src/model.js'
 import type { FileInfo } from '../src/types.js'
+import { NodeFileSystemAdapter, NodePathAdapter } from '@suds-cli/machine/node'
 
 function stubFile(name: string, isDir = false): FileInfo {
   return {
@@ -16,6 +17,9 @@ function stubFile(name: string, isDir = false): FileInfo {
 }
 
 describe('filepicker', () => {
+  const filesystem = new NodeFileSystemAdapter()
+  const path = new NodePathAdapter()
+
   it('sorts directories before files', () => {
     const files = [stubFile('b.txt'), stubFile('a', true)]
     const sorted = [...files].sort((a, b) => sortFiles(a, b, true))
@@ -23,7 +27,7 @@ describe('filepicker', () => {
   })
 
   it('handles directory read messages', () => {
-    const [model] = FilepickerModel.new({ showHidden: false })
+    const [model] = FilepickerModel.new({ filesystem, path, showHidden: false })
     const files = [stubFile('one.txt'), stubFile('sub', true)]
     const [updated] = model.update(new DirReadMsg(model.currentDir, files))
     expect(updated.files).toHaveLength(2)

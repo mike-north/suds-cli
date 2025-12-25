@@ -1,5 +1,6 @@
 import { PassThrough } from 'node:stream'
 import { describe, expect, test, vi } from 'vitest'
+import { createNodePlatform } from '@suds-cli/machine/node'
 import { Program } from '../src/program.js'
 import type { Cmd, Model, Msg } from '../src/types.js'
 import { EnterAltScreenMsg, QuitMsg, WindowSizeMsg } from '../src/messages.js'
@@ -24,9 +25,13 @@ class NoopModel implements Model<Msg, NoopModel> {
 
 describe('Program', () => {
   test('run resolves and cleans up on quit', async () => {
-    // Stub terminal methods to avoid mutating real stdout
-    const restore = stubTerminal()
+    // Create mock platform adapter with PassThrough streams
+    const output = new PassThrough()
+    const input = new PassThrough()
+    const platform = createNodePlatform({ input, output })
+
     const program = new Program(new NoopModel(), {
+      platform,
       altScreen: false,
       mouseMode: false,
     })
@@ -35,16 +40,16 @@ describe('Program', () => {
     program.send(new QuitMsg())
     const result = await resultPromise
     expect(result.model).toBeInstanceOf(NoopModel)
-    restore()
+    platform.dispose()
   })
 
   test('forwards window size messages to the model', async () => {
     const output = Object.assign(new PassThrough(), { columns: 80, rows: 25 })
     const input = new PassThrough()
+    const platform = createNodePlatform({ input, output })
     const model = new CollectModel()
     const program = new Program(model, {
-      input,
-      output,
+      platform,
       altScreen: false,
       mouseMode: false,
     })
@@ -55,14 +60,16 @@ describe('Program', () => {
 
     await resultPromise
     expect(model.messages.some((m) => m instanceof WindowSizeMsg)).toBe(true)
+    platform.dispose()
   })
 
   test('screen control messages perform side effects and reach the model', async () => {
     const enterSpy = vi.spyOn(TerminalController.prototype, 'enterAltScreen')
     const output = new PassThrough()
     const input = new PassThrough()
+    const platform = createNodePlatform({ input, output })
     const model = new CollectModel()
-    const program = new Program(model, { input, output })
+    const program = new Program(model, { platform })
 
     const resultPromise = program.run()
     program.send(new EnterAltScreenMsg())
@@ -74,17 +81,9 @@ describe('Program', () => {
       true,
     )
     enterSpy.mockRestore()
+    platform.dispose()
   })
 })
-
-function stubTerminal() {
-  const origWrite = process.stdout.write
-  // @ts-expect-error overriding for test
-  process.stdout.write = () => true
-  return () => {
-    process.stdout.write = origWrite
-  }
-}
 
 class CollectModel implements Model<Msg, CollectModel> {
   messages: Msg[] = []

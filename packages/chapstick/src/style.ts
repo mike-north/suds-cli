@@ -1,4 +1,5 @@
-import chalk from 'chalk'
+import type { ColorSupport, EnvironmentAdapter, StyleFn } from '@suds-cli/machine'
+import { createStyle } from '@suds-cli/machine'
 import { defaultBorderStyle } from './borders.js'
 import { resolveColor } from './colors.js'
 import { clampWidth, width as textWidth, wrapWidth } from './measure.js'
@@ -22,6 +23,41 @@ type MarginInput = number | Partial<Spacing>
 export type StyleKey = keyof StyleOptions
 
 /**
+ * Context required for rendering styles.
+ * @public
+ */
+export interface StyleContext {
+  /** Environment adapter for detecting terminal capabilities. */
+  readonly env: EnvironmentAdapter
+  /** Style function for applying ANSI styling. */
+  readonly styleFn: StyleFn
+}
+
+// Lazy-initialized default context for layout-only styling (no colors)
+let defaultContext: StyleContext | undefined
+
+/**
+ * Create a default StyleContext for layout-only styling (no ANSI colors).
+ * This is used internally when no context is provided.
+ * @public
+ */
+export function createDefaultContext(): StyleContext {
+  if (!defaultContext) {
+    const noColors: ColorSupport = { level: 0, hasBasic: false, has256: false, has16m: false }
+    const noopEnv: EnvironmentAdapter = {
+      get: () => undefined,
+      getColorSupport: () => noColors,
+      getTerminalBackground: () => 'unknown',
+    }
+    defaultContext = {
+      env: noopEnv,
+      styleFn: createStyle(noColors),
+    }
+  }
+  return defaultContext
+}
+
+/**
  * Fluent style builder for terminal strings.
  * @public
  */
@@ -29,19 +65,34 @@ export class Style {
   private readonly options: StyleOptions
   /** Track which properties have been explicitly set */
   private readonly setKeys: Set<StyleKey>
+  /** Optional context for rendering - if not set, rendering will throw */
+  private readonly context?: StyleContext
 
-  constructor(options: StyleOptions = {}, setKeys?: Set<StyleKey>) {
+  constructor(
+    options: StyleOptions = {},
+    setKeys?: Set<StyleKey>,
+    context?: StyleContext,
+  ) {
     this.options = { ...options }
     this.setKeys = setKeys
       ? new Set(setKeys)
       : new Set(Object.keys(options) as StyleKey[])
+    this.context = context
   }
 
   /**
    * Create a deep copy of this style.
    */
   copy(): Style {
-    return new Style(structuredClone(this.options), new Set(this.setKeys))
+    return new Style(structuredClone(this.options), new Set(this.setKeys), this.context)
+  }
+
+  /**
+   * Create a copy of this style with a new context.
+   * @param context - The new context to use for rendering
+   */
+  withContext(context: StyleContext): Style {
+    return new Style(this.options, this.setKeys, context)
   }
 
   /**
@@ -69,7 +120,7 @@ export class Style {
       }
     }
 
-    return new Style(newOptions, newSetKeys)
+    return new Style(newOptions, newSetKeys, this.context)
   }
 
   /**
@@ -89,7 +140,7 @@ export class Style {
       delete (newOptions as Record<string, unknown>)[key]
       newSetKeys.delete(key)
     }
-    return new Style(newOptions, newSetKeys)
+    return new Style(newOptions, newSetKeys, this.context)
   }
 
   foreground(color: ColorInput): Style {
@@ -227,8 +278,19 @@ export class Style {
 
   /**
    * Render the style to a string.
+   * Uses the default no-op context if none was provided.
    */
   render(text: string): string {
+    const ctx = this.context ?? createDefaultContext()
+    return this.renderWithContext(text, ctx)
+  }
+
+  /**
+   * Render the style to a string with an explicit context.
+   * @param text - Text to render
+   * @param ctx - Context for rendering
+   */
+  renderWithContext(text: string, ctx: StyleContext): string {
     const opts = this.options
     const isInline = opts.inline ?? false
 
@@ -269,7 +331,7 @@ export class Style {
     const padded = isInline ? aligned : applySpacing(aligned, padding)
     const borderStyle = opts.borderStyle ?? defaultBorderStyle
     const bordered = hasBorder
-      ? applyBorder(padded, borderStyle, opts.borderColor)
+      ? applyBorder(padded, borderStyle, opts.borderColor, ctx)
       : padded
 
     // Apply height and vertical alignment
@@ -279,7 +341,7 @@ export class Style {
       opts.maxHeight,
       opts.alignVertical,
     )
-    const colored = applyTextStyle(sized, opts)
+    const colored = applyTextStyle(sized, opts, ctx)
 
     // In inline mode, skip margin
     if (isInline) {
@@ -299,7 +361,7 @@ export class Style {
     for (const key of Object.keys(patch) as StyleKey[]) {
       newSetKeys.add(key)
     }
-    return new Style({ ...this.options, ...patch }, newSetKeys)
+    return new Style({ ...this.options, ...patch }, newSetKeys, this.context)
   }
 }
 
@@ -337,7 +399,8 @@ function alignLinesHorizontal(
   align: HAlign | undefined,
   targetWidth?: number,
 ): string[] {
-  if (!align) {
+  // When no width is specified and no alignment, return as-is
+  if (!targetWidth && !align) {
     return lines
   }
   const maxLineWidth = lines.reduce(
@@ -345,10 +408,12 @@ function alignLinesHorizontal(
     0,
   )
   const width = targetWidth ?? maxLineWidth
+  // Default to left alignment when width is set but no alignment specified
+  const effectiveAlign = align ?? 'left'
   return lines.map((line) => {
     const w = textWidth(line)
     const space = Math.max(0, width - w)
-    switch (align) {
+    switch (effectiveAlign) {
       case 'center': {
         const left = Math.floor(space / 2)
         const right = space - left
@@ -384,7 +449,8 @@ function applySpacing(lines: string[], spacing: Spacing): string[] {
 function applyBorder(
   lines: string[],
   style: BorderStyle,
-  borderColor?: ColorInput,
+  borderColor: ColorInput | undefined,
+  ctx: StyleContext,
 ): string[] {
   if (!style) return lines
   const widthMax = lines.reduce(
@@ -408,7 +474,7 @@ function applyBorder(
   if (!borderColor) {
     return withBorder
   }
-  const colored = applyColor(withBorder.join('\n'), borderColor)
+  const colored = applyColor(withBorder.join('\n'), borderColor, ctx)
   return colored.split('\n')
 }
 
@@ -451,13 +517,12 @@ function applyHeight(
   return result
 }
 
-function applyTextStyle(lines: string[], opts: StyleOptions): string[] {
-  const fg = resolveColor(opts.foreground)
-  const bg = resolveColor(opts.background)
-  const base = chalk
+function applyTextStyle(lines: string[], opts: StyleOptions, ctx: StyleContext): string[] {
+  const fg = resolveColor(opts.foreground, ctx.env)
+  const bg = resolveColor(opts.background, ctx.env)
 
   const styleFn = (input: string) => {
-    let instance = base
+    let instance = ctx.styleFn
     if (fg) instance = applyForeground(instance, fg)
     if (bg) instance = applyBackground(instance, bg)
     if (opts.bold) instance = instance.bold
@@ -473,7 +538,7 @@ function applyTextStyle(lines: string[], opts: StyleOptions): string[] {
 /**
  * Apply foreground color, handling hex, named colors, and rgb().
  */
-function applyForeground(instance: typeof chalk, color: string): typeof chalk {
+function applyForeground(instance: StyleFn, color: string): StyleFn {
   // Hex color
   if (color.startsWith('#')) {
     return instance.hex(color)
@@ -488,22 +553,20 @@ function applyForeground(instance: typeof chalk, color: string): typeof chalk {
     const b = parseInt(rgbMatch[3] ?? '0', 10)
     return instance.rgb(r, g, b)
   }
-  // Named color - check if it's a valid chalk color
-  const namedColor = color.toLowerCase() as keyof typeof chalk
-  if (
-    typeof instance[namedColor] === 'function' ||
-    typeof instance[namedColor] === 'object'
-  ) {
-    return instance[namedColor] as typeof chalk
+  // Named color - check if it's a valid style property
+  const namedColor = color.toLowerCase() as keyof StyleFn
+  const prop = instance[namedColor]
+  if (typeof prop === 'function' || (typeof prop === 'object' && prop !== null)) {
+    return prop as StyleFn
   }
-  // Fallback: try hex anyway (chalk will handle errors)
+  // Fallback: try hex anyway
   return instance.hex(color)
 }
 
 /**
  * Apply background color, handling hex, named colors, and rgb().
  */
-function applyBackground(instance: typeof chalk, color: string): typeof chalk {
+function applyBackground(instance: StyleFn, color: string): StyleFn {
   // Hex color
   if (color.startsWith('#')) {
     return instance.bgHex(color)
@@ -518,27 +581,25 @@ function applyBackground(instance: typeof chalk, color: string): typeof chalk {
     const b = parseInt(rgbMatch[3] ?? '0', 10)
     return instance.bgRgb(r, g, b)
   }
-  // Named color - check if chalk has a bg version
+  // Named color - check if style has a bg version
   const bgColor =
-    `bg${color.charAt(0).toUpperCase()}${color.slice(1).toLowerCase()}` as keyof typeof chalk
-  if (
-    typeof instance[bgColor] === 'function' ||
-    typeof instance[bgColor] === 'object'
-  ) {
-    return instance[bgColor] as typeof chalk
+    `bg${color.charAt(0).toUpperCase()}${color.slice(1).toLowerCase()}` as keyof StyleFn
+  const prop = instance[bgColor]
+  if (typeof prop === 'function' || (typeof prop === 'object' && prop !== null)) {
+    return prop as StyleFn
   }
   // Fallback: try bgHex anyway
   return instance.bgHex(color)
 }
 
-function applyColor(text: string, color: ColorInput): string {
-  const resolved = resolveColor(color)
+function applyColor(text: string, color: ColorInput, ctx: StyleContext): string {
+  const resolved = resolveColor(color, ctx.env)
   if (!resolved) return text
 
   return text
     .split('\n')
     .map((line) => {
-      let instance = chalk
+      let instance = ctx.styleFn
       instance = applyForeground(instance, resolved)
       return instance(line)
     })

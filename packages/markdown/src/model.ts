@@ -6,6 +6,7 @@ import { Style } from '@suds-cli/chapstick'
 import { readFileContent } from '@suds-cli/filesystem'
 import { ViewportModel } from '@suds-cli/viewport'
 import type { Cmd, Msg } from '@suds-cli/tea'
+import type { FileSystemAdapter } from '@suds-cli/machine'
 import { RenderMarkdownMsg, ErrorMsg } from './messages.js'
 import { renderMarkdown } from './renderer.js'
 
@@ -14,6 +15,10 @@ import { renderMarkdown } from './renderer.js'
  * @public
  */
 export interface MarkdownOptions {
+  /**
+   * Filesystem adapter for file operations.
+   */
+  filesystem: FileSystemAdapter
   /**
    * Whether the component is active and should handle input.
    * Defaults to true.
@@ -44,22 +49,25 @@ export class MarkdownModel {
   readonly viewport: ViewportModel
   readonly active: boolean
   readonly fileName: string
+  readonly filesystem: FileSystemAdapter
 
   private constructor(options: {
     viewport: ViewportModel
     active: boolean
     fileName: string
+    filesystem: FileSystemAdapter
   }) {
     this.viewport = options.viewport
     this.active = options.active
     this.fileName = options.fileName
+    this.filesystem = options.filesystem
   }
 
   /**
    * Create a new markdown model.
    * @param options - Configuration options
    */
-  static new(options: MarkdownOptions = {}): MarkdownModel {
+  static new(options: MarkdownOptions): MarkdownModel {
     const viewport = ViewportModel.new({
       width: options.width ?? 0,
       height: options.height ?? 0,
@@ -70,6 +78,7 @@ export class MarkdownModel {
       viewport,
       active: options.active ?? true,
       fileName: '',
+      filesystem: options.filesystem,
     })
   }
 
@@ -86,7 +95,7 @@ export class MarkdownModel {
    */
   setFileName(fileName: string): [MarkdownModel, Cmd<Msg>] {
     const updated = this.with({ fileName })
-    const cmd = renderMarkdownCmd(this.viewport.width, fileName)
+    const cmd = renderMarkdownCmd(this.filesystem, this.viewport.width, fileName)
     return [updated, cmd]
   }
 
@@ -100,7 +109,7 @@ export class MarkdownModel {
     const updated = this.with({ viewport: updatedViewport })
 
     if (this.fileName !== '') {
-      const cmd = renderMarkdownCmd(width, this.fileName)
+      const cmd = renderMarkdownCmd(this.filesystem, width, this.fileName)
       return [updated, cmd]
     }
 
@@ -179,6 +188,7 @@ export class MarkdownModel {
       viewport: patch.viewport ?? this.viewport,
       active: patch.active ?? this.active,
       fileName: patch.fileName ?? this.fileName,
+      filesystem: patch.filesystem ?? this.filesystem,
     })
   }
 }
@@ -186,10 +196,14 @@ export class MarkdownModel {
 /**
  * Command to read and render a markdown file.
  */
-function renderMarkdownCmd(width: number, fileName: string): Cmd<Msg> {
+function renderMarkdownCmd(
+  fs: FileSystemAdapter,
+  width: number,
+  fileName: string,
+): Cmd<Msg> {
   return async () => {
     try {
-      const content = await readFileContent(fileName)
+      const content = await readFileContent(fs, fileName)
       const rendered = renderMarkdown(content, { width })
       return new RenderMarkdownMsg(rendered)
     } catch (error) {

@@ -7,8 +7,6 @@ export {
   // Listing types
   DirectoriesListingType,
   FilesListingType,
-  // Types
-  type DirectoryEntry,
   // Core functions
   getDirectoryListing,
   getDirectoryListingByType,
@@ -27,7 +25,7 @@ export {
   copyFile,
   copyDirectory,
   writeToFile,
-  // Archive operations
-  zip,
-  unzip,
 } from './filesystem.js'
+
+// Re-export types from machine for convenience
+export type { DirectoryEntry } from '@suds-cli/machine'

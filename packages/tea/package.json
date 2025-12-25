@@ -2,6 +2,9 @@
   "name": "@suds-cli/tea",
   "description": "Bubble Tea-inspired runtime for Suds terminal UIs",
   "version": "0.0.0",
+  "dependencies": {
+    "@suds-cli/machine": "workspace:*"
+  },
   "devDependencies": {
     "@types/node": "^24.10.2",
     "typescript": "5.8.2",

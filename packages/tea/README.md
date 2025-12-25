@@ -11,6 +11,7 @@ pnpm add @suds-cli/tea
 ## Quickstart
 
 ```ts
+import { createNodePlatform } from '@suds-cli/machine/node'
 import {
   Program,
   quit,
@@ -51,8 +52,12 @@ class Counter implements Model<AppMsg, Counter> {
   }
 }
 
-// Run the program
-const program = new Program(new Counter(), { altScreen: true })
+// Create platform adapter and run the program
+const platform = createNodePlatform()
+const program = new Program(new Counter(), {
+  platform,
+  altScreen: true,
+})
 await program.run()
 ```
 
@@ -160,7 +165,11 @@ update(msg: Msg): [Model, Cmd<Msg>] {
 Enable mouse with program options:
 
 ```ts
+import { createNodePlatform } from '@suds-cli/machine/node'
+
+const platform = createNodePlatform()
 const program = new Program(model, {
+  platform,
   mouseMode: 'cell', // Track clicks and drags
   // mouseMode: "all", // Track all motion
 })
@@ -212,16 +221,32 @@ update(msg: Msg): [Model, Cmd<Msg>] {
 ## Program Options
 
 ```ts
+import { createNodePlatform } from '@suds-cli/machine/node'
+
+// Create platform adapter with custom streams (optional)
+const platform = createNodePlatform({
+  input: customInputStream,
+  output: customOutputStream,
+})
+
 const program = new Program(model, {
+  platform, // Platform adapter for terminal I/O and system signals
   altScreen: true, // Use alternate screen buffer
   mouseMode: 'cell', // "cell" | "all" | false
   fps: 60, // Render frame rate
   reportFocus: true, // Receive focus/blur events
   bracketedPaste: true, // Distinguish pasted text
-  input: process.stdin, // Custom input stream
-  output: process.stdout, // Custom output stream
 })
 ```
+
+### Platform Adapters
+
+Tea uses `@suds-cli/machine` for platform abstraction, making it possible to run terminal UIs in different environments:
+
+- **Node.js**: `createNodePlatform()` from `@suds-cli/machine/node`
+- **Browser** (with xterm.js): `createBrowserPlatform()` from `@suds-cli/machine/browser`
+
+The platform adapter provides terminal I/O, signal handling, environment access, and more.
 
 ## Scripts
 

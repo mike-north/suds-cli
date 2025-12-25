@@ -5,6 +5,7 @@
   "dependencies": {
     "@suds-cli/chapstick": "workspace:*",
     "@suds-cli/filesystem": "workspace:*",
+    "@suds-cli/machine": "workspace:*",
     "@suds-cli/tea": "workspace:*",
     "@suds-cli/viewport": "workspace:*",
     "shiki": "^1.24.2"
