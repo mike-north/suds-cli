@@ -1,7 +1,7 @@
 {
   "name": "@suds-cli/runeutil",
   "description": "Input sanitization utilities for Suds terminal UIs",
-  "version": "0.0.0",
+  "version": "0.1.0-alpha.0",
   "dependencies": {
     "strip-ansi": "^7.1.0"
   },

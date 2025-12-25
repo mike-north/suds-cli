@@ -1,7 +1,7 @@
 {
   "name": "@suds-cli/filesystem",
   "description": "Filesystem utility functions for Suds terminal UIs",
-  "version": "0.0.0",
+  "version": "0.1.0-alpha.0",
   "dependencies": {
     "@suds-cli/machine": "workspace:*"
   },

@@ -1,7 +1,7 @@
 {
   "name": "@suds-cli/filetree",
   "description": "Navigable file tree browser component for Suds terminal UIs",
-  "version": "0.0.0",
+  "version": "0.1.0-alpha.0",
   "dependencies": {
     "@suds-cli/chapstick": "workspace:*",
     "@suds-cli/key": "workspace:*",

@@ -1,7 +1,7 @@
 {
   "name": "@suds-cli/code",
   "description": "Syntax-highlighted code viewer with scrollable viewport for Suds terminal UIs",
-  "version": "0.1.0-alpha.0",
+  "version": "0.1.0-alpha.1",
   "dependencies": {
     "@suds-cli/chapstick": "workspace:*",
     "@suds-cli/filesystem": "workspace:*",
