@@ -1,6 +1,5 @@
 /**
  * Platform detection utilities.
- * @packageDocumentation
  */
 
 /**
