@@ -51,30 +51,30 @@ export default defineConfig(
             {
               group: ['node:*'],
               message:
-                'Node.js imports are not allowed. Use @suds-cli/machine abstractions instead.',
+                'Node.js imports are not allowed. Use @boba-cli/machine abstractions instead.',
             },
             {
               group: ['fs', 'fs/*'],
               message:
-                'Use @suds-cli/machine FileSystemAdapter instead of fs.',
+                'Use @boba-cli/machine FileSystemAdapter instead of fs.',
             },
             {
               group: ['path'],
-              message: 'Use @suds-cli/machine PathAdapter instead of path.',
+              message: 'Use @boba-cli/machine PathAdapter instead of path.',
             },
             {
               group: ['os'],
-              message: 'Use @suds-cli/machine abstractions instead of os.',
+              message: 'Use @boba-cli/machine abstractions instead of os.',
             },
             {
               group: ['process'],
               message:
-                'Use @suds-cli/machine PlatformAdapter instead of process.',
+                'Use @boba-cli/machine PlatformAdapter instead of process.',
             },
             {
               group: ['buffer'],
               message:
-                'Use @suds-cli/machine byte utilities instead of Buffer.',
+                'Use @boba-cli/machine byte utilities instead of Buffer.',
             },
             {
               group: [
@@ -99,19 +99,19 @@ export default defineConfig(
                 'zlib',
               ],
               message:
-                'Node.js imports are not allowed. Use @suds-cli/machine abstractions instead.',
+                'Node.js imports are not allowed. Use @boba-cli/machine abstractions instead.',
             },
           ],
           paths: [
             {
               name: 'chalk',
               message:
-                'Use @suds-cli/machine StyleAdapter instead of chalk.',
+                'Use @boba-cli/machine StyleAdapter instead of chalk.',
             },
             {
               name: 'supports-color',
               message:
-                'Use @suds-cli/machine EnvironmentAdapter.getColorSupport() instead of supports-color.',
+                'Use @boba-cli/machine EnvironmentAdapter.getColorSupport() instead of supports-color.',
             },
           ],
         },

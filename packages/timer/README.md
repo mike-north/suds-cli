@@ -1,6 +1,4 @@
-> **Deprecation Notice:** This package is being renamed from `@suds-cli/timer` to `@boba-cli/timer`. Please update your dependencies accordingly.
-
-# @suds-cli/timer
+# @boba-cli/timer
 
 Countdown timer component for Boba terminal UIs. Port of Charmbracelet Bubbles timer.
 

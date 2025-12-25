@@ -1,6 +1,4 @@
-> **Deprecation Notice:** This package is being renamed from `@suds-cli/spinner` to `@boba-cli/spinner`. Please update your dependencies accordingly.
-
-# @suds-cli/spinner
+# @boba-cli/spinner
 
 Animated spinner component for Boba terminal UIs. Port of Charmbracelet Bubbles spinner.
 

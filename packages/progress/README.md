@@ -1,6 +1,4 @@
-> **Deprecation Notice:** This package is being renamed from `@suds-cli/progress` to `@boba-cli/progress`. Please update your dependencies accordingly.
-
-# @suds-cli/progress
+# @boba-cli/progress
 
 Animated progress bar for Boba terminal UIs. Port of Charmbracelet Bubbles progress.
 

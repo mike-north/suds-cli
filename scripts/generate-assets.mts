@@ -1,6 +1,6 @@
 #!/usr/bin/env npx tsx
 /**
- * Generate GIF assets for Suds examples using VHS
+ * Generate GIF assets for Boba-CLI examples using VHS
  *
  * This script discovers `.tape` files in the examples directory and runs VHS
  * on them to produce GIFs. The tape files are the source of truth.
@@ -643,7 +643,7 @@ class AppModel implements Model<Msg, AppModel> {
     const lines: string[] = []
 
     lines.push('')
-    lines.push(styles.title.render('📼 Suds Asset Generator'))
+    lines.push(styles.title.render('📼 Boba-CLI Asset Generator'))
     lines.push(styles.muted.render('Generate GIF demos using VHS'))
     lines.push('')
     lines.push(this.list.view())

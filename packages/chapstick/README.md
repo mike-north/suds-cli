@@ -1,6 +1,4 @@
-> **Deprecation Notice:** This package is being renamed from `@suds-cli/chapstick` to `@boba-cli/chapstick`. Please update your dependencies accordingly.
-
-# @suds-cli/chapstick
+# @boba-cli/chapstick
 
 TypeScript port of Charmbracelet Lip Gloss for styling terminal strings. Implements a fluent `Style` API with colors, padding/margin, borders, alignment, joins/placement, and ANSI-aware rendering.
 
