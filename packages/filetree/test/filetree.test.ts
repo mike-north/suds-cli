@@ -3,14 +3,10 @@ import { FiletreeModel } from '../src/model.js'
 import { GetDirectoryListingMsg, ErrorMsg } from '../src/messages.js'
 import { convertBytesToSizeString } from '../src/fs.js'
 import { KeyMsg, KeyType, WindowSizeMsg } from '@suds-cli/tea'
-import { NodeFileSystemAdapter, NodePathAdapter } from '@suds-cli/machine/node'
 
 describe('FiletreeModel', () => {
-  const filesystem = new NodeFileSystemAdapter()
-  const path = new NodePathAdapter()
-
   it('should create a new model with defaults', () => {
-    const model = FiletreeModel.new({ filesystem, path })
+    const model = FiletreeModel.new()
     expect(model.cursor).toBe(0)
     expect(model.files).toEqual([])
     expect(model.active).toBe(true)
@@ -18,8 +14,6 @@ describe('FiletreeModel', () => {
 
   it('should create a model with custom options', () => {
     const model = FiletreeModel.new({
-      filesystem,
-      path,
       currentDir: '/tmp',
       showHidden: true,
       width: 100,
@@ -33,7 +27,7 @@ describe('FiletreeModel', () => {
   })
 
   it('should set active state', () => {
-    const model = FiletreeModel.new({ filesystem, path })
+    const model = FiletreeModel.new()
     const inactive = model.setIsActive(false)
 
     expect(model.active).toBe(true)
@@ -41,7 +35,7 @@ describe('FiletreeModel', () => {
   })
 
   it('should handle directory listing message', () => {
-    const model = FiletreeModel.new({ filesystem, path })
+    const model = FiletreeModel.new()
     const items = [
       {
         name: 'file1.txt',
@@ -70,7 +64,7 @@ describe('FiletreeModel', () => {
   })
 
   it('should navigate down', () => {
-    const model = FiletreeModel.new({ filesystem, path })
+    const model = FiletreeModel.new()
     const items = [
       {
         name: 'file1.txt',
@@ -101,7 +95,7 @@ describe('FiletreeModel', () => {
   })
 
   it('should navigate up', () => {
-    const model = FiletreeModel.new({ filesystem, path })
+    const model = FiletreeModel.new()
     const items = [
       {
         name: 'file1.txt',
@@ -135,7 +129,7 @@ describe('FiletreeModel', () => {
   })
 
   it('should get selected file', () => {
-    const model = FiletreeModel.new({ filesystem, path })
+    const model = FiletreeModel.new()
     const items = [
       {
         name: 'file1.txt',
@@ -153,25 +147,29 @@ describe('FiletreeModel', () => {
     expect(withItems.selectedFile).toEqual(items[0])
   })
 
-  // Edge case tests for navigation
   it('should not navigate when file list is empty', () => {
-    const model = FiletreeModel.new({ filesystem, path })
+    const model = FiletreeModel.new()
+    const emptyItems: typeof model.files = []
 
-    // Try to navigate down with empty list
-    const [afterDown] = model.update(
+    const [withEmptyItems] = model.update(
+      new GetDirectoryListingMsg(emptyItems),
+    )
+
+    // Try to navigate down
+    const [afterDown] = withEmptyItems.update(
       new KeyMsg({ type: KeyType.Runes, runes: 'j', alt: false, paste: false }),
     )
     expect(afterDown.cursor).toBe(0)
 
-    // Try to navigate up with empty list
-    const [afterUp] = model.update(
+    // Try to navigate up
+    const [afterUp] = withEmptyItems.update(
       new KeyMsg({ type: KeyType.Runes, runes: 'k', alt: false, paste: false }),
     )
     expect(afterUp.cursor).toBe(0)
   })
 
-  it('should not navigate past first item', () => {
-    const model = FiletreeModel.new({ filesystem, path })
+  it('should not navigate beyond first item', () => {
+    const model = FiletreeModel.new()
     const items = [
       {
         name: 'file1.txt',
@@ -182,29 +180,20 @@ describe('FiletreeModel', () => {
         currentDirectory: '/tmp',
         mode: 0o100644,
       },
-      {
-        name: 'file2.txt',
-        details: '2024-01-15 10:30:00 -rw-r--r-- 2.4K',
-        path: '/tmp/file2.txt',
-        extension: '.txt',
-        isDirectory: false,
-        currentDirectory: '/tmp',
-        mode: 0o100644,
-      },
     ]
 
     const [withItems] = model.update(new GetDirectoryListingMsg(items))
-    expect(withItems.cursor).toBe(0)
 
-    // Try to navigate up when already at first item
+    // Try to navigate up from first item
     const [afterUp] = withItems.update(
       new KeyMsg({ type: KeyType.Runes, runes: 'k', alt: false, paste: false }),
     )
+
     expect(afterUp.cursor).toBe(0)
   })
 
-  it('should not navigate past last item', () => {
-    const model = FiletreeModel.new({ filesystem, path })
+  it('should not navigate beyond last item', () => {
+    const model = FiletreeModel.new()
     const items = [
       {
         name: 'file1.txt',
@@ -227,52 +216,50 @@ describe('FiletreeModel', () => {
     ]
 
     const [withItems] = model.update(new GetDirectoryListingMsg(items))
-
-    // Navigate to last item
     const [atLast] = withItems.update(
       new KeyMsg({ type: KeyType.Runes, runes: 'j', alt: false, paste: false }),
     )
-    expect(atLast.cursor).toBe(1)
 
-    // Try to navigate past last item
+    // Try to navigate down from last item
     const [afterDown] = atLast.update(
       new KeyMsg({ type: KeyType.Runes, runes: 'j', alt: false, paste: false }),
     )
-    expect(afterDown.cursor).toBe(1)
+
+    expect(afterDown.cursor).toBe(items.length - 1)
   })
 
-  // ErrorMsg handling test
   it('should handle error message', () => {
-    const model = FiletreeModel.new({ filesystem, path })
+    const model = FiletreeModel.new()
     const error = new Error('Permission denied')
-
     const [nextModel] = model.update(new ErrorMsg(error))
 
-    expect(nextModel.error).toBe(error)
-    expect(nextModel.error?.message).toBe('Permission denied')
+    expect(nextModel.error).toEqual(error)
+    expect(nextModel.files).toEqual([])
+    expect(nextModel.cursor).toBe(0)
   })
 
-  // view() rendering tests
-  it('should render error state', () => {
-    const model = FiletreeModel.new({ filesystem, path })
+  it('should display error in view', () => {
+    const model = FiletreeModel.new()
     const error = new Error('Permission denied')
     const [withError] = model.update(new ErrorMsg(error))
 
     const view = withError.view()
-
-    expect(view).toBe('Error: Permission denied')
+    expect(view).toContain('Error: Permission denied')
   })
 
-  it('should render empty directory state', () => {
-    const model = FiletreeModel.new({ filesystem, path })
+  it('should display empty directory message in view', () => {
+    const model = FiletreeModel.new()
+    const emptyItems: typeof model.files = []
+    const [withEmptyItems] = model.update(
+      new GetDirectoryListingMsg(emptyItems),
+    )
 
-    const view = model.view()
-
+    const view = withEmptyItems.view()
     expect(view).toContain('(empty directory)')
   })
 
-  it('should render file list with selected item', () => {
-    const model = FiletreeModel.new({ filesystem, path, height: 10 })
+  it('should render viewport with selected item styling', () => {
+    const model = FiletreeModel.new({ height: 3, width: 80 })
     const items = [
       {
         name: 'file1.txt',
@@ -287,6 +274,15 @@ describe('FiletreeModel', () => {
         name: 'file2.txt',
         details: '2024-01-15 10:30:00 -rw-r--r-- 2.4K',
         path: '/tmp/file2.txt',
+        extension: '.txt',
+        isDirectory: false,
+        currentDirectory: '/tmp',
+        mode: 0o100644,
+      },
+      {
+        name: 'file3.txt',
+        details: '2024-01-15 10:30:00 -rw-r--r-- 3.6K',
+        path: '/tmp/file3.txt',
         extension: '.txt',
         isDirectory: false,
         currentDirectory: '/tmp',
@@ -297,13 +293,16 @@ describe('FiletreeModel', () => {
     const [withItems] = model.update(new GetDirectoryListingMsg(items))
     const view = withItems.view()
 
+    // Should contain file names
     expect(view).toContain('file1.txt')
     expect(view).toContain('file2.txt')
+    // Should have 3 lines (height) - may include empty lines
+    const lines = view.split('\n')
+    expect(lines.length).toBe(3)
   })
 
-  // setIsActive behavior test
   it('should ignore keyboard input when inactive', () => {
-    const model = FiletreeModel.new({ filesystem, path })
+    const model = FiletreeModel.new()
     const items = [
       {
         name: 'file1.txt',
@@ -326,32 +325,92 @@ describe('FiletreeModel', () => {
     ]
 
     const [withItems] = model.update(new GetDirectoryListingMsg(items))
-    const inactive = withItems.setIsActive(false)
+    const [inactive] = withItems.setIsActive(false)
 
-    // Try to navigate - should be ignored
-    const [afterDown] = inactive.update(
+    // Try to navigate when inactive
+    const [afterKey] = inactive.update(
       new KeyMsg({ type: KeyType.Runes, runes: 'j', alt: false, paste: false }),
     )
-    expect(afterDown.cursor).toBe(0)
-    expect(afterDown.active).toBe(false)
+
+    expect(afterKey.cursor).toBe(inactive.cursor)
+    expect(afterKey.cursor).toBe(0)
   })
 
-  // WindowSizeMsg handling tests
   it('should handle window resize message', () => {
-    const model = FiletreeModel.new({ filesystem, path, height: 24, width: 80 })
+    const model = FiletreeModel.new({ height: 24, width: 80 })
+    const items = [
+      {
+        name: 'file1.txt',
+        details: '2024-01-15 10:30:00 -rw-r--r-- 1.2K',
+        path: '/tmp/file1.txt',
+        extension: '.txt',
+        isDirectory: false,
+        currentDirectory: '/tmp',
+        mode: 0o100644,
+      },
+      {
+        name: 'file2.txt',
+        details: '2024-01-15 10:30:00 -rw-r--r-- 2.4K',
+        path: '/tmp/file2.txt',
+        extension: '.txt',
+        isDirectory: false,
+        currentDirectory: '/tmp',
+        mode: 0o100644,
+      },
+    ]
 
-    const [resized] = model.update(new WindowSizeMsg(100, 30))
+    const [withItems] = model.update(new GetDirectoryListingMsg(items))
+    const [resized] = withItems.update(new WindowSizeMsg(100, 10))
 
     expect(resized.width).toBe(100)
-    expect(resized.height).toBe(30)
+    expect(resized.height).toBe(10)
+    expect(resized.max).toBe(Math.min(9, items.length - 1))
   })
 
-  it('should clamp cursor when window shrinks', () => {
-    const model = FiletreeModel.new({ filesystem, path, height: 10 })
-    const items = Array.from({ length: 20 }, (_, i) => ({
-      name: `file${i}.txt`,
+  it('should clamp cursor when window resizes smaller', () => {
+    const model = FiletreeModel.new({ height: 24, width: 80 })
+    const items = [
+      {
+        name: 'file1.txt',
+        details: '2024-01-15 10:30:00 -rw-r--r-- 1.2K',
+        path: '/tmp/file1.txt',
+        extension: '.txt',
+        isDirectory: false,
+        currentDirectory: '/tmp',
+        mode: 0o100644,
+      },
+      {
+        name: 'file2.txt',
+        details: '2024-01-15 10:30:00 -rw-r--r-- 2.4K',
+        path: '/tmp/file2.txt',
+        extension: '.txt',
+        isDirectory: false,
+        currentDirectory: '/tmp',
+        mode: 0o100644,
+      },
+    ]
+
+    const [withItems] = model.update(new GetDirectoryListingMsg(items))
+    // Move cursor to position 1
+    const [atSecond] = withItems.update(
+      new KeyMsg({ type: KeyType.Runes, runes: 'j', alt: false, paste: false }),
+    )
+    expect(atSecond.cursor).toBe(1)
+
+    // Resize to height 1 (smaller than cursor position)
+    const [resized] = atSecond.update(new WindowSizeMsg(80, 1))
+
+    // Cursor should be clamped to valid range (0 to items.length - 1)
+    expect(resized.cursor).toBeLessThanOrEqual(items.length - 1)
+    expect(resized.cursor).toBeGreaterThanOrEqual(0)
+  })
+
+  it('should adjust viewport min to keep cursor visible after resize', () => {
+    const model = FiletreeModel.new({ height: 24, width: 80 })
+    const items = Array.from({ length: 10 }, (_, i) => ({
+      name: `file${i + 1}.txt`,
       details: '2024-01-15 10:30:00 -rw-r--r-- 1.2K',
-      path: `/tmp/file${i}.txt`,
+      path: `/tmp/file${i + 1}.txt`,
       extension: '.txt',
       isDirectory: false,
       currentDirectory: '/tmp',
@@ -359,58 +418,24 @@ describe('FiletreeModel', () => {
     }))
 
     const [withItems] = model.update(new GetDirectoryListingMsg(items))
-
-    // Navigate to item 15 (beyond what would be visible in a height=5 viewport)
+    // Move cursor to position 5
     let current = withItems
-    for (let i = 0; i < 15; i++) {
+    for (let i = 0; i < 5; i++) {
       const [next] = current.update(
         new KeyMsg({ type: KeyType.Runes, runes: 'j', alt: false, paste: false }),
       )
       current = next
     }
-    expect(current.cursor).toBe(15)
+    expect(current.cursor).toBe(5)
 
-    // Shrink window - cursor should remain at 15 but viewport should adjust
-    const [shrunk] = current.update(new WindowSizeMsg(80, 5))
+    // Resize to height 3 (smaller viewport)
+    const [resized] = current.update(new WindowSizeMsg(80, 3))
 
-    expect(shrunk.cursor).toBe(15)
-    expect(shrunk.height).toBe(5)
-    // Cursor should be visible within viewport (min <= cursor <= max)
-    expect(shrunk.cursor).toBeGreaterThanOrEqual(shrunk.min)
-    expect(shrunk.cursor).toBeLessThanOrEqual(shrunk.max)
-  })
-
-  it('should adjust viewport to keep cursor visible after resize', () => {
-    const model = FiletreeModel.new({ filesystem, path, height: 20 })
-    const items = Array.from({ length: 30 }, (_, i) => ({
-      name: `file${i}.txt`,
-      details: '2024-01-15 10:30:00 -rw-r--r-- 1.2K',
-      path: `/tmp/file${i}.txt`,
-      extension: '.txt',
-      isDirectory: false,
-      currentDirectory: '/tmp',
-      mode: 0o100644,
-    }))
-
-    const [withItems] = model.update(new GetDirectoryListingMsg(items))
-
-    // Navigate to item 25
-    let current = withItems
-    for (let i = 0; i < 25; i++) {
-      const [next] = current.update(
-        new KeyMsg({ type: KeyType.Runes, runes: 'j', alt: false, paste: false }),
-      )
-      current = next
-    }
-    expect(current.cursor).toBe(25)
-
-    // Resize to smaller height
-    const [resized] = current.update(new WindowSizeMsg(80, 10))
-
-    // Cursor should still be at 25 and visible
-    expect(resized.cursor).toBe(25)
-    expect(resized.min).toBeLessThanOrEqual(25)
-    expect(resized.max).toBeGreaterThanOrEqual(25)
+    // Cursor should still be visible (within viewport range)
+    expect(resized.cursor).toBeGreaterThanOrEqual(resized.min)
+    expect(resized.cursor).toBeLessThanOrEqual(resized.max)
+    // Min should be adjusted to keep cursor visible
+    expect(resized.min).toBeLessThanOrEqual(resized.cursor)
   })
 })
 

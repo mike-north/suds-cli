@@ -106,7 +106,8 @@ export function getDirectoryListingCmd(
 ): Cmd<GetDirectoryListingMsg | ErrorMsg> {
   return async () => {
     try {
-      const entries = await fs.readdir(dir, { withFileTypes: true })
+      const resolvedDir = path.resolve(dir)
+      const entries = await fs.readdir(resolvedDir, { withFileTypes: true })
       const items: DirectoryItem[] = []
 
       for (const entry of entries) {
@@ -115,7 +116,7 @@ export function getDirectoryListingCmd(
           continue
         }
 
-        const itemPath = path.join(dir, entry.name)
+        const itemPath = path.join(resolvedDir, entry.name)
 
         try {
           const stats = await fs.stat(itemPath)
@@ -133,7 +134,7 @@ export function getDirectoryListingCmd(
             path: itemPath,
             extension,
             isDirectory: entry.isDirectory(),
-            currentDirectory: dir,
+            currentDirectory: resolvedDir,
             mode: stats.mode,
           })
         } catch (error: unknown) {
