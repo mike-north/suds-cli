@@ -1,7 +1,7 @@
 import type { Terminal } from '@xterm/xterm'
-import { createBrowserPlatform } from '@suds-cli/machine/browser'
-import { DefaultItem, ListModel } from '@suds-cli/list'
-import { newBinding, matches } from '@suds-cli/key'
+import { createBrowserPlatform } from '@boba-cli/machine/browser'
+import { DefaultItem, ListModel } from '@boba-cli/list'
+import { newBinding, matches } from '@boba-cli/key'
 import {
   KeyMsg,
   Program,
@@ -10,7 +10,7 @@ import {
   type Cmd,
   type Model,
   type Msg,
-} from '@suds-cli/tea'
+} from '@boba-cli/tea'
 import { createStyle } from '../browser-style'
 
 const quitBinding = newBinding({ keys: ['q', 'Q', 'ctrl+c'] }).withHelp(
@@ -77,7 +77,7 @@ class ListDemoModel implements Model<Msg, ListDemoModel> {
   }
 
   view(): string {
-    const header = headerStyle.render('Suds Demo - List')
+    const header = headerStyle.render('Boba Demo - List')
     const help = helpStyle.render("Try '/', pgup/pgdn, ?, and q to quit.")
     return [header, '', this.list.view(), '', help, ''].join('\n')
   }

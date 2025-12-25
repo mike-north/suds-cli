@@ -2,7 +2,7 @@
  * Shared types for demo models.
  */
 
-import type { Cmd, Model, Msg } from '@suds-cli/tea'
+import type { Cmd, Model, Msg } from '@boba-cli/tea'
 
 /**
  * Interface for demo models that can be run in both Node.js and browser.

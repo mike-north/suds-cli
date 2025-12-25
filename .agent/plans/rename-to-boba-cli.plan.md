@@ -1,12 +1,12 @@
-# Comprehensive Rename Plan: suds-cli → boba-cli
+# Comprehensive Rename Plan: boba-cli → boba-cli
 
 ## Overview
 
-Rename the entire project from `suds-cli` (scoped packages `@suds-cli/*`) to `boba-cli` (scoped packages `@boba-cli/*`), plus create a new `boba-cli` rollup package.
+Rename the entire project from `boba-cli` (scoped packages `@boba-cli/*`) to `boba-cli` (scoped packages `@boba-cli/*`), plus create a new `boba-cli` rollup package.
 
 ## Scope Analysis
 
-Based on comprehensive search, there are **2719 occurrences** of "suds-cli" across **1661 files**.
+Based on comprehensive search, there are **2719 occurrences** of "boba-cli" across **1661 files**.
 
 ### Categories of Changes
 
@@ -17,19 +17,19 @@ Based on comprehensive search, there are **2719 occurrences** of "suds-cli" acro
 ### 1.1 Root `package.json`
 - Change `name` from `"suds-workspace"` → `"boba-workspace"`
 - Update script references: `--exclude suds-workspace` → `--exclude boba-workspace`
-- Update filter: `@suds-cli/examples` → `@boba-cli/examples`
+- Update filter: `@boba-cli/examples` → `@boba-cli/examples`
 
 ### 1.2 `.syncpackrc.json`
-- Change `"@suds-cli/**"` → `"@boba-cli/**"`
+- Change `"@boba-cli/**"` → `"@boba-cli/**"`
 
 ### 1.3 `.changeset/config.json`
-- Change repo from `"mike-north/suds-cli"` → `"mike-north/boba-cli"` (if applicable)
+- Change repo from `"mike-north/boba-cli"` → `"mike-north/boba-cli"` (if applicable)
 
 ### 1.4 `.changeset/pre.json`
-- Update all package names from `@suds-cli/*` → `@boba-cli/*`
+- Update all package names from `@boba-cli/*` → `@boba-cli/*`
 
 ### 1.5 All `.changeset/*.md` files
-- Update package references from `@suds-cli/*` → `@boba-cli/*`
+- Update package references from `@boba-cli/*` → `@boba-cli/*`
 
 ---
 
@@ -39,34 +39,34 @@ Each package in `packages/` requires:
 
 | Package | Current Name | New Name |
 |---------|--------------|----------|
-| chapstick | `@suds-cli/chapstick` | `@boba-cli/chapstick` |
-| code | `@suds-cli/code` | `@boba-cli/code` |
-| cursor | `@suds-cli/cursor` | `@boba-cli/cursor` |
-| dsl | `@suds-cli/dsl` | `@boba-cli/dsl` |
-| filepicker | `@suds-cli/filepicker` | `@boba-cli/filepicker` |
-| filesystem | `@suds-cli/filesystem` | `@boba-cli/filesystem` |
-| filetree | `@suds-cli/filetree` | `@boba-cli/filetree` |
-| help | `@suds-cli/help` | `@boba-cli/help` |
-| icons | `@suds-cli/icons` | `@boba-cli/icons` |
-| key | `@suds-cli/key` | `@boba-cli/key` |
-| list | `@suds-cli/list` | `@boba-cli/list` |
-| machine | `@suds-cli/machine` | `@boba-cli/machine` |
-| markdown | `@suds-cli/markdown` | `@boba-cli/markdown` |
-| paginator | `@suds-cli/paginator` | `@boba-cli/paginator` |
-| progress | `@suds-cli/progress` | `@boba-cli/progress` |
-| runeutil | `@suds-cli/runeutil` | `@boba-cli/runeutil` |
-| spinner | `@suds-cli/spinner` | `@boba-cli/spinner` |
-| statusbar | `@suds-cli/statusbar` | `@boba-cli/statusbar` |
-| stopwatch | `@suds-cli/stopwatch` | `@boba-cli/stopwatch` |
-| table | `@suds-cli/table` | `@boba-cli/table` |
-| tea | `@suds-cli/tea` | `@boba-cli/tea` |
-| textarea | `@suds-cli/textarea` | `@boba-cli/textarea` |
-| textinput | `@suds-cli/textinput` | `@boba-cli/textinput` |
-| timer | `@suds-cli/timer` | `@boba-cli/timer` |
-| viewport | `@suds-cli/viewport` | `@boba-cli/viewport` |
+| chapstick | `@boba-cli/chapstick` | `@boba-cli/chapstick` |
+| code | `@boba-cli/code` | `@boba-cli/code` |
+| cursor | `@boba-cli/cursor` | `@boba-cli/cursor` |
+| dsl | `@boba-cli/dsl` | `@boba-cli/dsl` |
+| filepicker | `@boba-cli/filepicker` | `@boba-cli/filepicker` |
+| filesystem | `@boba-cli/filesystem` | `@boba-cli/filesystem` |
+| filetree | `@boba-cli/filetree` | `@boba-cli/filetree` |
+| help | `@boba-cli/help` | `@boba-cli/help` |
+| icons | `@boba-cli/icons` | `@boba-cli/icons` |
+| key | `@boba-cli/key` | `@boba-cli/key` |
+| list | `@boba-cli/list` | `@boba-cli/list` |
+| machine | `@boba-cli/machine` | `@boba-cli/machine` |
+| markdown | `@boba-cli/markdown` | `@boba-cli/markdown` |
+| paginator | `@boba-cli/paginator` | `@boba-cli/paginator` |
+| progress | `@boba-cli/progress` | `@boba-cli/progress` |
+| runeutil | `@boba-cli/runeutil` | `@boba-cli/runeutil` |
+| spinner | `@boba-cli/spinner` | `@boba-cli/spinner` |
+| statusbar | `@boba-cli/statusbar` | `@boba-cli/statusbar` |
+| stopwatch | `@boba-cli/stopwatch` | `@boba-cli/stopwatch` |
+| table | `@boba-cli/table` | `@boba-cli/table` |
+| tea | `@boba-cli/tea` | `@boba-cli/tea` |
+| textarea | `@boba-cli/textarea` | `@boba-cli/textarea` |
+| textinput | `@boba-cli/textinput` | `@boba-cli/textinput` |
+| timer | `@boba-cli/timer` | `@boba-cli/timer` |
+| viewport | `@boba-cli/viewport` | `@boba-cli/viewport` |
 
 ### Per-package files to update:
-- `package.json` - `name` field and all `@suds-cli/*` dependencies
+- `package.json` - `name` field and all `@boba-cli/*` dependencies
 - `README.md` - package name references and import examples
 - `CHANGELOG.md` - package name references
 - Source files (`src/**/*.ts`) - import statements
@@ -80,7 +80,7 @@ Each package in `packages/` requires:
 Update all import statements:
 ```typescript
 // Before
-import { ... } from '@suds-cli/tea'
+import { ... } from '@boba-cli/tea'
 // After
 import { ... } from '@boba-cli/tea'
 ```
@@ -96,8 +96,8 @@ Update package references in `.d.ts` files.
 ## 4. Examples Folder
 
 ### 4.1 `examples/package.json`
-- Change `name` from `"@suds-cli/examples"` → `"@boba-cli/examples"`
-- Update all `@suds-cli/*` dependencies → `@boba-cli/*`
+- Change `name` from `"@boba-cli/examples"` → `"@boba-cli/examples"`
+- Update all `@boba-cli/*` dependencies → `@boba-cli/*`
 
 ### 4.2 Example TypeScript files (`*.ts`)
 - Update all import statements
@@ -110,12 +110,12 @@ Update package references in `.d.ts` files.
 ## 5. Demo Website
 
 ### 5.1 `demo-website/package.json`
-- Update all `@suds-cli/*` dependencies → `@boba-cli/*`
+- Update all `@boba-cli/*` dependencies → `@boba-cli/*`
 
 ### 5.2 `demo-website/index.html`
 - Change title from `"Suds CLI"` → `"Boba CLI"`
 - Change logo from `"Suds"` → `"Boba"`
-- Change terminal title from `"suds-cli"` → `"boba-cli"`
+- Change terminal title from `"boba-cli"` → `"boba-cli"`
 - Update GitHub link
 
 ### 5.3 `demo-website/CLAUDE.md`
@@ -136,7 +136,7 @@ Update package references in `.d.ts` files.
 - Update git clone URL
 
 ### 6.2 `docs/*.md` files (auto-generated)
-- These contain API docs with `@suds-cli` references
+- These contain API docs with `@boba-cli` references
 - Update package header references
 
 ### 6.3 Package README files
@@ -146,7 +146,7 @@ Update package references in `.d.ts` files.
 
 ## 7. API Reports (`api-reports/*.api.md`)
 
-- Update all `@suds-cli` package headers
+- Update all `@boba-cli` package headers
 - Update import statements in code blocks
 
 ---
@@ -154,7 +154,7 @@ Update package references in `.d.ts` files.
 ## 8. GitHub Workflows
 
 ### 8.1 `.github/workflows/deploy-demo.yml`
-- Change `VITE_BASE_PATH: /suds-cli/` → `/boba-cli/`
+- Change `VITE_BASE_PATH: /boba-cli/` → `/boba-cli/`
 
 ### 8.2 Other workflow files
 - Check for any other references
@@ -177,7 +177,7 @@ Update package references in `.d.ts` files.
 ## 10. Acceptance Tests
 
 ### 10.1 `acceptance-tests/module-consumption.test.ts`
-- Update all `@suds-cli/*` imports
+- Update all `@boba-cli/*` imports
 
 ---
 
@@ -302,8 +302,8 @@ Re-export all packages with namespaces or flat exports.
 ## Verification Checklist
 
 After completion, verify:
-- [ ] `grep -r "@suds-cli" .` returns no results (except git history)
-- [ ] `grep -r "suds-cli" .` returns no results (except git history)
+- [ ] `grep -r "@boba-cli" .` returns no results (except git history)
+- [ ] `grep -r "boba-cli" .` returns no results (except git history)
 - [ ] `grep -ri "suds" . --include="*.md" --include="*.json" --include="*.ts"` returns no results
 - [ ] `pnpm install` succeeds
 - [ ] `pnpm build` succeeds
