@@ -1,13 +1,13 @@
 /**
- * Interactive shell for running suds-cli demos.
+ * Interactive shell for running boba-cli demos.
  *
  * Provides a terminal-like experience where users can type commands
  * to run different demos.
  */
 
 import type { Terminal } from '@xterm/xterm'
-import { createBrowserPlatform } from '@suds-cli/machine/browser'
-import { Program, KeyMsg, KeyType, type Cmd, type Model, type Msg } from '@suds-cli/tea'
+import { createBrowserPlatform } from '@boba-cli/machine/browser'
+import { Program, KeyMsg, KeyType, type Cmd, type Model, type Msg } from '@boba-cli/tea'
 import { createStyle } from './browser-style'
 import { demos, findDemo, parseCommand, type DemoInfo } from './shared/registry'
 
@@ -23,7 +23,7 @@ const filenameStyle = createStyle().foreground('#f1fa8c')
 
 const BANNER = `
 ${headerStyle.render('╔═══════════════════════════════════════════════════╗')}
-${headerStyle.render('║')}  ${accentStyle.render('Suds CLI')} - Terminal UIs in TypeScript           ${headerStyle.render('║')}
+${headerStyle.render('║')}  ${accentStyle.render('Boba CLI')} - Terminal UIs in TypeScript           ${headerStyle.render('║')}
 ${headerStyle.render('║')}  ${dimStyle.render('A port of Bubble Tea for the browser')}              ${headerStyle.render('║')}
 ${headerStyle.render('╚═══════════════════════════════════════════════════╝')}
 `
@@ -270,7 +270,7 @@ class ShellModel implements Model<Msg, ShellModel> {
 /**
  * Shell runner - manages the shell and demo lifecycle.
  */
-class ShellRunner {
+export class ShellRunner {
   private terminal: Terminal
   private platform: ReturnType<typeof createBrowserPlatform>
   private shellProgram: Program<ShellModel> | null = null
@@ -334,15 +334,7 @@ class ShellRunner {
       platform: this.platform,
     })
 
-    let demoSucceeded = true
-    try {
-      await this.demoProgram.run()
-    } catch (err: unknown) {
-      demoSucceeded = false
-      console.error(err)
-      const message = err instanceof Error ? err.message : String(err)
-      this.terminal.write(`\r\n\x1b[31mDemo error: ${message}\x1b[0m\r\n`)
-    }
+    await this.demoProgram.run()
 
     // Demo finished, return to shell
     // Clear the pending demo from history
@@ -351,9 +343,7 @@ class ShellRunner {
     )
     newHistory.push({
       command: `tsx ${demo.filename}`,
-      output: demoSucceeded
-        ? successStyle.render(`\n✓ Demo '${demo.name}' completed.\n`)
-        : errorStyle.render(`\n✗ Demo '${demo.name}' failed.\n`),
+      output: successStyle.render(`\n✓ Demo '${demo.name}' completed.\n`),
     })
 
     this.shellModel = new ShellModel('', 0, newHistory, false)
@@ -369,13 +359,7 @@ class ShellRunner {
  */
 export function createShell(terminal: Terminal): { stop: () => void } {
   const runner = new ShellRunner(terminal)
-  runner.start().catch((err: unknown) => {
-    // Log for developers
-    console.error(err)
-    // Display user-facing error in terminal
-    const message = err instanceof Error ? err.message : String(err)
-    terminal.write(`\r\n\x1b[31mError: ${message}\x1b[0m\r\n`)
-  })
+  runner.start().catch(console.error)
 
   return {
     stop: () => runner.stop(),

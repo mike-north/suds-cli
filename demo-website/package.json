@@ -15,7 +15,10 @@
     "@boba-cli/machine": "workspace:*",
     "@boba-cli/progress": "workspace:*",
     "@boba-cli/spinner": "workspace:*",
+    "@boba-cli/stopwatch": "workspace:*",
+    "@boba-cli/table": "workspace:*",
     "@boba-cli/tea": "workspace:*",
+    "@boba-cli/timer": "workspace:*",
     "@xterm/xterm": "^5.5.0",
     "@xterm/addon-fit": "^0.10.0"
   },

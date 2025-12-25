@@ -21,27 +21,6 @@
       </header>
 
       <main class="main">
-        <section class="demo-selector">
-          <h2>Select a Demo</h2>
-          <div class="demo-buttons" id="demo-buttons">
-            <button class="demo-btn active" data-demo="spinner">
-              <span class="demo-icon">...</span>
-              <span class="demo-name">Spinner</span>
-              <span class="demo-desc">Animated loading indicators</span>
-            </button>
-            <button class="demo-btn" data-demo="progress">
-              <span class="demo-icon">|||||</span>
-              <span class="demo-name">Progress</span>
-              <span class="demo-desc">Animated progress bars</span>
-            </button>
-            <button class="demo-btn" data-demo="list">
-              <span class="demo-icon">[ ]</span>
-              <span class="demo-name">List</span>
-              <span class="demo-desc">Filterable, selectable lists</span>
-            </button>
-          </div>
-        </section>
-
         <section class="terminal-container">
           <div class="terminal-header">
             <div class="terminal-dots">
@@ -49,18 +28,23 @@
               <span class="dot yellow"></span>
               <span class="dot green"></span>
             </div>
-            <span class="terminal-title" id="terminal-title">spinner-demo</span>
+            <span class="terminal-title">suds-cli</span>
           </div>
           <div id="terminal"></div>
         </section>
 
         <section class="instructions">
-          <h3>Keyboard Controls</h3>
-          <div id="controls" class="controls">
-            <kbd>s</kbd> <span>Change spinner style</span>
-            <kbd>q</kbd> <span>Quit demo</span>
+          <h3>Quick Start</h3>
+          <div class="quick-commands">
+            <code>tsx spinner-demo.ts</code>
+            <code>tsx progress-demo.ts</code>
+            <code>tsx list-demo.ts</code>
+            <code>tsx timer-demo.ts</code>
           </div>
-          <p class="click-hint">Click inside the terminal to focus</p>
+          <p class="click-hint">
+            Type <kbd>help</kbd> for commands or <kbd>ls</kbd> to list demos.
+            Press <kbd>q</kbd> in any demo to return to the shell.
+          </p>
         </section>
       </main>
 

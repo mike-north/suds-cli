@@ -10,7 +10,7 @@ import { StopwatchDemoModel } from './stopwatch-demo'
 import { TableDemoModel } from './table-demo'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-type AnyModel = any
+export type AnyModel = any
 
 export interface DemoInfo {
   name: string
