@@ -1,7 +1,7 @@
 {
   "name": "@suds-cli/icons",
   "description": "Unicode/nerd font icons based on file type, extension, and directory names",
-  "version": "0.0.0",
+  "version": "0.1.0-alpha.0",
   "devDependencies": {
     "typescript": "5.8.2",
     "vitest": "^4.0.16"

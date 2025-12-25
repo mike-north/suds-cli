@@ -4,6 +4,33 @@
 
 ### Patch Changes
 
+- Updated dependencies [[`e8a6068`](https://github.com/mike-north/suds-cli/commit/e8a6068e74ddccec7d57308e48a5c37d9d430030), [`0756ee8`](https://github.com/mike-north/suds-cli/commit/0756ee87bd7470589cdd0181fab0573a90fe3c2d), [`2fd3d20`](https://github.com/mike-north/suds-cli/commit/2fd3d20da5fd2c57e219f94b8c13d7fc68e1daca), [`2fd3d20`](https://github.com/mike-north/suds-cli/commit/2fd3d20da5fd2c57e219f94b8c13d7fc68e1daca)]:
+  - @suds-cli/machine@0.1.0-alpha.0
+  - @suds-cli/chapstick@0.1.0-alpha.1
+  - @suds-cli/code@0.1.0-alpha.1
+  - @suds-cli/filepicker@0.1.0-alpha.1
+  - @suds-cli/filetree@0.1.0-alpha.0
+  - @suds-cli/help@0.1.0-alpha.1
+  - @suds-cli/icons@0.1.0-alpha.0
+  - @suds-cli/key@0.1.0-alpha.0
+  - @suds-cli/list@0.1.0-alpha.1
+  - @suds-cli/markdown@0.1.0-alpha.1
+  - @suds-cli/paginator@0.1.0-alpha.0
+  - @suds-cli/progress@0.1.0-alpha.1
+  - @suds-cli/spinner@0.1.0-alpha.1
+  - @suds-cli/statusbar@0.1.0-alpha.1
+  - @suds-cli/stopwatch@0.1.0-alpha.0
+  - @suds-cli/table@0.1.0-alpha.1
+  - @suds-cli/tea@0.1.0-alpha.0
+  - @suds-cli/textarea@0.1.0-alpha.1
+  - @suds-cli/textinput@0.1.0-alpha.1
+  - @suds-cli/timer@0.1.0-alpha.0
+  - @suds-cli/viewport@0.1.0-alpha.1
+
+## 0.0.1-alpha.0
+
+### Patch Changes
+
 - [#22](https://github.com/mike-north/suds-cli/pull/22) [`f8b25ba`](https://github.com/mike-north/suds-cli/commit/f8b25ba4be1652a7472b3d80adf6fdf634cb272c) Thanks [@copilot-swe-agent](https://github.com/apps/copilot-swe-agent)! - Add code-demo.ts example for the new code component
 
   This change adds a new example demonstrating the `@suds-cli/code` package for syntax-highlighted code viewing with scrollable viewport.

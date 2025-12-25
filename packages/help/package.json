@@ -1,7 +1,7 @@
 {
   "name": "@suds-cli/help",
   "description": "Help components for Suds terminal UIs: key binding renderer and scrollable help bubble",
-  "version": "0.1.0-alpha.0",
+  "version": "0.1.0-alpha.1",
   "dependencies": {
     "@suds-cli/chapstick": "workspace:*",
     "@suds-cli/key": "workspace:*",

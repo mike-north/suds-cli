@@ -26,14 +26,21 @@
     "@suds-cli/textinput": "0.0.0",
     "@suds-cli/timer": "0.0.0",
     "@suds-cli/viewport": "0.0.0",
-    "@suds-cli/scripts": "0.0.0"
+    "@suds-cli/scripts": "0.0.0",
+    "acceptance-tests": "0.0.0",
+    "@suds-cli/filetree": "0.0.0",
+    "@suds-cli/machine": "0.0.0"
   },
   "changesets": [
     "add-code-demo",
     "add-code-package",
+    "add-machine-package",
     "add-markdown-package",
     "add-statusbar-component",
+    "add-tsup-dual-builds",
+    "browser-isolation-adapters",
     "chapstick-style-provider",
+    "eager-feet-cheer",
     "fix-viewport-scrolling",
     "help-bubble-component"
   ]
