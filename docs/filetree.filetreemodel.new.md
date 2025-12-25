@@ -9,7 +9,7 @@ Creates a new filetree model.
 **Signature:**
 
 ```typescript
-static new(options?: FiletreeOptions): FiletreeModel;
+static new(options: FiletreeOptions): FiletreeModel;
 ```
 
 ## Parameters
@@ -42,7 +42,7 @@ options
 
 </td><td>
 
-_(Optional)_ Configuration options
+Configuration options
 
 
 </td></tr>

@@ -4,7 +4,7 @@
 
 ## FiletreeOptions.filesystem property
 
-FileSystem adapter for file operations
+Filesystem adapter for file operations
 
 **Signature:**
 

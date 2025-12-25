@@ -56,6 +56,25 @@ _(Optional)_ Initial directory to display
 </td></tr>
 <tr><td>
 
+[filesystem](./filetree.filetreeoptions.filesystem.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[FileSystemAdapter](./machine.filesystemadapter.md)
+
+
+</td><td>
+
+Filesystem adapter for file operations
+
+
+</td></tr>
+<tr><td>
+
 [height?](./filetree.filetreeoptions.height.md)
 
 
@@ -89,6 +108,25 @@ _(Optional)_ Initial height
 </td><td>
 
 _(Optional)_ Custom key bindings
+
+
+</td></tr>
+<tr><td>
+
+[path](./filetree.filetreeoptions.path.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[PathAdapter](./machine.pathadapter.md)
+
+
+</td><td>
+
+Path adapter for path operations
 
 
 </td></tr>

@@ -4,7 +4,7 @@
 
 ## FiletreeModel.filesystem property
 
-FileSystem adapter
+Filesystem adapter
 
 **Signature:**
 

@@ -9,7 +9,7 @@ Creates a command to asynchronously fetch directory contents.
 **Signature:**
 
 ```typescript
-export declare function getDirectoryListingCmd(dir: string, showHidden: boolean): Cmd<GetDirectoryListingMsg | ErrorMsg>;
+export declare function getDirectoryListingCmd(filesystem: FileSystemAdapter, path: PathAdapter, dir: string, showHidden: boolean): Cmd<GetDirectoryListingMsg | ErrorMsg>;
 ```
 
 ## Parameters
@@ -31,6 +31,38 @@ Description
 
 </th></tr></thead>
 <tbody><tr><td>
+
+filesystem
+
+
+</td><td>
+
+[FileSystemAdapter](./machine.filesystemadapter.md)
+
+
+</td><td>
+
+Filesystem adapter for file operations
+
+
+</td></tr>
+<tr><td>
+
+path
+
+
+</td><td>
+
+[PathAdapter](./machine.pathadapter.md)
+
+
+</td><td>
+
+Path adapter for path operations
+
+
+</td></tr>
+<tr><td>
 
 dir
 

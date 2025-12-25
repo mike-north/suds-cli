@@ -9,11 +9,11 @@ Initializes the model and returns a command to load the directory.
 **Signature:**
 
 ```typescript
-init(): Cmd<GetDirectoryListingMsg | ErrorMsg>;
+init(): Cmd<Msg>;
 ```
 **Returns:**
 
-[Cmd](./tea.cmd.md)<!-- -->&lt;[GetDirectoryListingMsg](./filetree.getdirectorylistingmsg.md) \| [ErrorMsg](./filetree.errormsg.md)<!-- -->&gt;
+[Cmd](./tea.cmd.md)<!-- -->&lt;[Msg](./tea.msg.md)<!-- -->&gt;
 
 Command to load directory listing
 
