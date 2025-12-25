@@ -19,7 +19,7 @@ Description
 </th></tr></thead>
 <tbody><tr><td>
 
-[@suds-cli/chapstick](./chapstick.md)
+[@boba-cli/chapstick](./chapstick.md)
 
 
 </td><td>
@@ -28,18 +28,7 @@ Description
 </td></tr>
 <tr><td>
 
-[@suds-cli/code](./code.md)
-
-
-</td><td>
-
-Syntax-highlighted code viewer component.
-
-
-</td></tr>
-<tr><td>
-
-[@suds-cli/cursor](./cursor.md)
+[@boba-cli/code](./code.md)
 
 
 </td><td>
@@ -48,7 +37,7 @@ Syntax-highlighted code viewer component.
 </td></tr>
 <tr><td>
 
-[@suds-cli/filepicker](./filepicker.md)
+[@boba-cli/cursor](./cursor.md)
 
 
 </td><td>
@@ -57,7 +46,7 @@ Syntax-highlighted code viewer component.
 </td></tr>
 <tr><td>
 
-[@suds-cli/filesystem](./filesystem.md)
+[@boba-cli/dsl](./dsl.md)
 
 
 </td><td>
@@ -66,7 +55,7 @@ Syntax-highlighted code viewer component.
 </td></tr>
 <tr><td>
 
-[@suds-cli/filetree](./filetree.md)
+[@boba-cli/filepicker](./filepicker.md)
 
 
 </td><td>
@@ -75,7 +64,7 @@ Syntax-highlighted code viewer component.
 </td></tr>
 <tr><td>
 
-[@suds-cli/help](./help.md)
+[@boba-cli/filesystem](./filesystem.md)
 
 
 </td><td>
@@ -84,7 +73,7 @@ Syntax-highlighted code viewer component.
 </td></tr>
 <tr><td>
 
-[@suds-cli/icons](./icons.md)
+[@boba-cli/filetree](./filetree.md)
 
 
 </td><td>
@@ -93,7 +82,7 @@ Syntax-highlighted code viewer component.
 </td></tr>
 <tr><td>
 
-[@suds-cli/key](./key.md)
+[@boba-cli/help](./help.md)
 
 
 </td><td>
@@ -102,7 +91,7 @@ Syntax-highlighted code viewer component.
 </td></tr>
 <tr><td>
 
-[@suds-cli/list](./list.md)
+[@boba-cli/icons](./icons.md)
 
 
 </td><td>
@@ -111,31 +100,7 @@ Syntax-highlighted code viewer component.
 </td></tr>
 <tr><td>
 
-[@suds-cli/machine](./machine.md)
-
-
-</td><td>
-
-@<!-- -->suds-cli/machine - Platform abstraction layer for Suds terminal UIs.
-
-This package provides platform-agnostic interfaces and utilities for building terminal applications that can run in both Node.js and browser environments.
-
-
-</td></tr>
-<tr><td>
-
-[@suds-cli/markdown](./markdown.md)
-
-
-</td><td>
-
-Markdown viewer component for Suds terminal UIs.
-
-
-</td></tr>
-<tr><td>
-
-[@suds-cli/paginator](./paginator.md)
+[@boba-cli/key](./key.md)
 
 
 </td><td>
@@ -144,7 +109,7 @@ Markdown viewer component for Suds terminal UIs.
 </td></tr>
 <tr><td>
 
-[@suds-cli/progress](./progress.md)
+[@boba-cli/list](./list.md)
 
 
 </td><td>
@@ -153,7 +118,7 @@ Markdown viewer component for Suds terminal UIs.
 </td></tr>
 <tr><td>
 
-[@suds-cli/runeutil](./runeutil.md)
+[@boba-cli/machine](./machine.md)
 
 
 </td><td>
@@ -162,7 +127,7 @@ Markdown viewer component for Suds terminal UIs.
 </td></tr>
 <tr><td>
 
-[@suds-cli/spinner](./spinner.md)
+[@boba-cli/markdown](./markdown.md)
 
 
 </td><td>
@@ -171,7 +136,7 @@ Markdown viewer component for Suds terminal UIs.
 </td></tr>
 <tr><td>
 
-[@suds-cli/statusbar](./statusbar.md)
+[@boba-cli/paginator](./paginator.md)
 
 
 </td><td>
@@ -180,7 +145,7 @@ Markdown viewer component for Suds terminal UIs.
 </td></tr>
 <tr><td>
 
-[@suds-cli/stopwatch](./stopwatch.md)
+[@boba-cli/progress](./progress.md)
 
 
 </td><td>
@@ -189,7 +154,7 @@ Markdown viewer component for Suds terminal UIs.
 </td></tr>
 <tr><td>
 
-[@suds-cli/table](./table.md)
+[@boba-cli/runeutil](./runeutil.md)
 
 
 </td><td>
@@ -198,7 +163,7 @@ Markdown viewer component for Suds terminal UIs.
 </td></tr>
 <tr><td>
 
-[@suds-cli/tea](./tea.md)
+[@boba-cli/spinner](./spinner.md)
 
 
 </td><td>
@@ -207,7 +172,7 @@ Markdown viewer component for Suds terminal UIs.
 </td></tr>
 <tr><td>
 
-[@suds-cli/textarea](./textarea.md)
+[@boba-cli/statusbar](./statusbar.md)
 
 
 </td><td>
@@ -216,7 +181,7 @@ Markdown viewer component for Suds terminal UIs.
 </td></tr>
 <tr><td>
 
-[@suds-cli/textinput](./textinput.md)
+[@boba-cli/stopwatch](./stopwatch.md)
 
 
 </td><td>
@@ -225,7 +190,7 @@ Markdown viewer component for Suds terminal UIs.
 </td></tr>
 <tr><td>
 
-[@suds-cli/timer](./timer.md)
+[@boba-cli/table](./table.md)
 
 
 </td><td>
@@ -234,7 +199,43 @@ Markdown viewer component for Suds terminal UIs.
 </td></tr>
 <tr><td>
 
-[@suds-cli/viewport](./viewport.md)
+[@boba-cli/tea](./tea.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[@boba-cli/textarea](./textarea.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[@boba-cli/textinput](./textinput.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[@boba-cli/timer](./timer.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[@boba-cli/viewport](./viewport.md)
 
 
 </td><td>
