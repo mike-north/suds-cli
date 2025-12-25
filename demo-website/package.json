@@ -15,7 +15,10 @@
     "@suds-cli/machine": "workspace:*",
     "@suds-cli/progress": "workspace:*",
     "@suds-cli/spinner": "workspace:*",
+    "@suds-cli/stopwatch": "workspace:*",
+    "@suds-cli/table": "workspace:*",
     "@suds-cli/tea": "workspace:*",
+    "@suds-cli/timer": "workspace:*",
     "@xterm/xterm": "^5.5.0",
     "@xterm/addon-fit": "^0.10.0"
   },
