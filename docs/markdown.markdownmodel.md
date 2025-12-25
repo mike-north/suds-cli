@@ -75,6 +75,25 @@ string
 </td></tr>
 <tr><td>
 
+[filesystem](./markdown.markdownmodel.filesystem.md)
+
+
+</td><td>
+
+`readonly`
+
+
+</td><td>
+
+[FileSystemAdapter](./machine.filesystemadapter.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
 [viewport](./markdown.markdownmodel.viewport.md)
 
 

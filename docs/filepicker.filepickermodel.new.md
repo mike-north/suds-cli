@@ -9,7 +9,7 @@ Create a new model and command to read the directory.
 **Signature:**
 
 ```typescript
-static new(options?: FilepickerOptions): [FilepickerModel, Cmd<Msg>];
+static new(options: FilepickerOptions): [FilepickerModel, Cmd<Msg>];
 ```
 
 ## Parameters
@@ -41,8 +41,6 @@ options
 
 
 </td><td>
-
-_(Optional)_
 
 
 </td></tr>

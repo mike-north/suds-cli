@@ -5,8 +5,11 @@
 ```ts
 
 import type { Cmd } from '@suds-cli/tea';
+import type { EnvironmentAdapter } from '@suds-cli/machine';
+import type { FileSystemAdapter } from '@suds-cli/machine';
 import type { Msg } from '@suds-cli/tea';
 import { Style } from '@suds-cli/chapstick';
+import type { TerminalBackground } from '@suds-cli/machine';
 import { ViewportModel } from '@suds-cli/viewport';
 
 // @public
@@ -24,9 +27,11 @@ export class MarkdownModel {
     readonly active: boolean;
     // (undocumented)
     readonly fileName: string;
+    // (undocumented)
+    readonly filesystem: FileSystemAdapter;
     gotoTop(): MarkdownModel;
     init(): Cmd<Msg>;
-    static new(options?: MarkdownOptions): MarkdownModel;
+    static new(options: MarkdownOptions): MarkdownModel;
     setFileName(fileName: string): [MarkdownModel, Cmd<Msg>];
     setIsActive(active: boolean): MarkdownModel;
     setSize(width: number, height: number): [MarkdownModel, Cmd<Msg>];
@@ -39,6 +44,7 @@ export class MarkdownModel {
 // @public
 export interface MarkdownOptions {
     active?: boolean;
+    filesystem: FileSystemAdapter;
     height?: number;
     style?: Style;
     width?: number;
@@ -58,6 +64,8 @@ export class RenderMarkdownMsg {
 
 // @public
 export interface RenderMarkdownOptions {
+    background?: TerminalBackground;
+    env?: EnvironmentAdapter;
     width?: number;
 }
 

@@ -56,6 +56,25 @@ _(Optional)_ Whether the component is active and should handle input. Defaults t
 </td></tr>
 <tr><td>
 
+[filesystem](./markdown.markdownoptions.filesystem.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[FileSystemAdapter](./machine.filesystemadapter.md)
+
+
+</td><td>
+
+Filesystem adapter for file operations.
+
+
+</td></tr>
+<tr><td>
+
 [height?](./markdown.markdownoptions.height.md)
 
 

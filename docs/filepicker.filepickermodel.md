@@ -132,6 +132,25 @@ boolean
 </td></tr>
 <tr><td>
 
+[filesystem](./filepicker.filepickermodel.filesystem.md)
+
+
+</td><td>
+
+`readonly`
+
+
+</td><td>
+
+[FileSystemAdapter](./machine.filesystemadapter.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
 [height](./filepicker.filepickermodel.height.md)
 
 
@@ -162,6 +181,25 @@ number
 </td><td>
 
 [FilepickerKeyMap](./filepicker.filepickerkeymap.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[path](./filepicker.filepickermodel.path.md)
+
+
+</td><td>
+
+`readonly`
+
+
+</td><td>
+
+[PathAdapter](./machine.pathadapter.md)
 
 
 </td><td>

@@ -75,6 +75,25 @@ string
 </td></tr>
 <tr><td>
 
+[filesystem](./code.codemodel.filesystem.md)
+
+
+</td><td>
+
+`readonly`
+
+
+</td><td>
+
+[FileSystemAdapter](./machine.filesystemadapter.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
 [highlightedContent](./code.codemodel.highlightedcontent.md)
 
 
@@ -86,6 +105,25 @@ string
 </td><td>
 
 string
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[path](./code.codemodel.path.md)
+
+
+</td><td>
+
+`readonly`
+
+
+</td><td>
+
+[PathAdapter](./machine.pathadapter.md)
 
 
 </td><td>

@@ -9,7 +9,7 @@ Create a new markdown model.
 **Signature:**
 
 ```typescript
-static new(options?: MarkdownOptions): MarkdownModel;
+static new(options: MarkdownOptions): MarkdownModel;
 ```
 
 ## Parameters
@@ -42,7 +42,7 @@ options
 
 </td><td>
 
-_(Optional)_ Configuration options
+Configuration options
 
 
 </td></tr>

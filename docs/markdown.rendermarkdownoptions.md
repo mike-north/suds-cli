@@ -37,6 +37,44 @@ Description
 </th></tr></thead>
 <tbody><tr><td>
 
+[background?](./markdown.rendermarkdownoptions.background.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[TerminalBackground](./machine.terminalbackground.md)
+
+
+</td><td>
+
+_(Optional)_ Terminal background mode. Defaults to 'dark'.
+
+
+</td></tr>
+<tr><td>
+
+[env?](./markdown.rendermarkdownoptions.env.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[EnvironmentAdapter](./machine.environmentadapter.md)
+
+
+</td><td>
+
+_(Optional)_ Environment adapter for detecting terminal capabilities.
+
+
+</td></tr>
+<tr><td>
+
 [width?](./markdown.rendermarkdownoptions.width.md)
 
 

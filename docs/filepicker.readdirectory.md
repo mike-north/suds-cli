@@ -9,7 +9,7 @@ Read a directory and return file info entries.
 **Signature:**
 
 ```typescript
-export declare function readDirectory(path: string, showHidden: boolean, dirFirst?: boolean): Promise<FileInfo[]>;
+export declare function readDirectory(filesystem: FileSystemAdapter, pathAdapter: PathAdapter, path: string, showHidden: boolean, dirFirst?: boolean): Promise<FileInfo[]>;
 ```
 
 ## Parameters
@@ -31,6 +31,34 @@ Description
 
 </th></tr></thead>
 <tbody><tr><td>
+
+filesystem
+
+
+</td><td>
+
+[FileSystemAdapter](./machine.filesystemadapter.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+pathAdapter
+
+
+</td><td>
+
+[PathAdapter](./machine.pathadapter.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
 
 path
 

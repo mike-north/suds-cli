@@ -125,6 +125,28 @@ Create a copy of a byte array.
 </td></tr>
 <tr><td>
 
+[createAlwaysEnabledStyle()](./machine.createalwaysenabledstyle.md)
+
+
+</td><td>
+
+Create a style function that always applies colors (for xterm.js).
+
+
+</td></tr>
+<tr><td>
+
+[createStyle(colorSupport)](./machine.createstyle.md)
+
+
+</td><td>
+
+Create a chainable style function.
+
+
+</td></tr>
+<tr><td>
+
 [cursorBackward(n)](./machine.cursorbackward.md)
 
 
@@ -349,6 +371,17 @@ Description
 </th></tr></thead>
 <tbody><tr><td>
 
+[ArchiveAdapter](./machine.archiveadapter.md)
+
+
+</td><td>
+
+Archive adapter interface for zip/unzip operations.
+
+
+</td></tr>
+<tr><td>
+
 [ClipboardAdapter](./machine.clipboardadapter.md)
 
 
@@ -366,6 +399,17 @@ Clipboard adapter interface for platform-agnostic clipboard operations.
 </td><td>
 
 Color support levels for terminal output.
+
+
+</td></tr>
+<tr><td>
+
+[DirectoryEntry](./machine.directoryentry.md)
+
+
+</td><td>
+
+Directory entry returned by readdir with withFileTypes option.
 
 
 </td></tr>
@@ -393,6 +437,39 @@ Environment adapter interface for platform-agnostic environment access.
 </td></tr>
 <tr><td>
 
+[FileStat](./machine.filestat.md)
+
+
+</td><td>
+
+File stat information returned by filesystem operations.
+
+
+</td></tr>
+<tr><td>
+
+[FileSystemAdapter](./machine.filesystemadapter.md)
+
+
+</td><td>
+
+FileSystem adapter interface for platform-agnostic file operations.
+
+
+</td></tr>
+<tr><td>
+
+[PathAdapter](./machine.pathadapter.md)
+
+
+</td><td>
+
+Path adapter interface for platform-agnostic path operations.
+
+
+</td></tr>
+<tr><td>
+
 [PlatformAdapter](./machine.platformadapter.md)
 
 
@@ -410,6 +487,28 @@ Complete platform adapter combining all platform-specific functionality.
 </td><td>
 
 Signal adapter interface for handling OS signals.
+
+
+</td></tr>
+<tr><td>
+
+[StyleAdapter](./machine.styleadapter.md)
+
+
+</td><td>
+
+Style adapter for platform-agnostic terminal styling.
+
+
+</td></tr>
+<tr><td>
+
+[StyleFn](./machine.stylefn.md)
+
+
+</td><td>
+
+Chainable style function for terminal text styling.
 
 
 </td></tr>

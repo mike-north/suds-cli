@@ -9,7 +9,7 @@ Creates a new code model instance.
 **Signature:**
 
 ```typescript
-static new(options?: CodeOptions): CodeModel;
+static new(options: CodeOptions): CodeModel;
 ```
 
 ## Parameters
@@ -42,7 +42,7 @@ options
 
 </td><td>
 
-_(Optional)_ Configuration options
+Configuration options
 
 
 </td></tr>

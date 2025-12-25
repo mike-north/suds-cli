@@ -38,6 +38,27 @@ Description
 </th></tr></thead>
 <tbody><tr><td>
 
+[archive](./machine.platformadapter.archive.md)
+
+
+</td><td>
+
+`readonly`
+
+
+</td><td>
+
+[ArchiveAdapter](./machine.archiveadapter.md)
+
+
+</td><td>
+
+Archive operations adapter.
+
+
+</td></tr>
+<tr><td>
+
 [clipboard](./machine.platformadapter.clipboard.md)
 
 
@@ -80,6 +101,48 @@ Environment access adapter.
 </td></tr>
 <tr><td>
 
+[filesystem](./machine.platformadapter.filesystem.md)
+
+
+</td><td>
+
+`readonly`
+
+
+</td><td>
+
+[FileSystemAdapter](./machine.filesystemadapter.md)
+
+
+</td><td>
+
+FileSystem operations adapter.
+
+
+</td></tr>
+<tr><td>
+
+[path](./machine.platformadapter.path.md)
+
+
+</td><td>
+
+`readonly`
+
+
+</td><td>
+
+[PathAdapter](./machine.pathadapter.md)
+
+
+</td><td>
+
+Path operations adapter.
+
+
+</td></tr>
+<tr><td>
+
 [signals](./machine.platformadapter.signals.md)
 
 
@@ -96,6 +159,27 @@ Environment access adapter.
 </td><td>
 
 Signal handling adapter.
+
+
+</td></tr>
+<tr><td>
+
+[style](./machine.platformadapter.style.md)
+
+
+</td><td>
+
+`readonly`
+
+
+</td><td>
+
+[StyleAdapter](./machine.styleadapter.md)
+
+
+</td><td>
+
+Style adapter for terminal text styling.
 
 
 </td></tr>

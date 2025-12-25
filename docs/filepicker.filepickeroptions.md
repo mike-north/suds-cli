@@ -94,6 +94,25 @@ _(Optional)_
 </td></tr>
 <tr><td>
 
+[filesystem](./filepicker.filepickeroptions.filesystem.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[FileSystemAdapter](./machine.filesystemadapter.md)
+
+
+</td><td>
+
+FileSystem adapter for file operations
+
+
+</td></tr>
+<tr><td>
+
 [height?](./filepicker.filepickeroptions.height.md)
 
 
@@ -127,6 +146,25 @@ _(Optional)_
 </td><td>
 
 _(Optional)_
+
+
+</td></tr>
+<tr><td>
+
+[path](./filepicker.filepickeroptions.path.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[PathAdapter](./machine.pathadapter.md)
+
+
+</td><td>
+
+Path adapter for path operations
 
 
 </td></tr>

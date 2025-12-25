@@ -78,7 +78,7 @@ Hidden file detection (Unix-style).
 </td></tr>
 <tr><td>
 
-[readDirectory(path, showHidden, dirFirst)](./filepicker.readdirectory.md)
+[readDirectory(filesystem, pathAdapter, path, showHidden, dirFirst)](./filepicker.readdirectory.md)
 
 
 </td><td>

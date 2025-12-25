@@ -6,8 +6,10 @@
 
 import type { Binding } from '@suds-cli/key';
 import { Cmd } from '@suds-cli/tea';
+import type { FileSystemAdapter } from '@suds-cli/machine';
 import type { KeyMap } from '@suds-cli/help';
 import { Msg } from '@suds-cli/tea';
+import type { PathAdapter } from '@suds-cli/machine';
 import { Style } from '@suds-cli/chapstick';
 
 // @public
@@ -86,6 +88,8 @@ export class FilepickerModel {
     enter(): [FilepickerModel, Cmd<Msg>];
     // (undocumented)
     readonly files: FileInfo[];
+    // (undocumented)
+    readonly filesystem: FileSystemAdapter;
     gotoBottom(): FilepickerModel;
     gotoTop(): FilepickerModel;
     // (undocumented)
@@ -93,7 +97,9 @@ export class FilepickerModel {
     init(): Cmd<Msg>;
     // (undocumented)
     readonly keyMap: FilepickerKeyMap;
-    static new(options?: FilepickerOptions): [FilepickerModel, Cmd<Msg>];
+    static new(options: FilepickerOptions): [FilepickerModel, Cmd<Msg>];
+    // (undocumented)
+    readonly path: PathAdapter;
     refresh(): [FilepickerModel, Cmd<Msg>];
     select(): [FilepickerModel, Cmd<Msg>];
     selected(): FileInfo | undefined;
@@ -120,10 +126,12 @@ export interface FilepickerOptions {
     currentDir?: string;
     // (undocumented)
     dirFirst?: boolean;
+    filesystem: FileSystemAdapter;
     // (undocumented)
     height?: number;
     // (undocumented)
     keyMap?: FilepickerKeyMap;
+    path: PathAdapter;
     // (undocumented)
     showHidden?: boolean;
     // (undocumented)
@@ -163,7 +171,7 @@ export class FileSelectedMsg {
 export function isHiddenUnix(name: string): boolean;
 
 // @public
-export function readDirectory(path: string, showHidden: boolean, dirFirst?: boolean): Promise<FileInfo[]>;
+export function readDirectory(filesystem: FileSystemAdapter, pathAdapter: PathAdapter, path: string, showHidden: boolean, dirFirst?: boolean): Promise<FileInfo[]>;
 
 // @public
 export function sortFiles(a: FileInfo, b: FileInfo, dirFirst?: boolean): number;

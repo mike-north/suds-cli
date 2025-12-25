@@ -5,7 +5,9 @@
 ```ts
 
 import { Cmd } from '@suds-cli/tea';
+import type { FileSystemAdapter } from '@suds-cli/machine';
 import { Msg } from '@suds-cli/tea';
+import type { PathAdapter } from '@suds-cli/machine';
 import { ViewportModel } from '@suds-cli/viewport';
 
 // @public
@@ -14,11 +16,15 @@ export class CodeModel {
     readonly active: boolean;
     // (undocumented)
     readonly filename: string;
+    // (undocumented)
+    readonly filesystem: FileSystemAdapter;
     gotoTop(): CodeModel;
     // (undocumented)
     readonly highlightedContent: string;
     init(): Cmd<Msg>;
-    static new(options?: CodeOptions): CodeModel;
+    static new(options: CodeOptions): CodeModel;
+    // (undocumented)
+    readonly path: PathAdapter;
     setFileName(filename: string): [CodeModel, Cmd<Msg>];
     setIsActive(active: boolean): CodeModel;
     setSize(width: number, height: number): CodeModel;
@@ -35,8 +41,10 @@ export class CodeModel {
 export interface CodeOptions {
     // (undocumented)
     active?: boolean;
+    filesystem: FileSystemAdapter;
     // (undocumented)
     height?: number;
+    path: PathAdapter;
     // (undocumented)
     syntaxTheme?: string;
     // (undocumented)

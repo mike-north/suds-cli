@@ -89,7 +89,7 @@ Default styles for the filetree component.
 </td></tr>
 <tr><td>
 
-[getDirectoryListingCmd(dir, showHidden)](./filetree.getdirectorylistingcmd.md)
+[getDirectoryListingCmd(filesystem, path, dir, showHidden)](./filetree.getdirectorylistingcmd.md)
 
 
 </td><td>

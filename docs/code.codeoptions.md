@@ -56,6 +56,25 @@ _(Optional)_
 </td></tr>
 <tr><td>
 
+[filesystem](./code.codeoptions.filesystem.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[FileSystemAdapter](./machine.filesystemadapter.md)
+
+
+</td><td>
+
+Filesystem adapter for file operations
+
+
+</td></tr>
+<tr><td>
+
 [height?](./code.codeoptions.height.md)
 
 
@@ -70,6 +89,25 @@ number
 </td><td>
 
 _(Optional)_
+
+
+</td></tr>
+<tr><td>
+
+[path](./code.codeoptions.path.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[PathAdapter](./machine.pathadapter.md)
+
+
+</td><td>
+
+Path adapter for path operations
 
 
 </td></tr>
