@@ -1,3 +1,5 @@
+> **Deprecation Notice:** This package is being renamed from `@suds-cli/markdown` to `@boba-cli/markdown`. Please update your dependencies accordingly.
+
 # @suds-cli/markdown
 
 Markdown viewer component for Suds terminal UIs.

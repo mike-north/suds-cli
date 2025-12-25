@@ -22,3 +22,4 @@ The package includes:
 - Utility functions for byte manipulation and ANSI escape sequences
 - Working examples for both Node.js and browser usage
 - Full test suite with 241 tests covering all adapters and edge cases
+

@@ -1,3 +1,5 @@
+> **Deprecation Notice:** This package is being renamed from `@suds-cli/textarea` to `@boba-cli/textarea`. Please update your dependencies accordingly.
+
 # @suds-cli/textarea
 
 Multi-line textarea component for Suds terminal UIs. Early port of Charmbracelet Bubbles textarea.

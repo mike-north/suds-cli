@@ -1,3 +1,5 @@
+> **Deprecation Notice:** This package is being renamed from `@suds-cli/dsl` to `@boba-cli/dsl`. Please update your dependencies accordingly.
+
 # @suds-cli/dsl
 
 Declarative DSL for building CLI applications with minimal ceremony. Build terminal UIs using a fluent builder API and view primitives inspired by SwiftUI.

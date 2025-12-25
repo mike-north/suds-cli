@@ -1,3 +1,5 @@
+> **Deprecation Notice:** This package is being renamed from `@suds-cli/icons` to `@boba-cli/icons`. Please update your dependencies accordingly.
+
 # @suds-cli/icons
 
 Unicode/nerd font icons based on file type, extension, and directory names.

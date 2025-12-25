@@ -1,3 +1,5 @@
+> **Deprecation Notice:** This package is being renamed from `@suds-cli/help` to `@boba-cli/help`. Please update your dependencies accordingly.
+
 # @suds-cli/help
 
 Render short or full help text from your key bindings. Ported from the Charm `bubbles/help` component.

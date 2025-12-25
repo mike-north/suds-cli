@@ -1,3 +1,5 @@
+> **Deprecation Notice:** This package is being renamed from `@suds-cli/filetree` to `@boba-cli/filetree`. Please update your dependencies accordingly.
+
 # @suds-cli/filetree
 
 Navigable file tree browser component for Suds terminal UIs.

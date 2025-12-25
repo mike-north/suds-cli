@@ -1,3 +1,5 @@
+> **Deprecation Notice:** This package is being renamed from `@suds-cli/table` to `@boba-cli/table`. Please update your dependencies accordingly.
+
 # @suds-cli/table
 
 Tabular data display with scrolling and selection for Suds terminal UIs.

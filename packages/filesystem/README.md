@@ -1,3 +1,5 @@
+> **Deprecation Notice:** This package is being renamed from `@suds-cli/filesystem` to `@boba-cli/filesystem`. Please update your dependencies accordingly.
+
 # @suds-cli/filesystem
 
 Filesystem utility functions for Suds terminal UIs. This package provides a collection of helper functions for working with the filesystem, ported from the [teacup](https://github.com/mistakenelf/teacup) Go library.

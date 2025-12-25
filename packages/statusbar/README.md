@@ -1,3 +1,5 @@
+> **Deprecation Notice:** This package is being renamed from `@suds-cli/statusbar` to `@boba-cli/statusbar`. Please update your dependencies accordingly.
+
 # @suds-cli/statusbar
 
 A 4-column status bar component for terminal UIs, ported from [teacup](https://github.com/mistakenelf/teacup).

@@ -1,3 +1,5 @@
+> **Deprecation Notice:** This package is being renamed from `@suds-cli/code` to `@boba-cli/code`. Please update your dependencies accordingly.
+
 # @suds-cli/code
 
 Syntax-highlighted code viewer component for Suds terminal UIs.

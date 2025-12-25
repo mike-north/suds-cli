@@ -1,3 +1,5 @@
+> **Deprecation Notice:** This package is being renamed from `@suds-cli/textinput` to `@boba-cli/textinput`. Please update your dependencies accordingly.
+
 # @suds-cli/textinput
 
 Single-line text input component for Suds terminal UIs. Port of Charmbracelet Bubbles textinput.

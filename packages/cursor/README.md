@@ -1,3 +1,5 @@
+> **Deprecation Notice:** This package is being renamed from `@suds-cli/cursor` to `@boba-cli/cursor`. Please update your dependencies accordingly.
+
 # @suds-cli/cursor
 
 Cursor component for Suds terminal UIs. Handles blinking, focus, and hidden/static modes.

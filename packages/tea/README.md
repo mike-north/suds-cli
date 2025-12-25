@@ -1,3 +1,5 @@
+> **Deprecation Notice:** This package is being renamed from `@suds-cli/tea` to `@boba-cli/tea`. Please update your dependencies accordingly.
+
 # @suds-cli/tea
 
 TypeScript port of [Bubble Tea](https://github.com/charmbracelet/bubbletea), the Elm-inspired terminal UI framework from Charm. Build interactive CLIs using a simple, functional architecture: Model-Update-View.

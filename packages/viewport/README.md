@@ -1,3 +1,5 @@
+> **Deprecation Notice:** This package is being renamed from `@suds-cli/viewport` to `@boba-cli/viewport`. Please update your dependencies accordingly.
+
 # @suds-cli/viewport
 
 Scrollable content window for Suds terminal UIs. Ported from the Charm `bubbles/viewport` component.

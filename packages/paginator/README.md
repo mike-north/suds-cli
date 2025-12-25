@@ -1,3 +1,5 @@
+> **Deprecation Notice:** This package is being renamed from `@suds-cli/paginator` to `@boba-cli/paginator`. Please update your dependencies accordingly.
+
 # @suds-cli/paginator
 
 Pagination state management and rendering for Suds terminal UIs. Ported from the Charm `bubbles/paginator` component.

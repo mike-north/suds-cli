@@ -1,3 +1,5 @@
+> **Deprecation Notice:** This package is being renamed from `@suds-cli/machine` to `@boba-cli/machine`. Please update your dependencies accordingly.
+
 # @suds-cli/machine
 
 Platform abstraction layer for Suds terminal UIs. This package enables Suds applications to run in both Node.js and browser environments (with xterm.js) by providing platform-agnostic interfaces for terminal I/O, clipboard access, environment detection, and signal handling.

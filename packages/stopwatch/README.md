@@ -1,3 +1,5 @@
+> **Deprecation Notice:** This package is being renamed from `@suds-cli/stopwatch` to `@boba-cli/stopwatch`. Please update your dependencies accordingly.
+
 # @suds-cli/stopwatch
 
 Stopwatch component for Suds terminal UIs. Port of Charmbracelet Bubbles stopwatch.
