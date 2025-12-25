@@ -661,26 +661,26 @@ importers:
   scripts:
     dependencies:
       '@suds-cli/chapstick':
-        specifier: 0.1.0-alpha.0
-        version: 0.1.0-alpha.0
+        specifier: workspace:*
+        version: link:../packages/chapstick
       '@suds-cli/key':
-        specifier: 0.0.0
-        version: 0.0.0
+        specifier: workspace:*
+        version: link:../packages/key
       '@suds-cli/list':
-        specifier: 0.0.1-alpha.0
-        version: 0.0.1-alpha.0
+        specifier: workspace:*
+        version: link:../packages/list
       '@suds-cli/progress':
-        specifier: 0.0.1-alpha.0
-        version: 0.0.1-alpha.0
+        specifier: workspace:*
+        version: link:../packages/progress
       '@suds-cli/spinner':
-        specifier: 0.0.1-alpha.0
-        version: 0.0.1-alpha.0
+        specifier: workspace:*
+        version: link:../packages/spinner
       '@suds-cli/stopwatch':
-        specifier: 0.0.0
-        version: 0.0.0
+        specifier: workspace:*
+        version: link:../packages/stopwatch
       '@suds-cli/tea':
-        specifier: 0.0.0
-        version: 0.0.0
+        specifier: workspace:*
+        version: link:../packages/tea
     devDependencies:
       tsx:
         specifier: ^4.21.0
@@ -1835,46 +1835,6 @@ packages:
 
   '@standard-schema/spec@1.0.0':
     resolution: {integrity: sha512-m2bOd0f2RT9k8QJx1JN85cZYyH1RqFBdlwtkSlf4tBDYLCiiZnv1fIIwacK6cqwXavOydf0NPToMQgpKq+dVlA==}
-
-  '@suds-cli/chapstick@0.1.0-alpha.0':
-    resolution: {integrity: sha512-Mr5vRIi+YbJQ2+a23XIklQCl/ORCNKr5itST4IKbS+6Ef0ottUN24/LMMvgTYaBSEsF2kPfdiqHhs3swjnUz7g==}
-    engines: {node: '>=20.0.0'}
-
-  '@suds-cli/help@0.1.0-alpha.0':
-    resolution: {integrity: sha512-2oDFFlEQeB227JsxVx1PDSnpeWFrWQHCjozOhxoeX7DOJzYXDtCmChfaIv31OBN/TEYTpyk4liY/RIoNTCHZYA==}
-    engines: {node: '>=20.0.0'}
-
-  '@suds-cli/key@0.0.0':
-    resolution: {integrity: sha512-i+KOZxVnN4ReL6l16QxrAhTaBTTw7/K0kNUeTtRTvwzMfrmIUU1GMMqEeJzfMF/T7KU+TrCZmfj09K3+O4n/Qw==}
-    engines: {node: '>=20.0.0'}
-
-  '@suds-cli/list@0.0.1-alpha.0':
-    resolution: {integrity: sha512-+4K8oCgassn6NGNLE5ifF5O4+sow17s8cuS6aK8F9Ac/caHEPCnOEoHBrk+4dslE6AvBIN5YpMWZmnbpnGt4JQ==}
-    engines: {node: '>=20.0.0'}
-
-  '@suds-cli/paginator@0.0.0':
-    resolution: {integrity: sha512-HzfHEPBLWBNdxKkIazKapYs/+HvetUiITjgF9SlXt1snWVHwduRG/pk1wcrY7MGTmpTMk+gFyfKi01ZowOugcg==}
-    engines: {node: '>=20.0.0'}
-
-  '@suds-cli/progress@0.0.1-alpha.0':
-    resolution: {integrity: sha512-qURlpRhNTEASVFSAq296gg9rKRnZpwt8HhGfZNb+SA5YsdRIr/7DqEP2Klnho/fY/UcKORSliOkXDKpaeeTqPQ==}
-    engines: {node: '>=20.0.0'}
-
-  '@suds-cli/spinner@0.0.1-alpha.0':
-    resolution: {integrity: sha512-ACeccPhBGIBRyWBOC73z/2zS1vMRepAvjsOuEnc77v4wCLLHV8kXy2wDdT9+JC7MlWHEUMvQZkTfXd924GaR+g==}
-    engines: {node: '>=20.0.0'}
-
-  '@suds-cli/stopwatch@0.0.0':
-    resolution: {integrity: sha512-ixRMchF0XY8j3upO3KcEtShitN/WpE0bhdho9iMCJ6ShmASop2OXPNT+LqeK2lBCOdpJ7FOq85h/IG/GeX4zGQ==}
-    engines: {node: '>=20.0.0'}
-
-  '@suds-cli/tea@0.0.0':
-    resolution: {integrity: sha512-XXupGlwZPAGH14lm+5vKmHyFW+ormz3tCwmi+Ac68HPLJMdoqjvGycXShn84gwu6dtwahLU4V9hh29Cnde8qkQ==}
-    engines: {node: '>=20.0.0'}
-
-  '@suds-cli/viewport@0.0.1-alpha.0':
-    resolution: {integrity: sha512-zYSoA0f5wJOREeWvMTcZlHob7elZ0Y7aBlyFz6Hx+898haRDRgO9TJtMwIj3wGeU8pGOBpdphJ0dvuBCz0LB6A==}
-    engines: {node: '>=20.0.0'}
 
   '@tybys/wasm-util@0.10.1':
     resolution: {integrity: sha512-9tTaPJLSiejZKx+Bmog4uSubteqTvFrVrURwkmHixBo0G4seD0zUxp98E1DzUBJxLQ3NPwXrGKDiVjwx/DpPsg==}
@@ -6108,59 +6068,6 @@ snapshots:
   '@sindresorhus/merge-streams@4.0.0': {}
 
   '@standard-schema/spec@1.0.0': {}
-
-  '@suds-cli/chapstick@0.1.0-alpha.0':
-    dependencies:
-      chalk: 5.6.2
-      string-width: 7.2.0
-      supports-color: 9.4.0
-      terminal-reflowjs: 0.0.0-alpha.0
-
-  '@suds-cli/help@0.1.0-alpha.0':
-    dependencies:
-      '@suds-cli/chapstick': 0.1.0-alpha.0
-      '@suds-cli/key': 0.0.0
-      '@suds-cli/tea': 0.0.0
-      '@suds-cli/viewport': 0.0.1-alpha.0
-
-  '@suds-cli/key@0.0.0': {}
-
-  '@suds-cli/list@0.0.1-alpha.0':
-    dependencies:
-      '@suds-cli/chapstick': 0.1.0-alpha.0
-      '@suds-cli/help': 0.1.0-alpha.0
-      '@suds-cli/key': 0.0.0
-      '@suds-cli/paginator': 0.0.0
-      '@suds-cli/spinner': 0.0.1-alpha.0
-      '@suds-cli/tea': 0.0.0
-      fuzzysort: 2.0.4
-
-  '@suds-cli/paginator@0.0.0':
-    dependencies:
-      '@suds-cli/key': 0.0.0
-      '@suds-cli/tea': 0.0.0
-
-  '@suds-cli/progress@0.0.1-alpha.0':
-    dependencies:
-      '@suds-cli/chapstick': 0.1.0-alpha.0
-      '@suds-cli/tea': 0.0.0
-
-  '@suds-cli/spinner@0.0.1-alpha.0':
-    dependencies:
-      '@suds-cli/chapstick': 0.1.0-alpha.0
-      '@suds-cli/tea': 0.0.0
-
-  '@suds-cli/stopwatch@0.0.0':
-    dependencies:
-      '@suds-cli/tea': 0.0.0
-
-  '@suds-cli/tea@0.0.0': {}
-
-  '@suds-cli/viewport@0.0.1-alpha.0':
-    dependencies:
-      '@suds-cli/chapstick': 0.1.0-alpha.0
-      '@suds-cli/key': 0.0.0
-      '@suds-cli/tea': 0.0.0
 
   '@tybys/wasm-util@0.10.1':
     dependencies:
