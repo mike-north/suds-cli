@@ -343,7 +343,7 @@ describe('FiletreeModel', () => {
     ]
 
     const [withItems] = model.update(new GetDirectoryListingMsg(items))
-    const [inactive] = withItems.setIsActive(false)
+    const inactive = withItems.setIsActive(false)
 
     // Try to navigate when inactive
     const [afterKey] = inactive.update(

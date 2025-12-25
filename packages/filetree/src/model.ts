@@ -247,16 +247,18 @@ export class FiletreeModel {
       const newWidth = msg.width
       const newMax = Math.max(0, Math.min(newHeight - 1, this.files.length - 1))
       
-      // Clamp cursor position if it falls outside new viewport bounds
+      // Clamp cursor position to valid range and viewport bounds
+      const maxValidCursor = Math.max(0, this.files.length - 1)
       const adjustedCursor = Math.min(
-        this.cursor,
-        Math.max(0, this.files.length - 1),
+        Math.min(this.cursor, maxValidCursor),
+        newMax,
       )
       
       // Adjust viewport min to keep cursor visible after resize
+      // If cursor is at the bottom of the viewport, min should be adjusted
       const newMin = Math.min(
-        this.min,
         Math.max(0, adjustedCursor - (newHeight - 1)),
+        adjustedCursor,
       )
 
       return [
@@ -289,6 +291,10 @@ export class FiletreeModel {
     if (msg instanceof KeyMsg) {
       // Move down
       if (matches(msg, this.keyMap.down)) {
+        // Don't navigate if files list is empty
+        if (this.files.length === 0) {
+          return [this, null]
+        }
         const nextCursor = Math.min(this.cursor + 1, this.files.length - 1)
 
         // Adjust viewport if needed
@@ -323,6 +329,10 @@ export class FiletreeModel {
 
       // Move up
       if (matches(msg, this.keyMap.up)) {
+        // Don't navigate if files list is empty
+        if (this.files.length === 0) {
+          return [this, null]
+        }
         const nextCursor = Math.max(this.cursor - 1, 0)
 
         // Adjust viewport if needed
