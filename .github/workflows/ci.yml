@@ -177,3 +177,24 @@ jobs:
           # These tests use happy-dom to simulate browser environment
           cd packages/machine && pnpm test:browser
 
+  all-tests-passed:
+    runs-on: ubuntu-latest
+    needs: [build-and-test, test-graceful-degradation, test-browser]
+    if: always()
+    steps:
+      - name: Check all test jobs succeeded
+        run: |
+          if [ "${{ needs.build-and-test.result }}" != "success" ]; then
+            echo "❌ build-and-test job failed"
+            exit 1
+          fi
+          if [ "${{ needs.test-graceful-degradation.result }}" != "success" ] && [ "${{ needs.test-graceful-degradation.result }}" != "skipped" ]; then
+            echo "❌ test-graceful-degradation job failed"
+            exit 1
+          fi
+          if [ "${{ needs.test-browser.result }}" != "success" ] && [ "${{ needs.test-browser.result }}" != "skipped" ]; then
+            echo "❌ test-browser job failed"
+            exit 1
+          fi
+          echo "✅ All test jobs passed or were appropriately skipped"
+
