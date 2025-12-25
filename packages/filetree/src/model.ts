@@ -245,15 +245,42 @@ export class FiletreeModel {
     if (msg instanceof WindowSizeMsg) {
       const newHeight = msg.height
       const newWidth = msg.width
-      const newMax = Math.max(0, Math.min(newHeight - 1, this.files.length - 1))
+
+      // Clamp cursor to valid range
+      const maxValidCursor = Math.max(0, this.files.length - 1)
+      const newCursor = Math.min(this.cursor, maxValidCursor)
+
+      // Calculate viewport size (can't be larger than file count)
+      const viewportSize = Math.min(newHeight, this.files.length)
+
+      // Adjust min to keep cursor visible within the new viewport
+      // Cursor should be between newMin and newMin + viewportSize - 1
+      let newMin = this.min
+
+      // If cursor is before the viewport, move viewport up
+      if (newCursor < newMin) {
+        newMin = newCursor
+      }
+
+      // If cursor is after the viewport, move viewport down
+      const maxVisibleIndex = newMin + viewportSize - 1
+      if (newCursor > maxVisibleIndex) {
+        newMin = newCursor - viewportSize + 1
+      }
+
+      // Ensure min doesn't go negative
+      newMin = Math.max(0, newMin)
+
+      // Calculate max based on min and viewport size
+      const newMax = Math.min(newMin + viewportSize - 1, this.files.length - 1)
 
       return [
         new FiletreeModel(
-          this.cursor,
+          newCursor,
           this.files,
           this.active,
           this.keyMap,
-          this.min,
+          newMin,
           newMax,
           newHeight,
           newWidth,
@@ -277,6 +304,10 @@ export class FiletreeModel {
     if (msg instanceof KeyMsg) {
       // Move down
       if (matches(msg, this.keyMap.down)) {
+        // Don't navigate if list is empty
+        if (this.files.length === 0) {
+          return [this, null]
+        }
         const nextCursor = Math.min(this.cursor + 1, this.files.length - 1)
 
         // Adjust viewport if needed
@@ -311,6 +342,10 @@ export class FiletreeModel {
 
       // Move up
       if (matches(msg, this.keyMap.up)) {
+        // Don't navigate if list is empty
+        if (this.files.length === 0) {
+          return [this, null]
+        }
         const nextCursor = Math.max(this.cursor - 1, 0)
 
         // Adjust viewport if needed
