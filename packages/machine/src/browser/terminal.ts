@@ -90,7 +90,10 @@ export class XtermTerminalAdapter implements TerminalAdapter {
     if (data.length === 0) {
       return
     }
-    this.terminal.write(data)
+    // Convert lone \n to \r\n for proper terminal line handling
+    // xterm.js requires \r\n for carriage return + line feed
+    const normalized = data.replace(/(?<!\r)\n/g, '\r\n')
+    this.terminal.write(normalized)
   }
 
   getSize(): TerminalSize {

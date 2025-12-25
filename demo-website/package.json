@@ -1,0 +1,26 @@
+{
+  "name": "demo-website",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@suds-cli/chapstick": "workspace:*",
+    "@suds-cli/key": "workspace:*",
+    "@suds-cli/list": "workspace:*",
+    "@suds-cli/machine": "workspace:*",
+    "@suds-cli/progress": "workspace:*",
+    "@suds-cli/spinner": "workspace:*",
+    "@suds-cli/tea": "workspace:*",
+    "@xterm/xterm": "^5.5.0",
+    "@xterm/addon-fit": "^0.10.0"
+  },
+  "devDependencies": {
+    "typescript": "5.8.2",
+    "vite": "^6.0.7"
+  }
+}

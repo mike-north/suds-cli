@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Suds CLI - Interactive Terminal UI Demos</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div id="app">
+      <header class="header">
+        <h1 class="logo">Suds</h1>
+        <p class="tagline">
+          Beautiful terminal UIs in TypeScript, powered by the Elm Architecture
+        </p>
+      </header>
+
+      <main class="main">
+        <section class="demo-selector">
+          <h2>Select a Demo</h2>
+          <div class="demo-buttons" id="demo-buttons">
+            <button class="demo-btn active" data-demo="spinner">
+              <span class="demo-icon">...</span>
+              <span class="demo-name">Spinner</span>
+              <span class="demo-desc">Animated loading indicators</span>
+            </button>
+            <button class="demo-btn" data-demo="progress">
+              <span class="demo-icon">|||||</span>
+              <span class="demo-name">Progress</span>
+              <span class="demo-desc">Animated progress bars</span>
+            </button>
+            <button class="demo-btn" data-demo="list">
+              <span class="demo-icon">[ ]</span>
+              <span class="demo-name">List</span>
+              <span class="demo-desc">Filterable, selectable lists</span>
+            </button>
+          </div>
+        </section>
+
+        <section class="terminal-container">
+          <div class="terminal-header">
+            <div class="terminal-dots">
+              <span class="dot red"></span>
+              <span class="dot yellow"></span>
+              <span class="dot green"></span>
+            </div>
+            <span class="terminal-title" id="terminal-title">spinner-demo</span>
+          </div>
+          <div id="terminal"></div>
+        </section>
+
+        <section class="instructions">
+          <h3>Keyboard Controls</h3>
+          <div id="controls" class="controls">
+            <kbd>s</kbd> <span>Change spinner style</span>
+            <kbd>q</kbd> <span>Quit demo</span>
+          </div>
+          <p class="click-hint">Click inside the terminal to focus</p>
+        </section>
+      </main>
+
+      <footer class="footer">
+        <p>
+          Built with
+          <a
+            href="https://github.com/mike-north/suds-cli"
+            target="_blank"
+            rel="noopener"
+            >suds-cli</a
+          >
+          - A TypeScript port of Bubble Tea
+        </p>
+      </footer>
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
