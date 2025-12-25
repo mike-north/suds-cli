@@ -58,6 +58,16 @@ export function createDefaultContext(): StyleContext {
 }
 
 /**
+ * Set the default StyleContext used when no context is explicitly provided.
+ * This is useful for browser environments (xterm.js) where colors should always be enabled.
+ * @param context - The context to use as default, or undefined to reset to no-colors default
+ * @public
+ */
+export function setDefaultContext(context: StyleContext | undefined): void {
+  defaultContext = context
+}
+
+/**
  * Fluent style builder for terminal strings.
  * @public
  */

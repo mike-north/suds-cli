@@ -3,6 +3,7 @@ packages:
   - examples
   - scripts
   - acceptance-tests
+  - demo-website
 
 onlyBuiltDependencies:
   - esbuild

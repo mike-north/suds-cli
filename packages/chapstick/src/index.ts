@@ -27,7 +27,7 @@ export {
 export { width, clampWidth, wrapWidth, padLines } from './measure.js'
 
 // Style class
-export { Style, createDefaultContext, type StyleKey, type StyleContext } from './style.js'
+export { Style, createDefaultContext, setDefaultContext, type StyleKey, type StyleContext } from './style.js'
 
 // Provider
 export {

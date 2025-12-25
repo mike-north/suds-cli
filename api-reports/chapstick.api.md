@@ -114,6 +114,9 @@ export interface SemanticStyles {
 }
 
 // @public
+export function setDefaultContext(context: StyleContext | undefined): void;
+
+// @public
 export interface Spacing {
     // (undocumented)
     bottom: number;
