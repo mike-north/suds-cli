@@ -9,7 +9,7 @@ Resolve a color input (string or adaptive light/dark) to a hex string when avail
 **Signature:**
 
 ```typescript
-export declare function resolveColor(input?: ColorInput): string | undefined;
+export declare function resolveColor(input: ColorInput | undefined, env: EnvironmentAdapter): string | undefined;
 ```
 
 ## Parameters
@@ -37,12 +37,28 @@ input
 
 </td><td>
 
-[ColorInput](./chapstick.colorinput.md)
+[ColorInput](./chapstick.colorinput.md) \| undefined
 
 
 </td><td>
 
-_(Optional)_
+Color input to resolve
+
+
+</td></tr>
+<tr><td>
+
+env
+
+
+</td><td>
+
+[EnvironmentAdapter](./machine.environmentadapter.md)
+
+
+</td><td>
+
+Environment adapter for detecting terminal background
 
 
 </td></tr>
@@ -51,4 +67,6 @@ _(Optional)_
 **Returns:**
 
 string \| undefined
+
+Resolved color string or undefined
 

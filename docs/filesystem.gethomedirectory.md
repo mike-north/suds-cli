@@ -9,8 +9,45 @@ Returns the user's home directory.
 **Signature:**
 
 ```typescript
-export declare function getHomeDirectory(): string;
+export declare function getHomeDirectory(fs: FileSystemAdapter): string;
 ```
+
+## Parameters
+
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+fs
+
+
+</td><td>
+
+[FileSystemAdapter](./machine.filesystemadapter.md)
+
+
+</td><td>
+
+FileSystem adapter
+
+
+</td></tr>
+</tbody></table>
+
 **Returns:**
 
 string

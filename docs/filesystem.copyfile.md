@@ -9,7 +9,7 @@ Copies a file with timestamp suffix.
 **Signature:**
 
 ```typescript
-export declare function copyFile(name: string): Promise<string>;
+export declare function copyFile(fs: FileSystemAdapter, path: PathAdapter, name: string): Promise<string>;
 ```
 
 ## Parameters
@@ -31,6 +31,38 @@ Description
 
 </th></tr></thead>
 <tbody><tr><td>
+
+fs
+
+
+</td><td>
+
+[FileSystemAdapter](./machine.filesystemadapter.md)
+
+
+</td><td>
+
+FileSystem adapter
+
+
+</td></tr>
+<tr><td>
+
+path
+
+
+</td><td>
+
+[PathAdapter](./machine.pathadapter.md)
+
+
+</td><td>
+
+Path adapter
+
+
+</td></tr>
+<tr><td>
 
 name
 

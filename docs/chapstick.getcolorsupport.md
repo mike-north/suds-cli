@@ -4,14 +4,53 @@
 
 ## getColorSupport() function
 
-Detect terminal color support levels.
+Detect terminal color support levels using an environment adapter.
 
 **Signature:**
 
 ```typescript
-export declare function getColorSupport(): ColorSupport;
+export declare function getColorSupport(env: EnvironmentAdapter): ColorSupport;
 ```
+
+## Parameters
+
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+env
+
+
+</td><td>
+
+[EnvironmentAdapter](./machine.environmentadapter.md)
+
+
+</td><td>
+
+Environment adapter to query color support
+
+
+</td></tr>
+</tbody></table>
+
 **Returns:**
 
-[ColorSupport](./chapstick.colorsupport.md)
+[ColorSupport](./machine.colorsupport.md)
+
+Color support information
 

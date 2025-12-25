@@ -4,7 +4,7 @@
 
 ## Style.render() method
 
-Render the style to a string.
+Render the style to a string. Uses the default no-op context if none was provided.
 
 **Signature:**
 

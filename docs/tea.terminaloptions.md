@@ -37,7 +37,7 @@ Description
 </th></tr></thead>
 <tbody><tr><td>
 
-[input?](./tea.terminaloptions.input.md)
+[platform?](./tea.terminaloptions.platform.md)
 
 
 </td><td>
@@ -45,26 +45,7 @@ Description
 
 </td><td>
 
-NodeJS.ReadableStream
-
-
-</td><td>
-
-_(Optional)_
-
-
-</td></tr>
-<tr><td>
-
-[output?](./tea.terminaloptions.output.md)
-
-
-</td><td>
-
-
-</td><td>
-
-NodeJS.WritableStream
+[PlatformAdapter](./machine.platformadapter.md)
 
 
 </td><td>

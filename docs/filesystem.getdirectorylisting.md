@@ -9,7 +9,7 @@ Returns a list of files and directories within a given directory.
 **Signature:**
 
 ```typescript
-export declare function getDirectoryListing(dir: string, showHidden?: boolean): Promise<DirectoryEntry[]>;
+export declare function getDirectoryListing(fs: FileSystemAdapter, dir: string, showHidden?: boolean): Promise<DirectoryEntry[]>;
 ```
 
 ## Parameters
@@ -31,6 +31,22 @@ Description
 
 </th></tr></thead>
 <tbody><tr><td>
+
+fs
+
+
+</td><td>
+
+[FileSystemAdapter](./machine.filesystemadapter.md)
+
+
+</td><td>
+
+FileSystem adapter
+
+
+</td></tr>
+<tr><td>
 
 dir
 
@@ -66,7 +82,7 @@ _(Optional)_ Whether to include hidden files (starting with .)
 
 **Returns:**
 
-Promise&lt;[DirectoryEntry](./filesystem.directoryentry.md)<!-- -->\[\]&gt;
+Promise&lt;[DirectoryEntry](./machine.directoryentry.md)<!-- -->\[\]&gt;
 
 Array of directory entries
 

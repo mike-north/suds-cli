@@ -37,25 +37,6 @@ Description
 </th></tr></thead>
 <tbody><tr><td>
 
-[input?](./tea.inputoptions.input.md)
-
-
-</td><td>
-
-
-</td><td>
-
-NodeJS.ReadableStream
-
-
-</td><td>
-
-_(Optional)_
-
-
-</td></tr>
-<tr><td>
-
 [onMessage](./tea.inputoptions.onmessage.md)
 
 
@@ -68,6 +49,25 @@ _(Optional)_
 
 
 </td><td>
+
+
+</td></tr>
+<tr><td>
+
+[platform?](./tea.inputoptions.platform.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[PlatformAdapter](./machine.platformadapter.md)
+
+
+</td><td>
+
+_(Optional)_
 
 
 </td></tr>

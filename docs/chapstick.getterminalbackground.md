@@ -4,14 +4,53 @@
 
 ## getTerminalBackground() function
 
-Detect whether the terminal is using a dark or light background. Uses multiple heuristics in order of reliability: 1. COLORFGBG environment variable (most reliable when present) 2. TERM\_BACKGROUND environment variable 3. COLORTERM / TERM\_PROGRAM hints (less reliable)
+Detect whether the terminal is using a dark or light background.
 
 **Signature:**
 
 ```typescript
-export declare function getTerminalBackground(): TerminalBackground;
+export declare function getTerminalBackground(env: EnvironmentAdapter): TerminalBackground;
 ```
+
+## Parameters
+
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+env
+
+
+</td><td>
+
+[EnvironmentAdapter](./machine.environmentadapter.md)
+
+
+</td><td>
+
+Environment adapter to query terminal background
+
+
+</td></tr>
+</tbody></table>
+
 **Returns:**
 
-[TerminalBackground](./chapstick.terminalbackground.md)
+[TerminalBackground](./machine.terminalbackground.md)
+
+Terminal background mode
 

@@ -9,7 +9,7 @@ Calculates size of a directory or file.
 **Signature:**
 
 ```typescript
-export declare function getDirectoryItemSize(itemPath: string): Promise<number>;
+export declare function getDirectoryItemSize(fs: FileSystemAdapter, path: PathAdapter, itemPath: string): Promise<number>;
 ```
 
 ## Parameters
@@ -31,6 +31,38 @@ Description
 
 </th></tr></thead>
 <tbody><tr><td>
+
+fs
+
+
+</td><td>
+
+[FileSystemAdapter](./machine.filesystemadapter.md)
+
+
+</td><td>
+
+FileSystem adapter
+
+
+</td></tr>
+<tr><td>
+
+path
+
+
+</td><td>
+
+[PathAdapter](./machine.pathadapter.md)
+
+
+</td><td>
+
+Path adapter
+
+
+</td></tr>
+<tr><td>
 
 itemPath
 

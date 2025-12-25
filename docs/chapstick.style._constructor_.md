@@ -9,7 +9,7 @@ Constructs a new instance of the `Style` class
 **Signature:**
 
 ```typescript
-constructor(options?: StyleOptions, setKeys?: Set<StyleKey>);
+constructor(options?: StyleOptions, setKeys?: Set<StyleKey>, context?: StyleContext);
 ```
 
 ## Parameters
@@ -54,6 +54,22 @@ setKeys
 </td><td>
 
 Set&lt;[StyleKey](./chapstick.stylekey.md)<!-- -->&gt;
+
+
+</td><td>
+
+_(Optional)_
+
+
+</td></tr>
+<tr><td>
+
+context
+
+
+</td><td>
+
+[StyleContext](./chapstick.stylecontext.md)
 
 
 </td><td>

@@ -467,7 +467,7 @@ Emit a message after a delay.
 </td></tr>
 <tr><td>
 
-[windowSize()](./tea.windowsize.md)
+[windowSize(platform)](./tea.windowsize.md)
 
 
 </td><td>

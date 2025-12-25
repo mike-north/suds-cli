@@ -94,25 +94,6 @@ _(Optional)_
 </td></tr>
 <tr><td>
 
-[input?](./tea.programoptions.input.md)
-
-
-</td><td>
-
-
-</td><td>
-
-NodeJS.ReadableStream
-
-
-</td><td>
-
-_(Optional)_
-
-
-</td></tr>
-<tr><td>
-
 [mouseMode?](./tea.programoptions.mousemode.md)
 
 
@@ -132,7 +113,7 @@ _(Optional)_
 </td></tr>
 <tr><td>
 
-[output?](./tea.programoptions.output.md)
+[platform?](./tea.programoptions.platform.md)
 
 
 </td><td>
@@ -140,7 +121,7 @@ _(Optional)_
 
 </td><td>
 
-NodeJS.WritableStream
+[PlatformAdapter](./machine.platformadapter.md)
 
 
 </td><td>

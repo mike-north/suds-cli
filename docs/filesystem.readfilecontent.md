@@ -9,7 +9,7 @@ Returns the contents of a file.
 **Signature:**
 
 ```typescript
-export declare function readFileContent(name: string): Promise<string>;
+export declare function readFileContent(fs: FileSystemAdapter, name: string): Promise<string>;
 ```
 
 ## Parameters
@@ -31,6 +31,22 @@ Description
 
 </th></tr></thead>
 <tbody><tr><td>
+
+fs
+
+
+</td><td>
+
+[FileSystemAdapter](./machine.filesystemadapter.md)
+
+
+</td><td>
+
+FileSystem adapter
+
+
+</td></tr>
+<tr><td>
 
 name
 

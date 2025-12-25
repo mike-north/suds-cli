@@ -9,7 +9,7 @@ Moves a file or directory.
 **Signature:**
 
 ```typescript
-export declare function moveDirectoryItem(src: string, dst: string): Promise<void>;
+export declare function moveDirectoryItem(fs: FileSystemAdapter, src: string, dst: string): Promise<void>;
 ```
 
 ## Parameters
@@ -31,6 +31,22 @@ Description
 
 </th></tr></thead>
 <tbody><tr><td>
+
+fs
+
+
+</td><td>
+
+[FileSystemAdapter](./machine.filesystemadapter.md)
+
+
+</td><td>
+
+FileSystem adapter
+
+
+</td></tr>
+<tr><td>
 
 src
 

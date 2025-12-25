@@ -9,8 +9,45 @@ Returns the current working directory.
 **Signature:**
 
 ```typescript
-export declare function getWorkingDirectory(): string;
+export declare function getWorkingDirectory(fs: FileSystemAdapter): string;
 ```
+
+## Parameters
+
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+fs
+
+
+</td><td>
+
+[FileSystemAdapter](./machine.filesystemadapter.md)
+
+
+</td><td>
+
+FileSystem adapter
+
+
+</td></tr>
+</tbody></table>
+
 **Returns:**
 
 string

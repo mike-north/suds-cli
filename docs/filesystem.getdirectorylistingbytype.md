@@ -9,7 +9,7 @@ Returns a directory listing based on type (directories \| files).
 **Signature:**
 
 ```typescript
-export declare function getDirectoryListingByType(dir: string, listingType: typeof DirectoriesListingType | typeof FilesListingType, showHidden?: boolean): Promise<DirectoryEntry[]>;
+export declare function getDirectoryListingByType(fs: FileSystemAdapter, dir: string, listingType: typeof DirectoriesListingType | typeof FilesListingType, showHidden?: boolean): Promise<DirectoryEntry[]>;
 ```
 
 ## Parameters
@@ -31,6 +31,22 @@ Description
 
 </th></tr></thead>
 <tbody><tr><td>
+
+fs
+
+
+</td><td>
+
+[FileSystemAdapter](./machine.filesystemadapter.md)
+
+
+</td><td>
+
+FileSystem adapter
+
+
+</td></tr>
+<tr><td>
 
 dir
 
@@ -82,7 +98,7 @@ _(Optional)_ Whether to include hidden files (starting with .)
 
 **Returns:**
 
-Promise&lt;[DirectoryEntry](./filesystem.directoryentry.md)<!-- -->\[\]&gt;
+Promise&lt;[DirectoryEntry](./machine.directoryentry.md)<!-- -->\[\]&gt;
 
 Array of directory entries matching the type
 

@@ -19,6 +19,17 @@ Description
 </th></tr></thead>
 <tbody><tr><td>
 
+[ChapstickStyleProvider](./chapstick.chapstickstyleprovider.md)
+
+
+</td><td>
+
+Implementation using Chapstick's Style class with injected adapters.
+
+
+</td></tr>
+<tr><td>
+
 [Style](./chapstick.style.md)
 
 
@@ -56,23 +67,34 @@ Truncate text to a maximum width per line, ANSI-aware.
 </td></tr>
 <tr><td>
 
-[getColorSupport()](./chapstick.getcolorsupport.md)
+[createDefaultContext()](./chapstick.createdefaultcontext.md)
 
 
 </td><td>
 
-Detect terminal color support levels.
+Create a default StyleContext for layout-only styling (no ANSI colors). This is used internally when no context is provided.
 
 
 </td></tr>
 <tr><td>
 
-[getTerminalBackground()](./chapstick.getterminalbackground.md)
+[getColorSupport(env)](./chapstick.getcolorsupport.md)
 
 
 </td><td>
 
-Detect whether the terminal is using a dark or light background. Uses multiple heuristics in order of reliability: 1. COLORFGBG environment variable (most reliable when present) 2. TERM\_BACKGROUND environment variable 3. COLORTERM / TERM\_PROGRAM hints (less reliable)
+Detect terminal color support levels using an environment adapter.
+
+
+</td></tr>
+<tr><td>
+
+[getTerminalBackground(env)](./chapstick.getterminalbackground.md)
+
+
+</td><td>
+
+Detect whether the terminal is using a dark or light background.
 
 
 </td></tr>
@@ -144,7 +166,7 @@ Place content inside a fixed rectangle with alignment.
 </td></tr>
 <tr><td>
 
-[resolveColor(input)](./chapstick.resolvecolor.md)
+[resolveColor(input, env)](./chapstick.resolvecolor.md)
 
 
 </td><td>
@@ -203,12 +225,12 @@ Characters used to render borders around content.
 </td></tr>
 <tr><td>
 
-[ColorSupport](./chapstick.colorsupport.md)
+[SemanticStyles](./chapstick.semanticstyles.md)
 
 
 </td><td>
 
-Color support levels. The `level` property indicates the maximum color support available.
+Common semantic styles for terminal output.
 
 
 </td></tr>
@@ -225,12 +247,34 @@ Spacing descriptor for padding or margin.
 </td></tr>
 <tr><td>
 
+[StyleContext](./chapstick.stylecontext.md)
+
+
+</td><td>
+
+Context required for rendering styles.
+
+
+</td></tr>
+<tr><td>
+
 [StyleOptions](./chapstick.styleoptions.md)
 
 
 </td><td>
 
 Options used internally to represent a Style.
+
+
+</td></tr>
+<tr><td>
+
+[StyleProvider](./chapstick.styleprovider.md)
+
+
+</td><td>
+
+Provider interface for creating styles. Enables dependency injection for better testability.
 
 
 </td></tr>
@@ -327,17 +371,6 @@ Horizontal alignment options for rendered content.
 </td><td>
 
 Keys that can be explicitly set on a style. Used to track which properties have been set vs using defaults.
-
-
-</td></tr>
-<tr><td>
-
-[TerminalBackground](./chapstick.terminalbackground.md)
-
-
-</td><td>
-
-Detected terminal background mode.
 
 
 </td></tr>

@@ -9,8 +9,45 @@ Emit the current window size.
 **Signature:**
 
 ```typescript
-windowSize: () => Cmd<Msg>
+windowSize: (platform?: PlatformAdapter) => Cmd<Msg>
 ```
+
+## Parameters
+
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+platform
+
+
+</td><td>
+
+[PlatformAdapter](./machine.platformadapter.md)
+
+
+</td><td>
+
+_(Optional)_ Optional platform adapter to get terminal size from
+
+
+</td></tr>
+</tbody></table>
+
 **Returns:**
 
 [Cmd](./tea.cmd.md)<!-- -->&lt;[Msg](./tea.msg.md)<!-- -->&gt;

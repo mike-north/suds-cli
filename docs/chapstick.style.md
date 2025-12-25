@@ -32,7 +32,7 @@ Description
 </th></tr></thead>
 <tbody><tr><td>
 
-[(constructor)(options, setKeys)](./chapstick.style._constructor_.md)
+[(constructor)(options, setKeys, context)](./chapstick.style._constructor_.md)
 
 
 </td><td>
@@ -382,7 +382,21 @@ Check if a property has been explicitly set.
 
 </td><td>
 
-Render the style to a string.
+Render the style to a string. Uses the default no-op context if none was provided.
+
+
+</td></tr>
+<tr><td>
+
+[renderWithContext(text, ctx)](./chapstick.style.renderwithcontext.md)
+
+
+</td><td>
+
+
+</td><td>
+
+Render the style to a string with an explicit context.
 
 
 </td></tr>
@@ -433,6 +447,20 @@ Unset a property, reverting to default behavior.
 
 
 </td><td>
+
+
+</td></tr>
+<tr><td>
+
+[withContext(context)](./chapstick.style.withcontext.md)
+
+
+</td><td>
+
+
+</td><td>
+
+Create a copy of this style with a new context.
 
 
 </td></tr>

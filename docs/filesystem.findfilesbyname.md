@@ -9,7 +9,7 @@ Search for files by name.
 **Signature:**
 
 ```typescript
-export declare function findFilesByName(name: string, dir: string): Promise<{
+export declare function findFilesByName(fs: FileSystemAdapter, path: PathAdapter, name: string, dir: string): Promise<{
     paths: string[];
     entries: DirectoryEntry[];
 }>;
@@ -34,6 +34,38 @@ Description
 
 </th></tr></thead>
 <tbody><tr><td>
+
+fs
+
+
+</td><td>
+
+[FileSystemAdapter](./machine.filesystemadapter.md)
+
+
+</td><td>
+
+FileSystem adapter
+
+
+</td></tr>
+<tr><td>
+
+path
+
+
+</td><td>
+
+[PathAdapter](./machine.pathadapter.md)
+
+
+</td><td>
+
+Path adapter
+
+
+</td></tr>
+<tr><td>
 
 name
 
@@ -69,7 +101,7 @@ The directory to search in
 
 **Returns:**
 
-Promise&lt;{ paths: string\[\]; entries: [DirectoryEntry](./filesystem.directoryentry.md)<!-- -->\[\]; }&gt;
+Promise&lt;{ paths: string\[\]; entries: [DirectoryEntry](./machine.directoryentry.md)<!-- -->\[\]; }&gt;
 
 Object containing arrays of paths and entries
 

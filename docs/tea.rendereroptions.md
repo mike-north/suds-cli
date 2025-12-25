@@ -56,7 +56,7 @@ _(Optional)_
 </td></tr>
 <tr><td>
 
-[output?](./tea.rendereroptions.output.md)
+[platform?](./tea.rendereroptions.platform.md)
 
 
 </td><td>
@@ -64,7 +64,7 @@ _(Optional)_
 
 </td><td>
 
-NodeJS.WritableStream
+[PlatformAdapter](./machine.platformadapter.md)
 
 
 </td><td>

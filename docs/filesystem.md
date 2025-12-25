@@ -19,7 +19,7 @@ Description
 </th></tr></thead>
 <tbody><tr><td>
 
-[copyDirectory(name)](./filesystem.copydirectory.md)
+[copyDirectory(fs, path, name)](./filesystem.copydirectory.md)
 
 
 </td><td>
@@ -30,7 +30,7 @@ Copies a directory recursively with timestamp suffix.
 </td></tr>
 <tr><td>
 
-[copyFile(name)](./filesystem.copyfile.md)
+[copyFile(fs, path, name)](./filesystem.copyfile.md)
 
 
 </td><td>
@@ -41,7 +41,7 @@ Copies a file with timestamp suffix.
 </td></tr>
 <tr><td>
 
-[createDirectory(name)](./filesystem.createdirectory.md)
+[createDirectory(fs, name)](./filesystem.createdirectory.md)
 
 
 </td><td>
@@ -52,7 +52,7 @@ Creates a new directory. Note: Parent directories must exist. Use recursive oper
 </td></tr>
 <tr><td>
 
-[createFile(name)](./filesystem.createfile.md)
+[createFile(fs, name)](./filesystem.createfile.md)
 
 
 </td><td>
@@ -63,7 +63,7 @@ Creates a new file.
 </td></tr>
 <tr><td>
 
-[deleteDirectory(name)](./filesystem.deletedirectory.md)
+[deleteDirectory(fs, name)](./filesystem.deletedirectory.md)
 
 
 </td><td>
@@ -74,7 +74,7 @@ Deletes a directory recursively.
 </td></tr>
 <tr><td>
 
-[deleteFile(name)](./filesystem.deletefile.md)
+[deleteFile(fs, name)](./filesystem.deletefile.md)
 
 
 </td><td>
@@ -85,7 +85,7 @@ Deletes a file.
 </td></tr>
 <tr><td>
 
-[findFilesByName(name, dir)](./filesystem.findfilesbyname.md)
+[findFilesByName(fs, path, name, dir)](./filesystem.findfilesbyname.md)
 
 
 </td><td>
@@ -96,7 +96,7 @@ Search for files by name.
 </td></tr>
 <tr><td>
 
-[getDirectoryItemSize(itemPath)](./filesystem.getdirectoryitemsize.md)
+[getDirectoryItemSize(fs, path, itemPath)](./filesystem.getdirectoryitemsize.md)
 
 
 </td><td>
@@ -107,7 +107,7 @@ Calculates size of a directory or file.
 </td></tr>
 <tr><td>
 
-[getDirectoryListing(dir, showHidden)](./filesystem.getdirectorylisting.md)
+[getDirectoryListing(fs, dir, showHidden)](./filesystem.getdirectorylisting.md)
 
 
 </td><td>
@@ -118,7 +118,7 @@ Returns a list of files and directories within a given directory.
 </td></tr>
 <tr><td>
 
-[getDirectoryListingByType(dir, listingType, showHidden)](./filesystem.getdirectorylistingbytype.md)
+[getDirectoryListingByType(fs, dir, listingType, showHidden)](./filesystem.getdirectorylistingbytype.md)
 
 
 </td><td>
@@ -129,7 +129,7 @@ Returns a directory listing based on type (directories \| files).
 </td></tr>
 <tr><td>
 
-[getHomeDirectory()](./filesystem.gethomedirectory.md)
+[getHomeDirectory(fs)](./filesystem.gethomedirectory.md)
 
 
 </td><td>
@@ -140,7 +140,7 @@ Returns the user's home directory.
 </td></tr>
 <tr><td>
 
-[getWorkingDirectory()](./filesystem.getworkingdirectory.md)
+[getWorkingDirectory(fs)](./filesystem.getworkingdirectory.md)
 
 
 </td><td>
@@ -151,7 +151,7 @@ Returns the current working directory.
 </td></tr>
 <tr><td>
 
-[moveDirectoryItem(src, dst)](./filesystem.movedirectoryitem.md)
+[moveDirectoryItem(fs, src, dst)](./filesystem.movedirectoryitem.md)
 
 
 </td><td>
@@ -162,7 +162,7 @@ Moves a file or directory.
 </td></tr>
 <tr><td>
 
-[readFileContent(name)](./filesystem.readfilecontent.md)
+[readFileContent(fs, name)](./filesystem.readfilecontent.md)
 
 
 </td><td>
@@ -173,7 +173,7 @@ Returns the contents of a file.
 </td></tr>
 <tr><td>
 
-[renameDirectoryItem(src, dst)](./filesystem.renamedirectoryitem.md)
+[renameDirectoryItem(fs, src, dst)](./filesystem.renamedirectoryitem.md)
 
 
 </td><td>
@@ -184,60 +184,12 @@ Renames a file or directory.
 </td></tr>
 <tr><td>
 
-[unzip(name)](./filesystem.unzip.md)
-
-
-</td><td>
-
-Extracts a zip archive.
-
-
-</td></tr>
-<tr><td>
-
-[writeToFile(filePath, content)](./filesystem.writetofile.md)
+[writeToFile(fs, filePath, content)](./filesystem.writetofile.md)
 
 
 </td><td>
 
 Writes content to a file.
-
-
-</td></tr>
-<tr><td>
-
-[zip(name)](./filesystem.zip.md)
-
-
-</td><td>
-
-Zips a file or directory.
-
-
-</td></tr>
-</tbody></table>
-
-## Interfaces
-
-<table><thead><tr><th>
-
-Interface
-
-
-</th><th>
-
-Description
-
-
-</th></tr></thead>
-<tbody><tr><td>
-
-[DirectoryEntry](./filesystem.directoryentry.md)
-
-
-</td><td>
-
-Directory entry type matching Node.js fs.Dirent.
 
 
 </td></tr>

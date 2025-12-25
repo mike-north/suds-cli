@@ -9,7 +9,7 @@ Writes content to a file.
 **Signature:**
 
 ```typescript
-export declare function writeToFile(filePath: string, content: string): Promise<void>;
+export declare function writeToFile(fs: FileSystemAdapter, filePath: string, content: string): Promise<void>;
 ```
 
 ## Parameters
@@ -31,6 +31,22 @@ Description
 
 </th></tr></thead>
 <tbody><tr><td>
+
+fs
+
+
+</td><td>
+
+[FileSystemAdapter](./machine.filesystemadapter.md)
+
+
+</td><td>
+
+FileSystem adapter
+
+
+</td></tr>
+<tr><td>
 
 filePath
 
