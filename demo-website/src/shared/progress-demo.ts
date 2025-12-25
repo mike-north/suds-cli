@@ -1,7 +1,15 @@
-import type { Terminal } from '@xterm/xterm'
-import { createBrowserPlatform } from '@suds-cli/machine/browser'
+/**
+ * Progress Demo - Shared Model
+ *
+ * Controls:
+ *   +/=    - Increase 10%
+ *   -      - Decrease 10%
+ *   r      - Reset to 0%
+ *   g      - Toggle gradient
+ *   q      - Quit
+ */
+
 import {
-  Program,
   KeyMsg,
   quit,
   type Cmd,
@@ -16,20 +24,16 @@ const keys = {
   inc: newBinding({ keys: ['+', '='] }).withHelp('+', 'increase 10%'),
   dec: newBinding({ keys: ['-'] }).withHelp('-', 'decrease 10%'),
   reset: newBinding({ keys: ['r', 'R'] }).withHelp('r', 'reset'),
-  toggleGradient: newBinding({ keys: ['g', 'G'] }).withHelp(
-    'g',
-    'toggle gradient',
-  ),
+  toggleGradient: newBinding({ keys: ['g', 'G'] }).withHelp('g', 'toggle gradient'),
   quit: newBinding({ keys: ['q', 'Q', 'ctrl+c'] }).withHelp('q', 'quit'),
 }
 
-// Styles with browser color support
 const titleStyle = createStyle().bold(true).foreground('#ff79c6')
 const textStyle = createStyle().foreground('#f8f8f2')
 const hintStyle = createStyle().foreground('#6272a4').italic(true)
 const keyStyle = createStyle().foreground('#bd93f9').bold(true)
 
-class ProgressDemoModel implements Model<Msg, ProgressDemoModel> {
+export class ProgressDemoModel implements Model<Msg, ProgressDemoModel> {
   readonly progress: ProgressModel
   readonly useGradient: boolean
   readonly initCmd: Cmd<Msg> | null
@@ -105,10 +109,10 @@ class ProgressDemoModel implements Model<Msg, ProgressDemoModel> {
 
     const help = hintStyle.render(
       [
-        `${keyStyle.render('[+]')} / ${keyStyle.render('[=]')} +10%`,
+        `${keyStyle.render('[+]')} +10%`,
         `${keyStyle.render('[-]')} -10%`,
         `${keyStyle.render('[r]')} reset`,
-        `${keyStyle.render('[g]')} toggle ${mode.toLowerCase()}`,
+        `${keyStyle.render('[g]')} toggle`,
         `${keyStyle.render('[q]')} quit`,
       ].join(' | '),
     )
@@ -129,18 +133,5 @@ class ProgressDemoModel implements Model<Msg, ProgressDemoModel> {
   private setPercent(value: number): [ProgressDemoModel, Cmd<Msg>] {
     const [next, cmd] = this.progress.setPercent(value)
     return [new ProgressDemoModel(next, this.useGradient), cmd]
-  }
-}
-
-export function createProgressDemo(terminal: Terminal): { stop: () => void } {
-  const platform = createBrowserPlatform({ terminal })
-  const program = new Program(new ProgressDemoModel(), { platform })
-
-  program.run().catch(console.error)
-
-  return {
-    stop: () => {
-      program.kill()
-    },
   }
 }

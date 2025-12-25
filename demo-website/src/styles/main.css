@@ -177,7 +177,7 @@ body {
 }
 
 #terminal {
-  height: 350px;
+  height: 450px;
   padding: 0.5rem;
   background: var(--terminal-bg);
 }
@@ -220,6 +220,28 @@ kbd {
   font-size: 0.85rem;
   color: var(--text-secondary);
   font-style: italic;
+}
+
+.click-hint kbd {
+  font-style: normal;
+}
+
+.quick-commands {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.quick-commands code {
+  display: inline-block;
+  padding: 0.35rem 0.75rem;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--success);
 }
 
 .footer {

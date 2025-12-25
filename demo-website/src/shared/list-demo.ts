@@ -1,24 +1,29 @@
-import type { Terminal } from '@xterm/xterm'
-import { createBrowserPlatform } from '@suds-cli/machine/browser'
-import { DefaultItem, ListModel } from '@suds-cli/list'
-import { newBinding, matches } from '@suds-cli/key'
+/**
+ * List Demo - Shared Model
+ *
+ * Controls:
+ *   j/k    - Move selection
+ *   /      - Start filtering
+ *   enter  - Accept filter
+ *   esc    - Clear filter
+ *   ?      - Toggle help
+ *   q      - Quit
+ */
+
 import {
   KeyMsg,
-  Program,
   WindowSizeMsg,
   quit,
   type Cmd,
   type Model,
   type Msg,
 } from '@suds-cli/tea'
+import { DefaultItem, ListModel } from '@suds-cli/list'
+import { newBinding, matches } from '@suds-cli/key'
 import { createStyle } from '../browser-style'
 
-const quitBinding = newBinding({ keys: ['q', 'Q', 'ctrl+c'] }).withHelp(
-  'q',
-  'quit',
-)
+const quitBinding = newBinding({ keys: ['q', 'Q', 'ctrl+c'] }).withHelp('q', 'quit')
 
-// Styles with browser color support
 const headerStyle = createStyle().bold(true).foreground('#8be9fd')
 const helpStyle = createStyle().foreground('#6272a4').italic(true)
 
@@ -35,7 +40,7 @@ const items = [
   new DefaultItem('Performance', 'Optimize rendering'),
 ]
 
-class ListDemoModel implements Model<Msg, ListDemoModel> {
+export class ListDemoModel implements Model<Msg, ListDemoModel> {
   readonly list: ListModel<DefaultItem>
 
   constructor(list?: ListModel<DefaultItem>) {
@@ -77,21 +82,8 @@ class ListDemoModel implements Model<Msg, ListDemoModel> {
   }
 
   view(): string {
-    const header = headerStyle.render('Suds Demo - List')
-    const help = helpStyle.render("Try '/', pgup/pgdn, ?, and q to quit.")
+    const header = headerStyle.render('Suds List Demo')
+    const help = helpStyle.render("Try '/', j/k, pgup/pgdn, ? | [q] quit")
     return [header, '', this.list.view(), '', help, ''].join('\n')
-  }
-}
-
-export function createListDemo(terminal: Terminal): { stop: () => void } {
-  const platform = createBrowserPlatform({ terminal })
-  const program = new Program(new ListDemoModel(), { platform })
-
-  program.run().catch(console.error)
-
-  return {
-    stop: () => {
-      program.kill()
-    },
   }
 }
