@@ -1,0 +1,56 @@
+{
+  "name": "@suds-cli/dsl",
+  "description": "Declarative DSL for building CLI applications with minimal ceremony",
+  "version": "0.1.0-alpha.0",
+  "dependencies": {
+    "@suds-cli/chapstick": "workspace:*",
+    "@suds-cli/key": "workspace:*",
+    "@suds-cli/spinner": "workspace:*",
+    "@suds-cli/tea": "workspace:*",
+    "@suds-cli/textinput": "workspace:*"
+  },
+  "devDependencies": {
+    "tsd": "^0.31.2",
+    "typescript": "5.8.2",
+    "vitest": "^4.0.16"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "scripts": {
+    "build": "tsup",
+    "check": "pnpm run check:lint-ts && pnpm run test",
+    "check:api-report": "pnpm run generate:api-report",
+    "check:eslint": "pnpm run check:lint-ts",
+    "check:lint-ts": "eslint \"{src,test}/**/*.{ts,tsx}\"",
+    "fix:lint-ts": "eslint \"{src,test}/**/*.{ts,tsx}\" --fix",
+    "generate:api-report": "api-extractor run --local",
+    "test": "pnpm run test:ts && pnpm run test:types",
+    "test:ts": "vitest run --passWithNoTests",
+    "test:types": "tsd"
+  },
+  "sideEffects": false,
+  "tsd": {
+    "directory": "test-d"
+  },
+  "type": "module",
+  "types": "./dist/index.d.ts"
+}

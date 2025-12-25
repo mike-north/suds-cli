@@ -4,6 +4,7 @@
   "type": "module",
   "dependencies": {
     "@suds-cli/code": "workspace:*",
+    "@suds-cli/dsl": "workspace:*",
     "@suds-cli/icons": "workspace:*",
     "@suds-cli/markdown": "workspace:*",
     "@suds-cli/statusbar": "workspace:*",
@@ -45,6 +46,7 @@
     "paginator": "tsx paginator-demo.ts",
     "progress": "tsx progress-demo.ts",
     "spinner": "tsx spinner-demo.ts",
+    "spinner-dsl": "tsx spinner-demo-dsl.ts",
     "start": "tsx progress-demo.ts",
     "statusbar": "tsx statusbar-demo.ts",
     "stopwatch": "tsx stopwatch-demo.ts",
