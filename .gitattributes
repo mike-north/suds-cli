@@ -3,3 +3,5 @@
 
 api-reports/*.api.md linguist-generated=true
 docs/** linguist-generated=true
+# Track GIF files with git-lfs
+*.gif filter=lfs diff=lfs merge=lfs -text
