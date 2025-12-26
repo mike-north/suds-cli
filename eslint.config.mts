@@ -16,8 +16,6 @@ export default defineConfig(
       },
     },
     plugins: {
-      // @ts-expect-error - @api-extractor-tools/eslint-plugin types don't match ESLint's Plugin type, but works at runtime
-      '@api-extractor-tools': apiExtractorPlugin,
       // @ts-expect-error - fixupPluginRules adapts old plugin format but types don't reflect this
       tsdoc: fixupPluginRules(tsdocPlugin),
     },
