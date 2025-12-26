@@ -1,21 +1,21 @@
 /**
  * Boba Demo: Filetree
  *
- * Demonstrates @boba-cli/filetree for browsing files with metadata.
+ * Demonstrates \@boba-cli/filetree for browsing files with metadata.
  *
  * Controls:
  *   j / k / arrows  - move selection up/down
  *   q / ctrl+c / esc - quit
  */
 
-import type { PlatformAdapter } from '@boba-cli/machine'
-import { Style } from '@boba-cli/chapstick'
-import { getIcon, getIndicator, type IconResult } from '@boba-cli/icons'
-import { newBinding, matches } from '@boba-cli/key'
+import type { PlatformAdapter } from '\@boba-cli/machine'
+import { Style } from '\@boba-cli/chapstick'
+import { getIcon, getIndicator, type IconResult } from '\@boba-cli/icons'
+import { newBinding, matches } from '\@boba-cli/key'
 import {
   NodeFileSystemAdapter,
   NodePathAdapter,
-} from '@boba-cli/machine/node'
+} from '\@boba-cli/machine/node'
 import {
   KeyMsg,
   Program,

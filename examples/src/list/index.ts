@@ -1,7 +1,7 @@
 /**
  * Boba Demo: List
  *
- * Demonstrates @boba-cli/list with filtering, pagination, and help.
+ * Demonstrates \@boba-cli/list with filtering, pagination, and help.
  *
  * Controls (built into the list keymap):
  *   j / k / arrows  - move selection
@@ -14,10 +14,10 @@
  *   q               - quit
  */
 
-import type { PlatformAdapter } from '@boba-cli/machine'
-import { Style } from '@boba-cli/chapstick'
-import { DefaultItem, ListModel } from '@boba-cli/list'
-import { newBinding, matches } from '@boba-cli/key'
+import type { PlatformAdapter } from '\@boba-cli/machine'
+import { Style } from '\@boba-cli/chapstick'
+import { DefaultItem, ListModel } from '\@boba-cli/list'
+import { newBinding, matches } from '\@boba-cli/key'
 import {
   KeyMsg,
   Program,
@@ -26,7 +26,7 @@ import {
   type Cmd,
   type Model,
   type Msg,
-} from '@boba-cli/tea'
+} from '\@boba-cli/tea'
 
 const quitBinding = newBinding({ keys: ['q', 'Q', 'ctrl+c'] }).withHelp(
   'q',

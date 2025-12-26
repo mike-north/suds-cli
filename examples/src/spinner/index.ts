@@ -1,7 +1,7 @@
 /**
  * Boba Demo: Spinner with Styling
  *
- * Demonstrates @boba/tea, @boba/spinner, @boba/chapstick, and @boba/key
+ * Demonstrates \@boba/tea, \@boba/spinner, \@boba/chapstick, and \@boba/key
  * working together.
  *
  * Controls:
@@ -10,7 +10,7 @@
  *   Ctrl+C - Quit
  */
 
-import type { PlatformAdapter } from '@boba-cli/machine'
+import type { PlatformAdapter } from '\@boba-cli/machine'
 import {
   Program,
   KeyMsg,
@@ -30,9 +30,9 @@ import {
   meter,
   ellipsis,
   type Spinner,
-} from '@boba-cli/spinner'
-import { Style } from '@boba-cli/chapstick'
-import { newBinding, matches } from '@boba-cli/key'
+} from '\@boba-cli/spinner'
+import { Style } from '\@boba-cli/chapstick'
+import { newBinding, matches } from '\@boba-cli/key'
 
 // Available spinners to cycle through
 const SPINNERS: { name: string; spinner: Spinner }[] = [

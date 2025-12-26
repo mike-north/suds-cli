@@ -1,7 +1,7 @@
 /**
  * Boba Demo: Table
  *
- * Demonstrates @boba-cli/table with scrolling and selection.
+ * Demonstrates \@boba-cli/table with scrolling and selection.
  *
  * Controls:
  *   j / ↓        - move down
@@ -15,10 +15,10 @@
  *   q            - quit
  */
 
-import type { PlatformAdapter } from '@boba-cli/machine'
-import { Style, borderStyles } from '@boba-cli/chapstick'
-import { newBinding, matches } from '@boba-cli/key'
-import { TableModel } from '@boba-cli/table'
+import type { PlatformAdapter } from '\@boba-cli/machine'
+import { Style, borderStyles } from '\@boba-cli/chapstick'
+import { newBinding, matches } from '\@boba-cli/key'
+import { TableModel } from '\@boba-cli/table'
 import {
   KeyMsg,
   Program,
@@ -27,7 +27,7 @@ import {
   type Cmd,
   type Model,
   type Msg,
-} from '@boba-cli/tea'
+} from '\@boba-cli/tea'
 
 const quitBinding = newBinding({ keys: ['q', 'Q', 'ctrl+c'] }).withHelp(
   'q',

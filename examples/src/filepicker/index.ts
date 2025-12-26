@@ -1,7 +1,7 @@
 /**
  * Boba Demo: Filepicker
  *
- * Demonstrates @boba-cli/filepicker for browsing the filesystem.
+ * Demonstrates \@boba-cli/filepicker for browsing the filesystem.
  *
  * Controls (built into the filepicker keymap):
  *   j / k / arrows  - move selection
@@ -16,10 +16,10 @@ import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 
-import type { PlatformAdapter } from '@boba-cli/machine'
-import { Style } from '@boba-cli/chapstick'
-import { newBinding, matches } from '@boba-cli/key'
-import { NodeFileSystemAdapter, NodePathAdapter } from '@boba-cli/machine/node'
+import type { PlatformAdapter } from '\@boba-cli/machine'
+import { Style } from '\@boba-cli/chapstick'
+import { newBinding, matches } from '\@boba-cli/key'
+import { NodeFileSystemAdapter, NodePathAdapter } from '\@boba-cli/machine/node'
 import {
   KeyMsg,
   Program,

@@ -11,7 +11,7 @@
  *   q or ctrl+c to quit (handled here)
  */
 
-import type { PlatformAdapter } from '@boba-cli/machine'
+import type { PlatformAdapter } from '\@boba-cli/machine'
 import {
   Program,
   KeyMsg,
@@ -19,10 +19,10 @@ import {
   type Cmd,
   type Msg,
   type Model,
-} from '@boba-cli/tea'
-import { TextareaModel } from '@boba-cli/textarea'
-import { Style } from '@boba-cli/chapstick'
-import { newBinding, matches } from '@boba-cli/key'
+} from '\@boba-cli/tea'
+import { TextareaModel } from '\@boba-cli/textarea'
+import { Style } from '\@boba-cli/chapstick'
+import { newBinding, matches } from '\@boba-cli/key'
 
 const keys = {
   quit: newBinding({ keys: ['q', 'Q', 'ctrl+c'] }).withHelp('q', 'quit'),

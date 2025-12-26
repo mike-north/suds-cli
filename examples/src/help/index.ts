@@ -1,7 +1,7 @@
 /**
  * Boba Demo: Help
  *
- * Shows how @boba-cli/help renders short and full help from key bindings.
+ * Shows how \@boba-cli/help renders short and full help from key bindings.
  *
  * Controls:
  *   k / ↑   - move up
@@ -11,7 +11,7 @@
  *   q       - quit
  */
 
-import type { PlatformAdapter } from '@boba-cli/machine'
+import type { PlatformAdapter } from '\@boba-cli/machine'
 import {
   Program,
   KeyMsg,
@@ -19,9 +19,9 @@ import {
   type Cmd,
   type Model,
   type Msg,
-} from '@boba-cli/tea'
-import { HelpModel, type KeyMap } from '@boba-cli/help'
-import { newBinding, matches, type Binding } from '@boba-cli/key'
+} from '\@boba-cli/tea'
+import { HelpModel, type KeyMap } from '\@boba-cli/help'
+import { newBinding, matches, type Binding } from '\@boba-cli/key'
 
 const items = ['Apples', 'Bananas', 'Cherries', 'Dates', 'Elderberry']
 

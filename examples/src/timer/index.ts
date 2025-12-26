@@ -1,7 +1,7 @@
 /**
  * Boba Demo: Timer countdown
  *
- * Demonstrates @boba-cli/tea, @boba-cli/timer, @boba-cli/chapstick, and @boba-cli/key.
+ * Demonstrates \@boba-cli/tea, \@boba-cli/timer, \@boba-cli/chapstick, and \@boba-cli/key.
  *
  * Controls:
  *   space  - Start/stop
@@ -9,7 +9,7 @@
  *   q      - Quit
  */
 
-import type { PlatformAdapter } from '@boba-cli/machine'
+import type { PlatformAdapter } from '\@boba-cli/machine'
 import {
   Program,
   KeyMsg,
@@ -17,10 +17,10 @@ import {
   type Cmd,
   type Model,
   type Msg,
-} from '@boba-cli/tea'
-import { TimerModel, TickMsg, TimeoutMsg, StartStopMsg } from '@boba-cli/timer'
-import { Style } from '@boba-cli/chapstick'
-import { newBinding, matches } from '@boba-cli/key'
+} from '\@boba-cli/tea'
+import { TimerModel, TickMsg, TimeoutMsg, StartStopMsg } from '\@boba-cli/timer'
+import { Style } from '\@boba-cli/chapstick'
+import { newBinding, matches } from '\@boba-cli/key'
 
 const keys = {
   // Space renders as " " from KeyMsg.toString()

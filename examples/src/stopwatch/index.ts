@@ -1,7 +1,7 @@
 /**
  * Boba Demo: Stopwatch
  *
- * Demonstrates @boba-cli/tea, @boba-cli/stopwatch, @boba-cli/chapstick, and @boba-cli/key.
+ * Demonstrates \@boba-cli/tea, \@boba-cli/stopwatch, \@boba-cli/chapstick, and \@boba-cli/key.
  *
  * Controls:
  *   space  - Start/stop
@@ -9,7 +9,7 @@
  *   q      - Quit
  */
 
-import type { PlatformAdapter } from '@boba-cli/machine'
+import type { PlatformAdapter } from '\@boba-cli/machine'
 import {
   Program,
   KeyMsg,
@@ -23,9 +23,9 @@ import {
   TickMsg,
   StartStopMsg,
   ResetMsg,
-} from '@boba-cli/stopwatch'
-import { Style } from '@boba-cli/chapstick'
-import { newBinding, matches } from '@boba-cli/key'
+} from '\@boba-cli/stopwatch'
+import { Style } from '\@boba-cli/chapstick'
+import { newBinding, matches } from '\@boba-cli/key'
 
 const keys = {
   toggle: newBinding({ keys: ['space'] }).withHelp('space', 'start/stop'),

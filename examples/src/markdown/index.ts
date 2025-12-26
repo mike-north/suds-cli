@@ -1,7 +1,7 @@
 /**
  * Boba Demo: Markdown Viewer
  *
- * Demonstrates @boba-cli/markdown with file rendering and scrolling.
+ * Demonstrates \@boba-cli/markdown with file rendering and scrolling.
  *
  * Controls:
  *   j / ↓      - scroll down 1 line
@@ -14,11 +14,11 @@
  *   q / ctrl+c / esc - quit
  */
 
-import type { PlatformAdapter } from '@boba-cli/machine'
-import { Style } from '@boba-cli/chapstick'
-import { newBinding, matches } from '@boba-cli/key'
-import { MarkdownModel } from '@boba-cli/markdown'
-import { NodeFileSystemAdapter } from '@boba-cli/machine/node'
+import type { PlatformAdapter } from '\@boba-cli/machine'
+import { Style } from '\@boba-cli/chapstick'
+import { newBinding, matches } from '\@boba-cli/key'
+import { MarkdownModel } from '\@boba-cli/markdown'
+import { NodeFileSystemAdapter } from '\@boba-cli/machine/node'
 import {
   KeyMsg,
   Program,

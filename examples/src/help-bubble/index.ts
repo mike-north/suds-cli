@@ -13,8 +13,8 @@
  *   q / ctrl+c / esc - quit
  */
 
-import type { PlatformAdapter } from '@boba-cli/machine'
-import { Style } from '@boba-cli/chapstick'
+import type { PlatformAdapter } from '\@boba-cli/machine'
+import { Style } from '\@boba-cli/chapstick'
 import {
   Program,
   KeyMsg,
@@ -23,9 +23,9 @@ import {
   type Cmd,
   type Model,
   type Msg,
-} from '@boba-cli/tea'
-import { HelpBubble, type Entry } from '@boba-cli/help'
-import { matches, newBinding } from '@boba-cli/key'
+} from '\@boba-cli/tea'
+import { HelpBubble, type Entry } from '\@boba-cli/help'
+import { matches, newBinding } from '\@boba-cli/key'
 
 const quitBinding = newBinding({ keys: ['q', 'ctrl+c', 'esc'] })
 

@@ -52,6 +52,10 @@ export default defineConfig(
         project: ['./examples/tsconfig.json'],
       },
     },
+    rules: {
+      // Disable no-useless-escape for examples - TSDoc requires escaping @ in comments
+      'no-useless-escape': 'off',
+    },
   },
   // Apply API Extractor rules to public npm packages (packages with api-extractor.json)
   // Note: extra-release-tag rule exists in source but not yet published in 0.1.0-alpha.0

@@ -1,7 +1,7 @@
 /**
  * Boba Demo: Text Input
  *
- * Demonstrates @boba-cli/textinput with validation, placeholder,
+ * Demonstrates \@boba-cli/textinput with validation, placeholder,
  * width-constrained scrolling, and styles.
  *
  * Controls:
@@ -10,7 +10,7 @@
  *   ctrl+c or q to quit
  */
 
-import type { PlatformAdapter } from '@boba-cli/machine'
+import type { PlatformAdapter } from '\@boba-cli/machine'
 import {
   Program,
   KeyMsg,
@@ -23,9 +23,9 @@ import {
   TextInputModel,
   EchoMode,
   type ValidateFunc,
-} from '@boba-cli/textinput'
-import { Style } from '@boba-cli/chapstick'
-import { newBinding, matches } from '@boba-cli/key'
+} from '\@boba-cli/textinput'
+import { Style } from '\@boba-cli/chapstick'
+import { newBinding, matches } from '\@boba-cli/key'
 
 const keys = {
   quit: newBinding({ keys: ['q', 'Q', 'ctrl+c'] }).withHelp('q', 'quit'),

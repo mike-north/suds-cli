@@ -1,7 +1,7 @@
 /**
  * Boba DSL Demo: Text Input
  *
- * Demonstrates the @boba-cli/dsl package with text input validation.
+ * Demonstrates the \@boba-cli/dsl package with text input validation.
  *
  * Compare this to textinput-demo.ts to see the reduction in boilerplate:
  * - Original: 128 lines with class, manual state management, complex update logic
@@ -16,7 +16,7 @@
  *   ctrl+c or q to quit
  */
 
-import type { PlatformAdapter } from '@boba-cli/machine'
+import type { PlatformAdapter } from '\@boba-cli/machine'
 import {
   createApp,
   textInput,
@@ -25,7 +25,7 @@ import {
   Style,
   EchoMode,
   type ValidateFunc,
-} from '@boba-cli/dsl'
+} from '\@boba-cli/dsl'
 
 // Styles
 const titleStyle = new Style().bold(true).foreground('#00d7ff')

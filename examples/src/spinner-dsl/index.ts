@@ -1,7 +1,7 @@
 /**
  * Boba DSL Demo: Spinner with Styling
  *
- * Demonstrates the @boba-cli/dsl package for building CLI apps
+ * Demonstrates the \@boba-cli/dsl package for building CLI apps
  * with minimal ceremony.
  *
  * Compare this to spinner-demo.ts to see the reduction in boilerplate:
@@ -13,8 +13,8 @@
  *   Ctrl+C - Quit
  */
 
-import type { PlatformAdapter } from '@boba-cli/machine'
-import { createApp, spinner, vstack, hstack, text, Style } from '@boba-cli/dsl'
+import type { PlatformAdapter } from '\@boba-cli/machine'
+import { createApp, spinner, vstack, hstack, text, Style } from '\@boba-cli/dsl'
 import { makeDemoHeader } from '../constants.js'
 // Styles
 const spinnerStyle = new Style().foreground('#50fa7b')

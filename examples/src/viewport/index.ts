@@ -1,7 +1,7 @@
 /**
  * Boba Demo: Scrollable Viewport
  *
- * Demonstrates @boba/viewport with keyboard and mouse scrolling.
+ * Demonstrates \@boba/viewport with keyboard and mouse scrolling.
  *
  * Controls:
  *   j / ↓      - scroll down 1 line
@@ -14,10 +14,10 @@
  *   q          - quit
  */
 
-import type { PlatformAdapter } from '@boba-cli/machine'
-import { Style } from '@boba-cli/chapstick'
-import { newBinding, matches } from '@boba-cli/key'
-import { ViewportModel } from '@boba-cli/viewport'
+import type { PlatformAdapter } from '\@boba-cli/machine'
+import { Style } from '\@boba-cli/chapstick'
+import { newBinding, matches } from '\@boba-cli/key'
+import { ViewportModel } from '\@boba-cli/viewport'
 import {
   KeyMsg,
   Program,
@@ -26,7 +26,7 @@ import {
   type Cmd,
   type Model,
   type Msg,
-} from '@boba-cli/tea'
+} from '\@boba-cli/tea'
 
 const quitBinding = newBinding({ keys: ['q', 'Q', 'ctrl+c'] }).withHelp(
   'q',

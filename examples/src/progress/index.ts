@@ -1,7 +1,7 @@
 /**
  * Boba Demo: Animated Progress Bar
  *
- * Demonstrates @boba-cli/progress with spring animation, gradient fill,
+ * Demonstrates \@boba-cli/progress with spring animation, gradient fill,
  * and keyboard controls.
  *
  * Controls:
@@ -13,7 +13,7 @@
  *   Ctrl+C  - Quit
  */
 
-import type { PlatformAdapter } from '@boba-cli/machine'
+import type { PlatformAdapter } from '\@boba-cli/machine'
 import {
   Program,
   KeyMsg,
@@ -21,10 +21,10 @@ import {
   type Cmd,
   type Model,
   type Msg,
-} from '@boba-cli/tea'
-import { newBinding, matches } from '@boba-cli/key'
-import { Style } from '@boba-cli/chapstick'
-import { ProgressModel } from '@boba-cli/progress'
+} from '\@boba-cli/tea'
+import { newBinding, matches } from '\@boba-cli/key'
+import { Style } from '\@boba-cli/chapstick'
+import { ProgressModel } from '\@boba-cli/progress'
 
 const keys = {
   inc: newBinding({ keys: ['+', '='] }).withHelp('+', 'increase 10%'),

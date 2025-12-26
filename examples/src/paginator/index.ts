@@ -10,7 +10,7 @@
  *   q / Ctrl+C - quit
  */
 
-import type { PlatformAdapter } from '@boba-cli/machine'
+import type { PlatformAdapter } from '\@boba-cli/machine'
 import {
   Program,
   KeyMsg,
@@ -18,9 +18,9 @@ import {
   type Cmd,
   type Model,
   type Msg,
-} from '@boba-cli/tea'
-import { PaginatorModel, PaginatorType } from '@boba-cli/paginator'
-import { newBinding, matches } from '@boba-cli/key'
+} from '\@boba-cli/tea'
+import { PaginatorModel, PaginatorType } from '\@boba-cli/paginator'
+import { newBinding, matches } from '\@boba-cli/key'
 
 // Sample data to paginate
 const ITEMS = Array.from({ length: 23 }, (_, i) => `Item ${i + 1}`)

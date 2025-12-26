@@ -1,7 +1,7 @@
 /**
  * Boba Demo: Statusbar
  *
- * Demonstrates @boba-cli/tea, @boba-cli/statusbar, @boba-cli/chapstick, and @boba-cli/key.
+ * Demonstrates \@boba-cli/tea, \@boba-cli/statusbar, \@boba-cli/chapstick, and \@boba-cli/key.
  *
  * Controls:
  *   q      - Quit
@@ -9,7 +9,7 @@
  *   esc    - Quit
  */
 
-import type { PlatformAdapter } from '@boba-cli/machine'
+import type { PlatformAdapter } from '\@boba-cli/machine'
 import {
   Program,
   KeyMsg,
@@ -18,10 +18,10 @@ import {
   type Cmd,
   type Model,
   type Msg,
-} from '@boba-cli/tea'
-import { StatusbarModel, Height } from '@boba-cli/statusbar'
-import { Style, joinVertical } from '@boba-cli/chapstick'
-import { newBinding, matches } from '@boba-cli/key'
+} from '\@boba-cli/tea'
+import { StatusbarModel, Height } from '\@boba-cli/statusbar'
+import { Style, joinVertical } from '\@boba-cli/chapstick'
+import { newBinding, matches } from '\@boba-cli/key'
 
 // Keybindings
 const keys = {
