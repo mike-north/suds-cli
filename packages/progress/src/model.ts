@@ -12,7 +12,6 @@ import { interpolateColor } from './gradient.js'
 
 const FPS = 60
 const FRAME_MS = Math.round(1000 / FPS)
-const DEFAULT_ENV = createDefaultContext().env
 const DEFAULT_WIDTH = 40
 const DEFAULT_FULL = '█'
 const DEFAULT_EMPTY = '░'
@@ -57,11 +56,19 @@ function settle(percent: number, target: number, velocity: number): boolean {
   return dist < SETTLE_DISTANCE && Math.abs(velocity) < SETTLE_VELOCITY
 }
 
+/**
+ * Lazily get the current default environment.
+ * This is called at render time to respect any context set via setDefaultContext().
+ */
+function getDefaultEnv() {
+  return createDefaultContext().env
+}
+
 function resolvedColor(
   color: ColorInput | undefined,
   fallback: string,
 ): string {
-  return resolveColor(color, DEFAULT_ENV) ?? fallback
+  return resolveColor(color, getDefaultEnv()) ?? fallback
 }
 
 /**
@@ -145,10 +152,10 @@ export class ProgressModel {
     this.percentageStyle = options.percentageStyle ?? new Style()
 
     const start = options.gradientStart
-      ? resolveColor(options.gradientStart, DEFAULT_ENV)
+      ? resolveColor(options.gradientStart, getDefaultEnv())
       : undefined
     const end = options.gradientEnd
-      ? resolveColor(options.gradientEnd, DEFAULT_ENV)
+      ? resolveColor(options.gradientEnd, getDefaultEnv())
       : undefined
     this.gradientStart = start
     this.gradientEnd = end
