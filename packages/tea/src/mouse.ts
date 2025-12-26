@@ -54,9 +54,7 @@ const mouseSGRRegex = /(\d+);(\d+);(\d+)([Mm])/
 const mouseEventX10Len = 6
 const x10MouseByteOffset = 32
 
-/**
- * @public
- */
+/** @internal */
 export function parseMouse(
   buffer: Uint8Array,
   allowMoreData: boolean,

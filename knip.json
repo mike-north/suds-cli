@@ -11,13 +11,21 @@
     "unzipper"
   ],
   "ignoreFiles": [
-    "./examples/filetree/**/*",
+    "./examples/src/filetree/mock-project/**/*",
     "./examples/src/code/program.ts",
-    "./examples/src/filetree/mock-project/**/*"
+    "./packages/dsl/examples/**/*"
   ],
+  "ignoreExportsUsedInFile": true,
   "ignoreBinaries": ["test:graceful-degradation", "test:browser"],
   "workspaces": {
     ".": {
+      "paths": {
+        "@": ["src/index.ts"],
+        "@/*": ["src/*"]
+      }
+    },
+    "examples": {
+      "entry": ["src/*/index.ts", "src/*/cli.ts"],
       "paths": {
         "@": ["src/index.ts"],
         "@/*": ["src/*"]

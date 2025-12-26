@@ -4,11 +4,25 @@
   "version": "0.1.0-alpha.1",
   "dependencies": {
     "@boba-cli/chapstick": "workspace:*",
+    "@boba-cli/code": "workspace:*",
+    "@boba-cli/filepicker": "workspace:*",
+    "@boba-cli/filetree": "workspace:*",
+    "@boba-cli/help": "workspace:*",
     "@boba-cli/key": "workspace:*",
+    "@boba-cli/list": "workspace:*",
     "@boba-cli/machine": "workspace:*",
+    "@boba-cli/markdown": "workspace:*",
+    "@boba-cli/paginator": "workspace:*",
+    "@boba-cli/progress": "workspace:*",
     "@boba-cli/spinner": "workspace:*",
+    "@boba-cli/statusbar": "workspace:*",
+    "@boba-cli/stopwatch": "workspace:*",
+    "@boba-cli/table": "workspace:*",
     "@boba-cli/tea": "workspace:*",
-    "@boba-cli/textinput": "workspace:*"
+    "@boba-cli/textarea": "workspace:*",
+    "@boba-cli/textinput": "workspace:*",
+    "@boba-cli/timer": "workspace:*",
+    "@boba-cli/viewport": "workspace:*"
   },
   "devDependencies": {
     "tsd": "^0.31.2",

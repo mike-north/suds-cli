@@ -10,7 +10,7 @@ interface SpringConfig {
 }
 
 /**
- * @public
+ * @internal
  * Minimal damped spring integrator (ported from harmonica).
  * Stores its own position/velocity and integrates using a simple
  * damped harmonic oscillator step.

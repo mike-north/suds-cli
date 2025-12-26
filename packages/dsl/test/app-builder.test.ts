@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from 'vitest'
 import { createApp, AppBuilder } from '../src/app-builder.js'
 import { text, vstack } from '../src/view/nodes.js'
 import type { ComponentBuilder } from '../src/types.js'
-import type { Cmd, Msg } from '@boba-cli/tea'
+import { KeyMsg, KeyType, type Cmd, type Msg } from '@boba-cli/tea'
 
 // Mock component builder for testing
 function createMockComponent<M>(initialModel: M): ComponentBuilder<M> {
@@ -315,5 +315,212 @@ describe('EventContext', () => {
   it('provides state to handlers', () => {
     // Test that handlers receive correct state is covered by integration tests
     expect(true).toBe(true)
+  })
+})
+
+// Helper to create KeyMsg for testing
+function keyMsg(runes: string): KeyMsg {
+  // Space is a special key type
+  if (runes === ' ') {
+    return new KeyMsg({
+      type: KeyType.Space,
+      runes: '',
+      alt: false,
+      paste: false,
+    })
+  }
+  return new KeyMsg({
+    type: KeyType.Runes,
+    runes,
+    alt: false,
+    paste: false,
+  })
+}
+
+describe('EventContext.sendToComponent', () => {
+  // Create a mock component with a mutable counter
+  interface CounterModel {
+    count: number
+    increment(): [CounterModel, Cmd<Msg>]
+    setCount(n: number): [CounterModel, Cmd<Msg>]
+  }
+
+  function createCounterComponent(initial: number): ComponentBuilder<CounterModel> {
+    return {
+      init: () => {
+        const model: CounterModel = {
+          count: initial,
+          increment() {
+            return [{ ...this, count: this.count + 1 }, null]
+          },
+          setCount(n: number) {
+            return [{ ...this, count: n }, null]
+          },
+        }
+        return [model, null]
+      },
+      update: (model: CounterModel, _msg: Msg) => [model, null],
+      view: (model: CounterModel) => `Count: ${model.count}`,
+    }
+  }
+
+  it('allows handlers to update component models', () => {
+    const app = createApp()
+      .component('counter', createCounterComponent(0))
+      .onKey(' ', ({ sendToComponent }) => {
+        sendToComponent('counter', (model) => model.increment())
+      })
+      .view(({ components }) => components.counter)
+      .build()
+
+    const model = app.getModel()
+    model.init()
+
+    // Initial view
+    expect(model.view()).toContain('Count: 0')
+
+    // Simulate key press
+    const [nextModel] = model.update(keyMsg(' '))
+    expect(nextModel.view()).toContain('Count: 1')
+  })
+
+  it('allows calling component methods with arguments', () => {
+    const app = createApp()
+      .component('counter', createCounterComponent(0))
+      .onKey('1', ({ sendToComponent }) => {
+        sendToComponent('counter', (model) => model.setCount(10))
+      })
+      .view(({ components }) => components.counter)
+      .build()
+
+    const model = app.getModel()
+    model.init()
+
+    expect(model.view()).toContain('Count: 0')
+
+    const [nextModel] = model.update(keyMsg('1'))
+    expect(nextModel.view()).toContain('Count: 10')
+  })
+
+  it('allows updating multiple components in one handler', () => {
+    const app = createApp()
+      .component('counter1', createCounterComponent(0))
+      .component('counter2', createCounterComponent(100))
+      .onKey(' ', ({ sendToComponent }) => {
+        sendToComponent('counter1', (model) => model.increment())
+        sendToComponent('counter2', (model) => model.increment())
+      })
+      .view(({ components }) => vstack(components.counter1, components.counter2))
+      .build()
+
+    const model = app.getModel()
+    model.init()
+
+    expect(model.view()).toContain('Count: 0')
+    expect(model.view()).toContain('Count: 100')
+
+    const [nextModel] = model.update(keyMsg(' '))
+    expect(nextModel.view()).toContain('Count: 1')
+    expect(nextModel.view()).toContain('Count: 101')
+  })
+
+  it('works together with state updates', () => {
+    const app = createApp()
+      .state({ userCount: 0 })
+      .component('counter', createCounterComponent(0))
+      .onKey(' ', ({ state, update, sendToComponent }) => {
+        update({ userCount: state.userCount + 1 })
+        sendToComponent('counter', (model) => model.increment())
+      })
+      .view(({ state, components }) =>
+        vstack(text(`User: ${state.userCount}`), components.counter),
+      )
+      .build()
+
+    const model = app.getModel()
+    model.init()
+
+    expect(model.view()).toContain('User: 0')
+    expect(model.view()).toContain('Count: 0')
+
+    const [nextModel] = model.update(keyMsg(' '))
+    expect(nextModel.view()).toContain('User: 1')
+    expect(nextModel.view()).toContain('Count: 1')
+  })
+
+  it('handles non-existent component keys gracefully', () => {
+    const app = createApp()
+      .component('counter', createCounterComponent(0))
+      .onKey(' ', ({ sendToComponent }) => {
+        // Try to update a component that doesn't exist
+        sendToComponent('nonexistent' as never, (_model: never) => {
+          throw new Error('Should not be called')
+        })
+      })
+      .view(({ components }) => components.counter)
+      .build()
+
+    const model = app.getModel()
+    model.init()
+
+    // Should not throw
+    expect(() => {
+      model.update(keyMsg(' '))
+    }).not.toThrow()
+  })
+
+  it('batches commands from multiple component updates', () => {
+    const mockCmd1 = vi.fn()
+    const mockCmd2 = vi.fn()
+
+    interface CmdModel {
+      executeCmd(): [CmdModel, Cmd<Msg>]
+    }
+
+    const createCmdComponent = (cmd: Cmd<Msg>): ComponentBuilder<CmdModel> => ({
+      init: () => {
+        const model: CmdModel = {
+          executeCmd() {
+            return [this, cmd]
+          },
+        }
+        return [model, null]
+      },
+      update: (model: CmdModel, _msg: Msg) => [model, null],
+      view: (_model: CmdModel) => 'cmd',
+    })
+
+    const app = createApp()
+      .component('cmd1', createCmdComponent(mockCmd1 as unknown as Cmd<Msg>))
+      .component('cmd2', createCmdComponent(mockCmd2 as unknown as Cmd<Msg>))
+      .onKey(' ', ({ sendToComponent }) => {
+        sendToComponent('cmd1', (model) => model.executeCmd())
+        sendToComponent('cmd2', (model) => model.executeCmd())
+      })
+      .view(() => text('test'))
+      .build()
+
+    const model = app.getModel()
+    model.init()
+
+    const [, cmd] = model.update(keyMsg(' '))
+    expect(cmd).not.toBeNull()
+  })
+
+  it('returns same model if no components updated', () => {
+    const app = createApp()
+      .component('counter', createCounterComponent(0))
+      .onKey(' ', () => {
+        // Handler does nothing
+      })
+      .view(({ components }) => components.counter)
+      .build()
+
+    const model = app.getModel()
+    model.init()
+
+    const [nextModel] = model.update(keyMsg(' '))
+    // Should return same instance if nothing changed
+    expect(nextModel).toBe(model)
   })
 })

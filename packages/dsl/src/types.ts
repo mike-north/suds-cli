@@ -190,10 +190,11 @@ export interface ComponentBuilder<M> {
  *
  * @remarks
  * The event context provides access to the current application state and
- * component views, along with methods to update state or quit the application.
- * It's passed to handlers registered via {@link AppBuilder.onKey}.
+ * component views, along with methods to update state, interact with components,
+ * or quit the application. It's passed to handlers registered via {@link AppBuilder.onKey}.
  *
  * @example
+ * Basic usage:
  * ```typescript
  * createApp()
  *   .state({ count: 0 })
@@ -201,6 +202,16 @@ export interface ComponentBuilder<M> {
  *     update({ count: state.count + 1 })
  *   })
  *   .onKey('q', ({ quit }) => quit())
+ * ```
+ *
+ * @example
+ * Interacting with components:
+ * ```typescript
+ * createApp()
+ *   .component('progress', progress())
+ *   .onKey('space', ({ sendToComponent }) => {
+ *     sendToComponent('progress', (model) => model.setPercent(0.5))
+ *   })
  * ```
  *
  * @typeParam State - The application state type
@@ -227,6 +238,39 @@ export interface EventContext<State, Components extends Record<string, unknown>>
    * Quit the application gracefully.
    */
   quit(): void
+  /**
+   * Send a message to a specific component by calling a function with the component's model.
+   *
+   * @remarks
+   * This method allows event handlers to interact with component models directly
+   * while maintaining the TEA pattern. The callback function receives the current
+   * component model and should return a tuple of [nextModel, command], following
+   * the standard TEA update signature.
+   *
+   * The component will be updated with the returned model and any commands will
+   * be executed. This is the recommended way to call methods like `setPercent()`
+   * on progress bars or `setText()` on text inputs.
+   *
+   * @example
+   * ```typescript
+   * // Update a progress bar
+   * sendToComponent('progress', (model) => model.setPercent(0.75))
+   *
+   * // Chain multiple updates
+   * onKey('space', ({ sendToComponent }) => {
+   *   sendToComponent('progress', (m) => m.setPercent(0.5))
+   *   sendToComponent('input', (m) => m.setText('Hello'))
+   * })
+   * ```
+   *
+   * @typeParam K - The component key from the Components record
+   * @param key - The unique key of the component to update
+   * @param fn - Function that receives the component model and returns [nextModel, command]
+   */
+  sendToComponent<K extends keyof Components>(
+    key: K,
+    fn: (model: Components[K]) => [Components[K], Cmd<Msg>],
+  ): void
 }
 
 /**

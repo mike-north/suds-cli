@@ -325,12 +325,17 @@ class GeneratedModel<State, Components extends Record<string, unknown>>
   update(msg: Msg): [GeneratedModel<State, Components>, Cmd<Msg>] {
     // Check key handlers first
     if (msg instanceof KeyMsg) {
-      for (const { keys, handler } of this.#keyHandlers) {
+      for (const { keys, handler} of this.#keyHandlers) {
         const binding = newBinding({ keys })
         if (matches(msg, binding)) {
           // Create event context and call handler
           let nextUserState = this.#userState
           let shouldQuit = false
+          const componentUpdates: Array<{
+            key: string
+            model: unknown
+            cmd: Cmd<Msg>
+          }> = []
 
           const ctx: EventContext<State, Components> = {
             state: this.#userState,
@@ -344,6 +349,17 @@ class GeneratedModel<State, Components extends Record<string, unknown>>
             quit: () => {
               shouldQuit = true
             },
+            sendToComponent: (key, fn) => {
+              const currentModel = this.#componentModels.get(key as string)
+              if (currentModel !== undefined) {
+                const [nextModel, cmd] = fn(currentModel as Components[typeof key])
+                componentUpdates.push({
+                  key: key as string,
+                  model: nextModel,
+                  cmd,
+                })
+              }
+            },
           }
 
           handler(ctx)
@@ -352,8 +368,33 @@ class GeneratedModel<State, Components extends Record<string, unknown>>
             return [this, teaQuit()]
           }
 
-          if (nextUserState !== this.#userState) {
-            return [this.#withUserState(nextUserState), null]
+          // Apply any component updates
+          const stateChanged = nextUserState !== this.#userState
+          const componentsChanged = componentUpdates.length > 0
+
+          if (stateChanged || componentsChanged) {
+            const newComponentModels = new Map(this.#componentModels)
+            const cmds: Cmd<Msg>[] = []
+
+            for (const { key, model, cmd } of componentUpdates) {
+              newComponentModels.set(key, model)
+              if (cmd) {
+                cmds.push(cmd)
+              }
+            }
+
+            const next = new GeneratedModel(
+              nextUserState,
+              Array.from(this.#componentBuilders.entries()).map(([key, builder]) => ({
+                key,
+                builder,
+              })),
+              this.#keyHandlers,
+              this.#viewFn,
+              newComponentModels,
+            )
+
+            return [next, cmds.length > 0 ? batch(...cmds) : null]
           }
 
           return [this, null]
@@ -426,18 +467,5 @@ class GeneratedModel<State, Components extends Record<string, unknown>>
     }
 
     return views as { [K in keyof Components]: ComponentView }
-  }
-
-  #withUserState(newUserState: State): GeneratedModel<State, Components> {
-    return new GeneratedModel(
-      newUserState,
-      Array.from(this.#componentBuilders.entries()).map(([key, builder]) => ({
-        key,
-        builder,
-      })),
-      this.#keyHandlers,
-      this.#viewFn,
-      this.#componentModels,
-    )
   }
 }

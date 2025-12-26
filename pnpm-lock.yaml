@@ -394,21 +394,63 @@ importers:
       '@boba-cli/chapstick':
         specifier: workspace:*
         version: link:../chapstick
+      '@boba-cli/code':
+        specifier: workspace:*
+        version: link:../code
+      '@boba-cli/filepicker':
+        specifier: workspace:*
+        version: link:../filepicker
+      '@boba-cli/filetree':
+        specifier: workspace:*
+        version: link:../filetree
+      '@boba-cli/help':
+        specifier: workspace:*
+        version: link:../help
       '@boba-cli/key':
         specifier: workspace:*
         version: link:../key
+      '@boba-cli/list':
+        specifier: workspace:*
+        version: link:../list
       '@boba-cli/machine':
         specifier: workspace:*
         version: link:../machine
+      '@boba-cli/markdown':
+        specifier: workspace:*
+        version: link:../markdown
+      '@boba-cli/paginator':
+        specifier: workspace:*
+        version: link:../paginator
+      '@boba-cli/progress':
+        specifier: workspace:*
+        version: link:../progress
       '@boba-cli/spinner':
         specifier: workspace:*
         version: link:../spinner
+      '@boba-cli/statusbar':
+        specifier: workspace:*
+        version: link:../statusbar
+      '@boba-cli/stopwatch':
+        specifier: workspace:*
+        version: link:../stopwatch
+      '@boba-cli/table':
+        specifier: workspace:*
+        version: link:../table
       '@boba-cli/tea':
         specifier: workspace:*
         version: link:../tea
+      '@boba-cli/textarea':
+        specifier: workspace:*
+        version: link:../textarea
       '@boba-cli/textinput':
         specifier: workspace:*
         version: link:../textinput
+      '@boba-cli/timer':
+        specifier: workspace:*
+        version: link:../timer
+      '@boba-cli/viewport':
+        specifier: workspace:*
+        version: link:../viewport
     devDependencies:
       tsd:
         specifier: ^0.31.2

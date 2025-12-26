@@ -26,7 +26,7 @@ function rgbToHex({ r, g, b }: RGB): string {
 }
 
 /**
- * @public
+ * @internal
  * Linearly interpolate between two hex colors in RGB space.
  * Returns the first color if parsing fails.
  */

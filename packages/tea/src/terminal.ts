@@ -23,9 +23,7 @@ export interface TerminalOptions {
   platform?: PlatformAdapter
 }
 
-/**
- * @public
- */
+/** @public Controller for terminal state management. */
 export class TerminalController {
   private rawMode = false
   private altScreen = false
