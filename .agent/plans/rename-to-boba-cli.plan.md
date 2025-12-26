@@ -314,6 +314,6 @@ After completion, verify:
 
 ## Notes
 
-- The emoji in README changes from 🧋 (soap/suds) to 🧋 (boba tea)
+- The emoji in README changes from 🧼 (soap/suds) to 🧋 (boba tea)
 - Some descriptions mentioning "Suds" should change to "Boba"
 - The theme stays consistent: Bubble Tea framework port, now named "Boba" (bubble tea drink)

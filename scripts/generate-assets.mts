@@ -1131,7 +1131,7 @@ async function main(): Promise<void> {
   const model = new AppModel({ tapes })
 
   // Create program with explicit Node.js platform
-  const teaProgram = new Program(model, {
+  const program = new Program(model, {
     altScreen: false,
     platform: createNodePlatform(),
   })
@@ -1140,11 +1140,11 @@ async function main(): Promise<void> {
   if (opts.all || opts.example.length > 0) {
     // Use a small delay to let the program initialize
     setTimeout(() => {
-      teaProgram.send(new StartGeneratingMsg(tapes))
+      program.send(new StartGeneratingMsg(tapes))
     }, 10)
   }
 
-  await teaProgram.run()
+  await program.run()
 
   // Exit with error code if any generation failed
   if (hasFailure) {
