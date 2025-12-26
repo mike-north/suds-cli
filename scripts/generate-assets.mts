@@ -7,6 +7,7 @@
  *
  * Requirements:
  *   - VHS: https://github.com/charmbracelet/vhs
+ *   - ffmpeg: https://ffmpeg.org (required by VHS)
  *   - gifsicle: https://github.com/kohler/gifsicle
  *
  * Usage:
@@ -36,6 +37,7 @@ import {
   type Model,
   type Msg,
 } from '@boba-cli/tea'
+import { createNodePlatform } from '@boba-cli/machine/node'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
@@ -818,6 +820,30 @@ async function main(): Promise<void> {
     process.exit(1)
   }
 
+  // Check for ttyd (required by VHS for terminal emulation)
+  if (!commandExists('ttyd')) {
+    printStatic('\n✗ Error: ttyd is not installed or not in PATH\n', 'red')
+    printStatic('ttyd is required by VHS for terminal emulation.', 'yellow')
+    printStatic('Install ttyd using one of the following methods:\n')
+    printStatic('  # macOS (Homebrew)')
+    printStatic('  brew install ttyd\n')
+    printStatic('  # See: https://github.com/tsl0922/ttyd\n')
+    process.exit(1)
+  }
+
+  // Check for ffmpeg (required by VHS for recording)
+  if (!commandExists('ffmpeg')) {
+    printStatic('\n✗ Error: ffmpeg is not installed or not in PATH\n', 'red')
+    printStatic('ffmpeg is required by VHS to generate recordings.', 'yellow')
+    printStatic('Install ffmpeg using one of the following methods:\n')
+    printStatic('  # macOS (Homebrew)')
+    printStatic('  brew install ffmpeg\n')
+    printStatic('  # Linux (apt)')
+    printStatic('  sudo apt install ffmpeg\n')
+    printStatic('  # See: https://ffmpeg.org/download.html\n')
+    process.exit(1)
+  }
+
   // Check for gifsicle (required for compression)
   if (!commandExists('gifsicle')) {
     printStatic('\n✗ Error: gifsicle is not installed or not in PATH\n', 'red')
@@ -856,8 +882,8 @@ async function main(): Promise<void> {
   // Create model
   const model = new AppModel({ tapes })
 
-  // Create program
-  const program = new Program(model, { altScreen: false })
+  // Create program with explicit Node.js platform
+  const program = new Program(model, { altScreen: false, platform: createNodePlatform() })
 
   // For non-interactive mode, send StartGeneratingMsg after init
   if (runAll || requestedDemos.length > 0) {

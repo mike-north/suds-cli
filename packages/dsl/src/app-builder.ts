@@ -15,6 +15,7 @@ import type {
   KeyHandler,
   ViewFunction,
   ComponentView,
+  RunOptions,
 } from './types.js'
 import { render } from './view/renderer.js'
 import { componentView } from './view/nodes.js'
@@ -238,8 +239,8 @@ export class AppBuilder<
     const model = new GeneratedModel(initialState, components, keyHandlers, viewFn)
 
     return {
-      async run() {
-        const program = new Program(model)
+      async run(options: RunOptions) {
+        const program = new Program(model, { platform: options.platform })
         const result = await program.run()
         return { state: result.model.getUserState() }
       },

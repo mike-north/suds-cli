@@ -20,6 +20,7 @@ import {
 } from '@boba-cli/tea'
 import { PaginatorModel, PaginatorType } from '@boba-cli/paginator'
 import { newBinding, matches } from '@boba-cli/key'
+import { createNodePlatform } from '@boba-cli/machine/node'
 
 // Sample data to paginate
 const ITEMS = Array.from({ length: 23 }, (_, i) => `Item ${i + 1}`)
@@ -123,7 +124,7 @@ class PaginatorDemo implements Model<Msg, PaginatorDemo> {
 
 async function main() {
   console.clear()
-  const program = new Program(new PaginatorDemo())
+  const program = new Program(new PaginatorDemo(), { platform: createNodePlatform() })
   await program.run()
 }
 

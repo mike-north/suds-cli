@@ -32,6 +32,7 @@ import {
 } from '@boba-cli/spinner'
 import { Style } from '@boba-cli/chapstick'
 import { newBinding, matches } from '@boba-cli/key'
+import { createNodePlatform } from '@boba-cli/machine/node'
 
 // Available spinners to cycle through
 const SPINNERS: { name: string; spinner: Spinner }[] = [
@@ -139,7 +140,7 @@ class DemoModel implements Model<Msg, DemoModel> {
 // Run the demo
 async function main() {
   console.clear()
-  const program = new Program(new DemoModel())
+  const program = new Program(new DemoModel(), { platform: createNodePlatform() })
   await program.run()
 }
 

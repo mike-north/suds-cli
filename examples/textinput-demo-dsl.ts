@@ -25,6 +25,7 @@ import {
   EchoMode,
   type ValidateFunc,
 } from '@boba-cli/dsl'
+import { createNodePlatform } from '@boba-cli/machine/node'
 
 // Styles
 const titleStyle = new Style().bold(true).foreground('#00d7ff')
@@ -75,7 +76,7 @@ const app = createApp()
 
 async function main() {
   console.clear()
-  await app.run()
+  await app.run({ platform: createNodePlatform() })
 }
 
 main().catch(console.error)

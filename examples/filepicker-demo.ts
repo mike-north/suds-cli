@@ -18,7 +18,7 @@ import { join } from 'node:path'
 
 import { Style } from '@boba-cli/chapstick'
 import { newBinding, matches } from '@boba-cli/key'
-import { NodeFileSystemAdapter, NodePathAdapter } from '@boba-cli/machine/node'
+import { NodeFileSystemAdapter, NodePathAdapter, createNodePlatform } from '@boba-cli/machine/node'
 import {
   KeyMsg,
   Program,
@@ -140,7 +140,7 @@ async function main(): Promise<void> {
 
   try {
     console.clear()
-    const program = new Program(new DemoModel(demoDir))
+    const program = new Program(new DemoModel(demoDir), { platform: createNodePlatform() })
     await program.run()
   } finally {
     // Clean up the demo directory

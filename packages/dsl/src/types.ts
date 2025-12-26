@@ -1,4 +1,20 @@
 import type { Cmd, Model, Msg } from '@boba-cli/tea'
+import type { PlatformAdapter } from '@boba-cli/machine'
+
+/**
+ * Options for running an application.
+ * @public
+ */
+export interface RunOptions {
+  /**
+   * Platform adapter to use.
+   *
+   * @remarks
+   * For Node.js, use `createNodePlatform()` from `@boba-cli/machine/node`.
+   * For browser with xterm.js, use `createBrowserPlatform({ terminal })` from `@boba-cli/machine/browser`.
+   */
+  platform: PlatformAdapter
+}
 
 /**
  * View node types for the view DSL.
@@ -264,9 +280,11 @@ export type ViewFunction<State, Components extends Record<string, unknown>> = (c
 export interface App<State, _Components extends Record<string, unknown>> {
   /**
    * Run the application and block until it quits.
+   *
+   * @param options - Run configuration including platform adapter
    * @returns A promise resolving to the final application state
    */
-  run(): Promise<{ state: State }>
+  run(options: RunOptions): Promise<{ state: State }>
   /**
    * Get the underlying TEA model (escape hatch for advanced use cases).
    * @returns The generated TEA Model from `@boba-cli/tea`

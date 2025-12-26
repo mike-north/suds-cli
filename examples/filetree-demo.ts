@@ -14,6 +14,7 @@ import { newBinding, matches } from '@boba-cli/key'
 import {
   NodeFileSystemAdapter,
   NodePathAdapter,
+  createNodePlatform,
 } from '@boba-cli/machine/node'
 import {
   KeyMsg,
@@ -184,7 +185,7 @@ class DemoModel implements Model<Msg, DemoModel> {
 
 async function main(): Promise<void> {
   console.clear()
-  const program = new Program(new DemoModel())
+  const program = new Program(new DemoModel(), { platform: createNodePlatform() })
   await program.run()
 }
 

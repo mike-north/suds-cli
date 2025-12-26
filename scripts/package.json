@@ -5,6 +5,7 @@
     "@boba-cli/chapstick": "workspace:*",
     "@boba-cli/key": "workspace:*",
     "@boba-cli/list": "workspace:*",
+    "@boba-cli/machine": "workspace:*",
     "@boba-cli/progress": "workspace:*",
     "@boba-cli/spinner": "workspace:*",
     "@boba-cli/stopwatch": "workspace:*",

@@ -9,6 +9,7 @@ export type {
   EventContext,
   KeyHandler,
   LayoutNode,
+  RunOptions,
   TextNode,
   ViewFunction,
   ViewNode,

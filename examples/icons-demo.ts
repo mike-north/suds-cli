@@ -19,6 +19,7 @@ import {
   type Model,
   type Msg,
 } from '@boba-cli/tea'
+import { createNodePlatform } from '@boba-cli/machine/node'
 
 const quitBinding = newBinding({ keys: ['q', 'ctrl+c', 'esc'] })
 
@@ -166,7 +167,7 @@ class IconsDemo implements Model<Msg, IconsDemo> {
 
 async function main(): Promise<void> {
   console.clear()
-  const program = new Program(new IconsDemo())
+  const program = new Program(new IconsDemo(), { platform: createNodePlatform() })
   await program.run()
 }
 

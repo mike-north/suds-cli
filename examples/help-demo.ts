@@ -21,6 +21,7 @@ import {
 } from '@boba-cli/tea'
 import { HelpModel, type KeyMap } from '@boba-cli/help'
 import { newBinding, matches, type Binding } from '@boba-cli/key'
+import { createNodePlatform } from '@boba-cli/machine/node'
 
 const items = ['Apples', 'Bananas', 'Cherries', 'Dates', 'Elderberry']
 
@@ -128,7 +129,7 @@ class HelpDemo implements Model<Msg, HelpDemo> {
 
 async function main() {
   console.clear()
-  const program = new Program(new HelpDemo())
+  const program = new Program(new HelpDemo(), { platform: createNodePlatform() })
   await program.run()
 }
 

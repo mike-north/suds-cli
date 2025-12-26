@@ -225,6 +225,12 @@ export function indexOfString(bytes: Uint8Array, needle: string, fromIndex?: num
 export type InputHandler = (data: Uint8Array) => void;
 
 // @public
+export function isBrowserEnvironment(): boolean;
+
+// @public
+export function isNodeEnvironment(): boolean;
+
+// @public
 export const ITALIC = "\u001B[3m";
 
 // @public

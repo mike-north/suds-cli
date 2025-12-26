@@ -27,6 +27,7 @@ import {
   type Model,
   type Msg,
 } from '@boba-cli/tea'
+import { createNodePlatform } from '@boba-cli/machine/node'
 
 const quitBinding = newBinding({ keys: ['q', 'Q', 'ctrl+c'] }).withHelp(
   'q',
@@ -118,7 +119,7 @@ class DemoModel implements Model<Msg, DemoModel> {
 
 async function main(): Promise<void> {
   console.clear()
-  const program = new Program(new DemoModel())
+  const program = new Program(new DemoModel(), { platform: createNodePlatform() })
   await program.run()
 }
 

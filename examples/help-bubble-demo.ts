@@ -24,6 +24,7 @@ import {
 } from '@boba-cli/tea'
 import { HelpBubble, type Entry } from '@boba-cli/help'
 import { matches, newBinding } from '@boba-cli/key'
+import { createNodePlatform } from '@boba-cli/machine/node'
 
 const quitBinding = newBinding({ keys: ['q', 'ctrl+c', 'esc'] })
 
@@ -101,7 +102,7 @@ class HelpBubbleDemo implements Model<Msg, HelpBubbleDemo> {
 
 async function main() {
   console.clear()
-  const program = new Program(new HelpBubbleDemo())
+  const program = new Program(new HelpBubbleDemo(), { platform: createNodePlatform() })
   await program.run()
 }
 

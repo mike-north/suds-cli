@@ -5,6 +5,7 @@
   "dependencies": {
     "@boba-cli/chapstick": "workspace:*",
     "@boba-cli/key": "workspace:*",
+    "@boba-cli/machine": "workspace:*",
     "@boba-cli/spinner": "workspace:*",
     "@boba-cli/tea": "workspace:*",
     "@boba-cli/textinput": "workspace:*"

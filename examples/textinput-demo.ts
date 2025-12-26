@@ -25,6 +25,7 @@ import {
 } from '@boba-cli/textinput'
 import { Style } from '@boba-cli/chapstick'
 import { newBinding, matches } from '@boba-cli/key'
+import { createNodePlatform } from '@boba-cli/machine/node'
 
 const keys = {
   quit: newBinding({ keys: ['q', 'Q', 'ctrl+c'] }).withHelp('q', 'quit'),
@@ -120,7 +121,7 @@ class DemoModel implements Model<Msg, DemoModel> {
 
 async function main() {
   console.clear()
-  const program = new Program(new DemoModel())
+  const program = new Program(new DemoModel(), { platform: createNodePlatform() })
   await program.run()
 }
 
