@@ -1,5 +1,6 @@
 import * as eslint from '@eslint/js'
 import { defineConfig } from 'eslint/config'
+import { fixupPluginRules } from '@eslint/compat'
 
 import * as tsdocPlugin from 'eslint-plugin-tsdoc'
 import tseslint from 'typescript-eslint'
@@ -14,8 +15,8 @@ export default defineConfig(
       },
     },
     plugins: {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- plugin has no types
-      tsdoc: tsdocPlugin,
+      // @ts-expect-error - fixupPluginRules adapts old plugin format but types don't reflect this
+      tsdoc: fixupPluginRules(tsdocPlugin),
     },
     rules: {
       '@typescript-eslint/no-unused-vars': [
@@ -55,8 +56,7 @@ export default defineConfig(
             },
             {
               group: ['fs', 'fs/*'],
-              message:
-                'Use @boba-cli/machine FileSystemAdapter instead of fs.',
+              message: 'Use @boba-cli/machine FileSystemAdapter instead of fs.',
             },
             {
               group: ['path'],
@@ -105,8 +105,7 @@ export default defineConfig(
           paths: [
             {
               name: 'chalk',
-              message:
-                'Use @boba-cli/machine StyleAdapter instead of chalk.',
+              message: 'Use @boba-cli/machine StyleAdapter instead of chalk.',
             },
             {
               name: 'supports-color',
