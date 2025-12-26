@@ -327,11 +327,12 @@ export class ProgressModel {
     const denominator = this.scaleGradient
       ? Math.max(1, filledWidth - 1)
       : Math.max(1, totalWidth - 1)
+    const ctx = createDefaultContext()
 
     for (let i = 0; i < filledWidth; i++) {
       const t = filledWidth === 1 ? 0.5 : i / denominator
       const color = interpolateColor(this.gradientStart, this.gradientEnd, t)
-      parts.push(new Style().foreground(color).render(this.full))
+      parts.push(new Style({}, undefined, ctx).foreground(color).render(this.full))
     }
 
     return parts.join('')
@@ -339,13 +340,15 @@ export class ProgressModel {
 
   private renderSolid(filledWidth: number): string {
     if (filledWidth <= 0) return ''
-    const styled = new Style().foreground(this.fullColor).render(this.full)
+    const ctx = createDefaultContext()
+    const styled = new Style({}, undefined, ctx).foreground(this.fullColor).render(this.full)
     return styled.repeat(filledWidth)
   }
 
   private renderEmpty(emptyWidth: number): string {
     if (emptyWidth <= 0) return ''
-    const styled = new Style().foreground(this.emptyColor).render(this.empty)
+    const ctx = createDefaultContext()
+    const styled = new Style({}, undefined, ctx).foreground(this.emptyColor).render(this.empty)
     return styled.repeat(emptyWidth)
   }
 

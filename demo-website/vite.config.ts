@@ -14,6 +14,12 @@ export default defineConfig({
       external: [/^@boba-cli\/machine\/node/, /^node:/],
     },
   },
+  resolve: {
+    // Deduplicate workspace packages to ensure single module instances
+    // This is critical for shared state like setDefaultContext() to work
+    // across the demo-website and the component packages
+    dedupe: ['@boba-cli/chapstick', '@boba-cli/machine', '@boba-cli/tea'],
+  },
   server: {
     port: 3000,
   },
