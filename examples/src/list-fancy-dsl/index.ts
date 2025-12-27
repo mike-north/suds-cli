@@ -6,7 +6,6 @@
  *
  * Features:
  *   - Add/remove items dynamically
- *   - Toggle title, status bar, pagination, help
  *   - Styled list with custom colors
  *   - Status messages for user feedback
  *
@@ -14,10 +13,6 @@
  *   a         - Add random item
  *   x/delete  - Remove selected item
  *   enter     - Choose selected item
- *   T         - Toggle title bar
- *   S         - Toggle status bar
- *   P         - Toggle pagination
- *   H         - Toggle help
  *   j/k       - Move up/down
  *   /         - Start filtering
  *   q/ctrl+c  - Quit
@@ -133,9 +128,11 @@ class RandomItemGenerator {
   }
 }
 
-// Generate initial items
-function generateInitialItems(count: number): DefaultItem[] {
-  const generator = new RandomItemGenerator()
+// Generate initial items using the provided generator
+function generateInitialItems(
+  count: number,
+  generator: RandomItemGenerator,
+): DefaultItem[] {
   const items: DefaultItem[] = []
   for (let i = 0; i < count; i++) {
     items.push(generator.next())
@@ -146,25 +143,17 @@ function generateInitialItems(count: number): DefaultItem[] {
 // App state
 interface AppState {
   statusMessage: string
-  showTitle: boolean
-  showStatusBar: boolean
-  showPagination: boolean
-  showHelp: boolean
   itemGenerator: RandomItemGenerator
 }
 
-// Build the app
-const initialItems = generateInitialItems(10)
-const initialGenerator = new RandomItemGenerator()
+// Build the app - use a single generator for both initial items and adding new ones
+const itemGenerator = new RandomItemGenerator()
+const initialItems = generateInitialItems(10, itemGenerator)
 
 const app = createApp()
   .state<AppState>({
     statusMessage: '',
-    showTitle: true,
-    showStatusBar: true,
-    showPagination: true,
-    showHelp: true,
-    itemGenerator: initialGenerator,
+    itemGenerator: itemGenerator,
   })
   .component(
     'groceries',
@@ -194,78 +183,43 @@ const app = createApp()
   .onKey(['q', 'Q', 'ctrl+c'], (ctx) => {
     ctx.quit()
   })
-  // Add random item
+  // Add random item at the beginning of the list
   .onKey('a', (ctx) => {
     const newItem = ctx.state.itemGenerator.next()
     ctx.sendToComponent('groceries', (model: ListModel<DefaultItem>) => {
-      const newModel = model.insertItem(model.items.length, newItem)
+      const newModel = model.insertItem(0, newItem)
       return [newModel, null]
     })
     ctx.update({ statusMessage: `Added ${newItem.title()}` })
   })
   // Remove selected item
   .onKey(['x', 'backspace', 'delete'], (ctx) => {
+    let removedTitle: string | null = null
     ctx.sendToComponent('groceries', (model: ListModel<DefaultItem>) => {
       const selected = model.selectedItem()
       if (selected) {
-        const title = selected.title()
-        const newModel = model.removeItem(model.selectedIndex())
-        ctx.update({ statusMessage: `${title} removed` })
-        return [newModel, null]
+        removedTitle = selected.title()
+        return [model.removeItem(model.selectedIndex()), null]
       }
       return [model, null]
     })
+    if (removedTitle) {
+      ctx.update({ statusMessage: `${removedTitle} removed` })
+    }
   })
   // Choose selected item
   .onKey('enter', (ctx) => {
+    let chosenTitle: string | null = null
     ctx.sendToComponent('groceries', (model: ListModel<DefaultItem>) => {
       const selected = model.selectedItem()
       if (selected) {
-        ctx.update({
-          statusMessage: `You chose ${selected.title()}!`,
-        })
+        chosenTitle = selected.title()
       }
       return [model, null]
     })
-  })
-  // Toggle title bar
-  .onKey('T', (ctx) => {
-    const newShowTitle = !ctx.state.showTitle
-    ctx.update({
-      showTitle: newShowTitle,
-      statusMessage: newShowTitle ? 'Title bar visible' : 'Title bar hidden',
-    })
-    ctx.sendToComponent('groceries', (model: ListModel<DefaultItem>) => {
-      // We can't directly toggle showTitle on model after creation,
-      // but we can recreate with new settings - for now just show message
-      return [model, null]
-    })
-  })
-  // Toggle status bar
-  .onKey('S', (ctx) => {
-    const newShowStatus = !ctx.state.showStatusBar
-    ctx.update({
-      showStatusBar: newShowStatus,
-      statusMessage: newShowStatus ? 'Status bar visible' : 'Status bar hidden',
-    })
-  })
-  // Toggle pagination
-  .onKey('P', (ctx) => {
-    const newShowPagination = !ctx.state.showPagination
-    ctx.update({
-      showPagination: newShowPagination,
-      statusMessage: newShowPagination
-        ? 'Pagination visible'
-        : 'Pagination hidden',
-    })
-  })
-  // Toggle help
-  .onKey('H', (ctx) => {
-    const newShowHelp = !ctx.state.showHelp
-    ctx.update({
-      showHelp: newShowHelp,
-      statusMessage: newShowHelp ? 'Help visible' : 'Help hidden',
-    })
+    if (chosenTitle) {
+      ctx.update({ statusMessage: `You chose ${chosenTitle}!` })
+    }
   })
   .view(({ state, components }) =>
     vstack(
@@ -279,9 +233,7 @@ const app = createApp()
         statusMessageStyle.render(state.statusMessage),
       ),
       text(''),
-      helpStyle.render(
-        'a: add item  x: remove  enter: choose  T/S/P/H: toggle features  q: quit',
-      ),
+      helpStyle.render('a: add item  x: remove  enter: choose  q: quit'),
       text(''),
     ),
   )
