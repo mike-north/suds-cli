@@ -199,5 +199,6 @@ export function list<T extends Item>(
   }
 }
 
-// Re-export Item type for convenience
-export type { Item } from '@boba-cli/list'
+// Re-export types and classes for convenience
+export type { Item, ListStyles } from '@boba-cli/list'
+export { DefaultItem, ListModel } from '@boba-cli/list'
