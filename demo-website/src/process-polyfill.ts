@@ -7,7 +7,7 @@
 declare global {
   // eslint-disable-next-line no-var
   var process: {
-    env: Record<string, string | undefined>
+    env: Record<string, string>
     platform: string
     version: string
     versions: Record<string, string>
@@ -36,6 +36,10 @@ if (typeof globalThis.process === 'undefined') {
   }
 
   // Wrap entire process object in Proxy to handle any missing properties
+  // Note: We return empty strings instead of undefined to prevent errors like
+  // "Cannot read property 'indexOf' of undefined" from libraries (e.g., marked-terminal)
+  // that check terminal capabilities. Empty strings are falsy in boolean checks but
+  // safe for string operations like .indexOf(), .includes(), etc.
   globalThis.process = new Proxy(baseProcess, {
     get(target, prop) {
       if (prop in target) {

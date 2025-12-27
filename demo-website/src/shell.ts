@@ -25,7 +25,7 @@ const filenameStyle = createStyle().foreground('#f1fa8c')
 const BANNER = `
 ${headerStyle.render('╔═══════════════════════════════════════════════════╗')}
 ${headerStyle.render('║')}  ${accentStyle.render('Boba CLI')} - Terminal UIs in TypeScript            ${headerStyle.render('║')}
-${headerStyle.render('║')}  ${dimStyle.render('A port of Bubble Tea               ')}              ${headerStyle.render('║')}
+${headerStyle.render('║')}  ${dimStyle.render('A port of Bubble Tea')}              ${headerStyle.render('║')}
 ${headerStyle.render('╚═══════════════════════════════════════════════════╝')}
 `
 
@@ -465,6 +465,8 @@ class ShellRunner {
 
   private async runShell(): Promise<void> {
     this.isRunningDemo = false
+    // Reset pending demo to prevent re-running the same demo when shell restarts
+    // after a demo completes (e.g., line 517)
     this.pendingDemoName = null
 
     // Create a new platform for each shell session to reset state

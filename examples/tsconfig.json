@@ -1,6 +1,7 @@
 {
   "extends": "../tsconfig.json",
   "compilerOptions": {
+    // Enable emit so the demo-website can import and run compiled examples
     "noEmit": false,
     "module": "NodeNext",
     "moduleResolution": "NodeNext",

@@ -77,13 +77,17 @@ export class SimpleFSAdapter implements FileSystemAdapter {
 
     for (const segment of segments) {
       if (segment === '..') {
-        normalized.pop()
+        // Only pop if there's something to pop (don't go above root)
+        if (normalized.length > 0) {
+          normalized.pop()
+        }
       } else {
         normalized.push(segment)
       }
     }
 
-    return '/' + normalized.join('/')
+    // Return root if normalized is empty, otherwise return the path
+    return normalized.length === 0 ? '/' : '/' + normalized.join('/')
   }
 
   async readdir(
@@ -290,14 +294,66 @@ export class SimpleFSAdapter implements FileSystemAdapter {
   async rename(src: string, dst: string): Promise<void> {
     const normalizedSrc = this.normalizePath(src)
     const normalizedDst = this.normalizePath(dst)
-    const entry = this.files.get(normalizedSrc)
 
-    if (!entry) {
+    // No-op if source and destination are the same path
+    if (normalizedSrc === normalizedDst) {
+      return
+    }
+
+    const srcEntry = this.files.get(normalizedSrc)
+
+    if (!srcEntry) {
       throw new Error(`ENOENT: no such file or directory, rename '${src}'`)
     }
 
-    this.files.set(normalizedDst, entry)
+    const dstEntry = this.files.get(normalizedDst)
+
+    if (dstEntry) {
+      const srcIsDir = isDirectory(srcEntry)
+      const dstIsDir = isDirectory(dstEntry)
+
+      // Disallow replacing a directory with a file or a file with a directory
+      if (srcIsDir && !dstIsDir) {
+        throw new Error(`ENOTDIR: not a directory, rename '${src}' -> '${dst}'`)
+      }
+
+      if (!srcIsDir && dstIsDir) {
+        throw new Error(`EISDIR: illegal operation on a directory, rename '${src}' -> '${dst}'`)
+      }
+
+      // Both are files: do not overwrite existing file
+      if (!srcIsDir && !dstIsDir) {
+        throw new Error(`EEXIST: file already exists, rename '${src}' -> '${dst}'`)
+      }
+
+      // Both are directories: ensure destination directory is empty
+      const prefix = normalizedDst === '/' ? '/' : `${normalizedDst}/`
+      for (const filePath of this.files.keys()) {
+        if (filePath !== normalizedDst && filePath.startsWith(prefix)) {
+          throw new Error(`ENOTEMPTY: directory not empty, rename '${src}' -> '${dst}'`)
+        }
+      }
+    }
+
+    // Move the entry itself
+    this.files.set(normalizedDst, srcEntry)
     this.files.delete(normalizedSrc)
+
+    // If this is a directory, update all children to reflect the new parent path
+    if (isDirectory(srcEntry)) {
+      const prefix = normalizedSrc === '/' ? '/' : `${normalizedSrc}/`
+      const entries = Array.from(this.files.entries())
+
+      for (const [filePath, childEntry] of entries) {
+        if (filePath !== normalizedSrc && filePath.startsWith(prefix)) {
+          const suffix = filePath.substring(normalizedSrc.length)
+          const newChildPath = normalizedDst + suffix
+
+          this.files.set(newChildPath, childEntry)
+          this.files.delete(filePath)
+        }
+      }
+    }
   }
 
   async copyFile(src: string, dst: string): Promise<void> {
@@ -311,6 +367,18 @@ export class SimpleFSAdapter implements FileSystemAdapter {
 
     if (isDirectory(entry)) {
       throw new Error(`EISDIR: illegal operation on a directory, copyfile '${src}'`)
+    }
+
+    // Ensure parent directory exists
+    const parentDir = normalizedDst.substring(0, normalizedDst.lastIndexOf('/')) || '/'
+    const parentEntry = this.files.get(parentDir)
+
+    if (!parentEntry) {
+      throw new Error(`ENOENT: no such file or directory, copyfile '${dst}'`)
+    }
+
+    if (!isDirectory(parentEntry)) {
+      throw new Error(`ENOTDIR: not a directory, copyfile '${dst}'`)
     }
 
     this.files.set(normalizedDst, {
