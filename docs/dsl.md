@@ -456,17 +456,6 @@ Options for the help component builder.
 </td></tr>
 <tr><td>
 
-[InitContext](./dsl.initcontext.md)
-
-
-</td><td>
-
-Context passed to init handlers.
-
-
-</td></tr>
-<tr><td>
-
 [LayoutNode](./dsl.layoutnode.md)
 
 
@@ -495,17 +484,6 @@ Options for the list component builder.
 </td><td>
 
 Options for the markdown component builder.
-
-
-</td></tr>
-<tr><td>
-
-[MessageContext](./dsl.messagecontext.md)
-
-
-</td><td>
-
-Context passed to message handlers.
 
 
 </td></tr>
@@ -658,34 +636,12 @@ Description
 </th></tr></thead>
 <tbody><tr><td>
 
-[InitHandler](./dsl.inithandler.md)
-
-
-</td><td>
-
-Init handler function type.
-
-
-</td></tr>
-<tr><td>
-
 [KeyHandler](./dsl.keyhandler.md)
 
 
 </td><td>
 
 Key handler function type.
-
-
-</td></tr>
-<tr><td>
-
-[MessageHandler](./dsl.messagehandler.md)
-
-
-</td><td>
-
-Message handler function type.
 
 
 </td></tr>
