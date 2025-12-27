@@ -217,11 +217,12 @@ export class AppBuilder<
   }
 
   /**
-   * Register an initialization handler.
+   * Set the initialization handler.
    *
    * @remarks
    * The init handler is called once when the application starts. Use it to
    * schedule initial async operations like fetching data or starting timers.
+   * Calling this method multiple times will replace the previous handler.
    *
    * @example
    * ```typescript

@@ -125,7 +125,8 @@ const app = createApp()
     ctx.quit()
   })
   .view(({ state, components }) => {
-    const currentPackage = packages[state.currentIndex]
+    const currentPackage =
+      state.currentIndex < packages.length ? packages[state.currentIndex] : undefined
     const totalPackages = packages.length
 
     return vstack(

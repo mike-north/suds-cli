@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from 'vitest'
 import { createApp, AppBuilder } from '../src/app-builder.js'
 import { text, vstack } from '../src/view/nodes.js'
+import { tick } from '../src/index.js'
 import type { ComponentBuilder } from '../src/types.js'
 import { KeyMsg, KeyType, type Cmd, type Msg } from '@boba-cli/tea'
 
@@ -522,5 +523,374 @@ describe('EventContext.sendToComponent', () => {
     const [nextModel] = model.update(keyMsg(' '))
     // Should return same instance if nothing changed
     expect(nextModel).toBe(model)
+  })
+})
+
+describe('AppBuilder.onInit', () => {
+  it('handler is called during init()', () => {
+    let initCalled = false
+
+    const app = createApp()
+      .state({ count: 0 })
+      .onInit(() => {
+        initCalled = true
+      })
+      .view(({ state }) => text(String(state.count)))
+      .build()
+
+    expect(initCalled).toBe(false)
+    app.getModel().init()
+    expect(initCalled).toBe(true)
+  })
+
+  it('handler receives correct context with state', () => {
+    let receivedState: { count: number } | undefined
+
+    const app = createApp()
+      .state({ count: 42 })
+      .onInit((ctx) => {
+        receivedState = ctx.state
+      })
+      .view(({ state }) => text(String(state.count)))
+      .build()
+
+    app.getModel().init()
+    expect(receivedState).toEqual({ count: 42 })
+  })
+
+  it('can schedule commands that are returned from init()', () => {
+    const mockCmd = vi.fn()
+
+    const app = createApp()
+      .state({ count: 0 })
+      .onInit((ctx) => {
+        ctx.schedule(mockCmd as unknown as Cmd<Msg>)
+      })
+      .view(({ state }) => text(String(state.count)))
+      .build()
+
+    const cmd = app.getModel().init()
+    expect(cmd).not.toBeNull()
+  })
+
+  it('can schedule multiple commands', () => {
+    const mockCmd1 = vi.fn()
+    const mockCmd2 = vi.fn()
+
+    const app = createApp()
+      .state({ count: 0 })
+      .onInit((ctx) => {
+        ctx.schedule(mockCmd1 as unknown as Cmd<Msg>)
+        ctx.schedule(mockCmd2 as unknown as Cmd<Msg>)
+      })
+      .view(({ state }) => text(String(state.count)))
+      .build()
+
+    const cmd = app.getModel().init()
+    expect(cmd).not.toBeNull()
+  })
+
+  it('calling onInit multiple times replaces the previous handler', () => {
+    let firstCalled = false
+    let secondCalled = false
+
+    const app = createApp()
+      .state({ count: 0 })
+      .onInit(() => {
+        firstCalled = true
+      })
+      .onInit(() => {
+        secondCalled = true
+      })
+      .view(({ state }) => text(String(state.count)))
+      .build()
+
+    app.getModel().init()
+    expect(firstCalled).toBe(false)
+    expect(secondCalled).toBe(true)
+  })
+
+  it('can send messages to components during init', () => {
+    interface CounterModel {
+      count: number
+      setCount(n: number): [CounterModel, Cmd<Msg>]
+    }
+
+    const createCounterComponent = (initial: number): ComponentBuilder<CounterModel> => ({
+      init: () => {
+        const model: CounterModel = {
+          count: initial,
+          setCount(n: number) {
+            return [{ ...this, count: n }, null]
+          },
+        }
+        return [model, null]
+      },
+      update: (model: CounterModel, _msg: Msg) => [model, null],
+      view: (model: CounterModel) => `Count: ${model.count}`,
+    })
+
+    const app = createApp()
+      .component('counter', createCounterComponent(0))
+      .onInit((ctx) => {
+        ctx.sendToComponent('counter', (model) => model.setCount(100))
+      })
+      .view(({ components }) => components.counter)
+      .build()
+
+    const model = app.getModel()
+    model.init()
+    expect(model.view()).toContain('Count: 100')
+  })
+})
+
+// Test message class for onMessage tests
+class TestMessage {
+  constructor(public readonly value: number) {}
+}
+
+class AnotherMessage {
+  constructor(public readonly text: string) {}
+}
+
+describe('AppBuilder.onMessage', () => {
+  it('handler is called when matching message is received', () => {
+    let handlerCalled = false
+
+    const app = createApp()
+      .state({ count: 0 })
+      .onMessage(TestMessage, () => {
+        handlerCalled = true
+      })
+      .view(({ state }) => text(String(state.count)))
+      .build()
+
+    const model = app.getModel()
+    model.init()
+
+    expect(handlerCalled).toBe(false)
+    model.update(new TestMessage(42))
+    expect(handlerCalled).toBe(true)
+  })
+
+  it('handler receives correct context with message', () => {
+    let receivedMsg: TestMessage | undefined
+    let receivedState: { count: number } | undefined
+
+    const app = createApp()
+      .state({ count: 10 })
+      .onMessage(TestMessage, (ctx) => {
+        receivedMsg = ctx.msg
+        receivedState = ctx.state
+      })
+      .view(({ state }) => text(String(state.count)))
+      .build()
+
+    const model = app.getModel()
+    model.init()
+    model.update(new TestMessage(42))
+
+    expect(receivedMsg).toBeInstanceOf(TestMessage)
+    expect(receivedMsg?.value).toBe(42)
+    expect(receivedState).toEqual({ count: 10 })
+  })
+
+  it('handler is not called for non-matching messages', () => {
+    let testMessageCalled = false
+    let anotherMessageCalled = false
+
+    const app = createApp()
+      .state({ count: 0 })
+      .onMessage(TestMessage, () => {
+        testMessageCalled = true
+      })
+      .onMessage(AnotherMessage, () => {
+        anotherMessageCalled = true
+      })
+      .view(({ state }) => text(String(state.count)))
+      .build()
+
+    const model = app.getModel()
+    model.init()
+
+    model.update(new TestMessage(42))
+    expect(testMessageCalled).toBe(true)
+    expect(anotherMessageCalled).toBe(false)
+  })
+
+  it('can update state with update()', () => {
+    const app = createApp()
+      .state({ count: 0 })
+      .onMessage(TestMessage, (ctx) => {
+        ctx.update({ count: ctx.msg.value })
+      })
+      .view(({ state }) => text(String(state.count)))
+      .build()
+
+    const model = app.getModel()
+    model.init()
+
+    const [nextModel] = model.update(new TestMessage(42))
+    expect(nextModel.getUserState()).toEqual({ count: 42 })
+  })
+
+  it('can replace state with setState()', () => {
+    const app = createApp()
+      .state({ count: 0, name: 'initial' })
+      .onMessage(TestMessage, (ctx) => {
+        ctx.setState({ count: ctx.msg.value, name: 'updated' })
+      })
+      .view(({ state }) => text(`${state.count} ${state.name}`))
+      .build()
+
+    const model = app.getModel()
+    model.init()
+
+    const [nextModel] = model.update(new TestMessage(100))
+    expect(nextModel.getUserState()).toEqual({ count: 100, name: 'updated' })
+  })
+
+  it('can schedule commands', () => {
+    const mockCmd = vi.fn()
+
+    const app = createApp()
+      .state({ count: 0 })
+      .onMessage(TestMessage, (ctx) => {
+        ctx.schedule(mockCmd as unknown as Cmd<Msg>)
+      })
+      .view(({ state }) => text(String(state.count)))
+      .build()
+
+    const model = app.getModel()
+    model.init()
+
+    const [, cmd] = model.update(new TestMessage(42))
+    expect(cmd).not.toBeNull()
+  })
+
+  it('can quit the application', () => {
+    const app = createApp()
+      .state({ count: 0 })
+      .onMessage(TestMessage, (ctx) => {
+        ctx.quit()
+      })
+      .view(({ state }) => text(String(state.count)))
+      .build()
+
+    const model = app.getModel()
+    model.init()
+
+    const [, cmd] = model.update(new TestMessage(42))
+    // The quit command should be returned
+    expect(cmd).not.toBeNull()
+  })
+
+  it('can send messages to components', () => {
+    interface CounterModel {
+      count: number
+      setCount(n: number): [CounterModel, Cmd<Msg>]
+    }
+
+    const createCounterComponent = (initial: number): ComponentBuilder<CounterModel> => ({
+      init: () => {
+        const model: CounterModel = {
+          count: initial,
+          setCount(n: number) {
+            return [{ ...this, count: n }, null]
+          },
+        }
+        return [model, null]
+      },
+      update: (model: CounterModel, _msg: Msg) => [model, null],
+      view: (model: CounterModel) => `Count: ${model.count}`,
+    })
+
+    const app = createApp()
+      .component('counter', createCounterComponent(0))
+      .onMessage(TestMessage, (ctx) => {
+        ctx.sendToComponent('counter', (model) => model.setCount(ctx.msg.value))
+      })
+      .view(({ components }) => components.counter)
+      .build()
+
+    const model = app.getModel()
+    model.init()
+
+    expect(model.view()).toContain('Count: 0')
+
+    const [nextModel] = model.update(new TestMessage(99))
+    expect(nextModel.view()).toContain('Count: 99')
+  })
+
+  it('multiple message handlers can be registered', () => {
+    let testCount = 0
+    let anotherCount = 0
+
+    const app = createApp()
+      .state({ value: '' })
+      .onMessage(TestMessage, () => {
+        testCount++
+      })
+      .onMessage(AnotherMessage, () => {
+        anotherCount++
+      })
+      .view(({ state }) => text(state.value))
+      .build()
+
+    const model = app.getModel()
+    model.init()
+
+    model.update(new TestMessage(1))
+    model.update(new AnotherMessage('hello'))
+    model.update(new TestMessage(2))
+
+    expect(testCount).toBe(2)
+    expect(anotherCount).toBe(1)
+  })
+
+  it('returns same model if no state or component changes', () => {
+    const app = createApp()
+      .state({ count: 0 })
+      .onMessage(TestMessage, () => {
+        // Handler does nothing
+      })
+      .view(({ state }) => text(String(state.count)))
+      .build()
+
+    const model = app.getModel()
+    model.init()
+
+    const [nextModel] = model.update(new TestMessage(42))
+    expect(nextModel).toBe(model)
+  })
+
+  it('works with tick command for async operations', () => {
+    class TickComplete {
+      constructor(public readonly data: string) {}
+    }
+
+    const app = createApp()
+      .state({ loading: true, data: '' })
+      .onInit((ctx) => {
+        // Schedule a tick that will send TickComplete after delay
+        ctx.schedule(tick(100, () => new TickComplete('loaded data')))
+      })
+      .onMessage(TickComplete, (ctx) => {
+        ctx.update({ loading: false, data: ctx.msg.data })
+      })
+      .view(({ state }) => text(state.loading ? 'Loading...' : state.data))
+      .build()
+
+    const model = app.getModel()
+    const initCmd = model.init()
+
+    // Init should return the tick command
+    expect(initCmd).not.toBeNull()
+    expect(model.view()).toContain('Loading...')
+
+    // Simulate receiving the tick message
+    const [nextModel] = model.update(new TickComplete('loaded data'))
+    expect(nextModel.getUserState()).toEqual({ loading: false, data: 'loaded data' })
+    expect(nextModel.view()).toContain('loaded data')
   })
 })
