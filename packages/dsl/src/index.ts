@@ -36,7 +36,14 @@ export {
 } from './components/filetree.js'
 export { help, type HelpBuilderOptions } from './components/help.js'
 export { helpBubble, type HelpBubbleBuilderOptions, type Entry } from './components/help-bubble.js'
-export { list, type ListBuilderOptions, type Item } from './components/list.js'
+export {
+  list,
+  type ListBuilderOptions,
+  type Item,
+  type ListStyles,
+  DefaultItem,
+  ListModel,
+} from './components/list.js'
 export { markdown, type MarkdownBuilderOptions } from './components/markdown.js'
 export { paginator, type PaginatorBuilderOptions } from './components/paginator.js'
 export { progress, type ProgressBuilderOptions } from './components/progress.js'

@@ -4,7 +4,6 @@
 
 ```ts
 
-import { batch } from '@boba-cli/tea';
 import { BorderStyle } from '@boba-cli/chapstick';
 import { Cmd } from '@boba-cli/tea';
 import { CodeModel } from '@boba-cli/code';
@@ -12,6 +11,7 @@ import { ColorInput } from '@boba-cli/chapstick';
 import { Column } from '@boba-cli/table';
 import { CursorMode } from '@boba-cli/textinput';
 import { CursorMode as CursorMode_2 } from '@boba-cli/textarea';
+import { DefaultItem } from '@boba-cli/list';
 import { DirectoryItem } from '@boba-cli/filetree';
 import { dot } from '@boba-cli/spinner';
 import { EchoMode } from '@boba-cli/textinput';
@@ -47,7 +47,6 @@ import { points } from '@boba-cli/spinner';
 import { ProgressModel } from '@boba-cli/progress';
 import { pulse } from '@boba-cli/spinner';
 import { Row } from '@boba-cli/table';
-import { sequence } from '@boba-cli/tea';
 import { Spinner } from '@boba-cli/spinner';
 import { SpinnerModel } from '@boba-cli/spinner';
 import { StatusbarModel } from '@boba-cli/statusbar';
@@ -58,7 +57,6 @@ import { TableModel } from '@boba-cli/table';
 import { TableStyles } from '@boba-cli/table';
 import { TextareaModel } from '@boba-cli/textarea';
 import { TextInputModel } from '@boba-cli/textinput';
-import { tick } from '@boba-cli/tea';
 import { TimerModel } from '@boba-cli/timer';
 import { TitleColor } from '@boba-cli/help';
 import { ValidateFunc } from '@boba-cli/textinput';
@@ -79,14 +77,10 @@ export class AppBuilder<State = undefined, Components extends Record<string, unk
     component<K extends string, M>(key: K, builder: ComponentBuilder<M>): AppBuilder<State, Components & Record<K, M>>;
     // @internal
     static create(): AppBuilder<undefined, Record<string, never>>;
-    onInit(handler: InitHandler<State, Components>): AppBuilder<State, Components>;
     onKey(keys: string | string[], handler: KeyHandler<State, Components>): AppBuilder<State, Components>;
-    onMessage<M extends Msg>(msgClass: new (...args: any[]) => M, handler: MessageHandler<State, Components, M>): AppBuilder<State, Components>;
     state<S>(initial: S): AppBuilder<S, Components>;
     view(fn: ViewFunction<State, Components>): AppBuilder<State, Components>;
 }
-
-export { batch }
 
 // @public
 export function choose(condition: boolean, ifTrue: ViewNode, ifFalse: ViewNode): ViewNode;
@@ -121,6 +115,8 @@ export interface ComponentView {
 export function createApp(): AppBuilder<undefined, Record<string, never>>;
 
 export { CursorMode }
+
+export { DefaultItem }
 
 export { DirectoryItem }
 
@@ -204,16 +200,6 @@ export interface HelpBuilderOptions {
 // @public
 export function hstack(...children: ViewNode[]): LayoutNode;
 
-// @public
-export interface InitContext<State, Components extends Record<string, unknown>> {
-    schedule(cmd: Cmd<Msg>): void;
-    sendToComponent<K extends keyof Components>(key: K, fn: (model: Components[K]) => [Components[K], Cmd<Msg>]): void;
-    readonly state: State;
-}
-
-// @public
-export type InitHandler<State, Components extends Record<string, unknown>> = (ctx: InitContext<State, Components>) => void;
-
 export { Item }
 
 // @public
@@ -248,6 +234,10 @@ export interface ListBuilderOptions<T extends Item> {
     width?: number;
 }
 
+export { ListModel }
+
+export { ListStyles }
+
 // @public
 export function map<T>(items: T[], render: (item: T, index: number) => ViewNode): ViewNode[];
 
@@ -261,23 +251,6 @@ export interface MarkdownBuilderOptions {
     content: string;
     width?: number;
 }
-
-// @public
-export interface MessageContext<State, Components extends Record<string, unknown>, M extends Msg> {
-    readonly components: {
-        [K in keyof Components]: ComponentView;
-    };
-    readonly msg: M;
-    quit(): void;
-    schedule(cmd: Cmd<Msg>): void;
-    sendToComponent<K extends keyof Components>(key: K, fn: (model: Components[K]) => [Components[K], Cmd<Msg>]): void;
-    setState(newState: State): void;
-    readonly state: State;
-    update(patch: Partial<State>): void;
-}
-
-// @public
-export type MessageHandler<State, Components extends Record<string, unknown>, M extends Msg> = (ctx: MessageContext<State, Components, M>) => void;
 
 export { meter }
 
@@ -335,8 +308,6 @@ export function render(node: ViewNode): string;
 export interface RunOptions {
     platform: PlatformAdapter;
 }
-
-export { sequence }
 
 // @public
 export function spacer(height?: number): string;
@@ -460,8 +431,6 @@ export interface TextNode {
     readonly _italic: boolean;
     readonly _type: 'text';
 }
-
-export { tick }
 
 // @public
 export function timer(options: TimerBuilderOptions): ComponentBuilder<TimerModel>;

@@ -2,7 +2,7 @@ import { HelpModel } from '@boba-cli/help'
 import { matches } from '@boba-cli/key'
 import { PaginatorModel } from '@boba-cli/paginator'
 import { SpinnerModel, TickMsg as SpinnerTickMsg } from '@boba-cli/spinner'
-import { batch, type Cmd, type Msg, KeyMsg } from '@boba-cli/tea'
+import { batch, type Cmd, type Msg, KeyMsg, KeyType } from '@boba-cli/tea'
 import fuzzysort from 'fuzzysort'
 import { DefaultDelegate, type ItemDelegate } from './delegate.js'
 import type { Item } from './item.js'
@@ -458,8 +458,11 @@ export class ListModel<T extends Item> {
         return [this.prevPage(), null]
       }
 
-      // Filtering
-      if (matches(msg, this.keyMap.filter)) {
+      // Filtering - only start if not already filtering
+      if (
+        this.filterState !== 'filtering' &&
+        matches(msg, this.keyMap.filter)
+      ) {
         return [this.startFiltering(), null]
       }
       if (matches(msg, this.keyMap.clearFilter)) {
@@ -470,6 +473,22 @@ export class ListModel<T extends Item> {
       }
       if (matches(msg, this.keyMap.cancelFilter)) {
         return [this.cancelFilter(), null]
+      }
+
+      // Character input during filtering
+      if (this.filterState === 'filtering') {
+        if (
+          (msg.key.type === KeyType.Runes || msg.key.type === KeyType.Space) &&
+          !msg.key.alt
+        ) {
+          const chars =
+            msg.key.type === KeyType.Space ? ' ' : msg.key.runes
+          return [this.setFilter(this.filterValue + chars), null]
+        }
+        if (msg.key.type === KeyType.Backspace) {
+          const newValue = this.filterValue.slice(0, -1)
+          return [this.setFilter(newValue), null]
+        }
       }
 
       // Help toggles
@@ -514,9 +533,18 @@ export class ListModel<T extends Item> {
           : idx
         const selected = absoluteIndex === this.cursor
         const rendered = this.delegate.render(item, absoluteIndex, selected)
-        lines.push((selected ? '● ' : '  ') + rendered)
+        // Prefix each line of the rendered item appropriately
+        const renderedLines = rendered.split('\n')
+        for (const line of renderedLines) {
+          // Selected item: styled vertical line prefix, non-selected: just spacing
+          const prefix = selected
+            ? this.styles.selectedTitle.render('│') + ' '
+            : '  '
+          lines.push(prefix + line)
+        }
         if (idx < visible.length - 1 && this.delegate.spacing() > 0) {
-          lines.push(''.padEnd(this.delegate.spacing(), ' '))
+          // Spacing between items - empty for visual separation
+          lines.push('')
         }
       }
     }
