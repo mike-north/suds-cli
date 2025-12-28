@@ -1,5 +1,12 @@
 # demo-website
 
+## 0.0.1-alpha.3
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @boba-cli/examples@0.0.1-alpha.4
+
 ## 0.0.1-alpha.2
 
 ### Patch Changes

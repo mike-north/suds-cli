@@ -1,6 +1,6 @@
 {
   "name": "@boba-cli/scripts",
-  "version": "0.0.1-alpha.4",
+  "version": "0.0.1-alpha.5",
   "dependencies": {
     "@boba-cli/chapstick": "workspace:*",
     "@boba-cli/key": "workspace:*",

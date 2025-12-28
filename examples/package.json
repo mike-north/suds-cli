@@ -1,6 +1,6 @@
 {
   "name": "@boba-cli/examples",
-  "version": "0.0.1-alpha.3",
+  "version": "0.0.1-alpha.4",
   "type": "module",
   "exports": {
     "./code": "./dist/code/index.js",

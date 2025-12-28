@@ -1,5 +1,13 @@
 # @boba-cli/examples
 
+## 0.0.1-alpha.4
+
+### Patch Changes
+
+- Updated dependencies [[`eabe864`](https://github.com/mike-north/boba-cli/commit/eabe86448f61f5495202e1cf80cae9a1aa06843c)]:
+  - @boba-cli/progress@0.1.0-alpha.4
+  - @boba-cli/dsl@1.0.0-alpha.4
+
 ## 0.0.1-alpha.3
 
 ### Patch Changes

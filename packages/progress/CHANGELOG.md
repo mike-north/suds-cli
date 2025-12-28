@@ -1,5 +1,11 @@
 # @boba-cli/progress
 
+## 0.1.0-alpha.4
+
+### Patch Changes
+
+- [#56](https://github.com/mike-north/boba-cli/pull/56) [`eabe864`](https://github.com/mike-north/boba-cli/commit/eabe86448f61f5495202e1cf80cae9a1aa06843c) Thanks [@mike-north](https://github.com/mike-north)! - Fix progress bar animation when setPercent() is called repeatedly in quick succession. Previously, rapid calls would cause animation frames to be rejected, making the progress bar appear stuck. Now the animation smoothly continues toward each new target.
+
 ## 0.1.0-alpha.3
 
 ### Patch Changes

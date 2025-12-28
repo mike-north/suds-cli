@@ -47,6 +47,7 @@
     "chapstick-style-provider",
     "deprecate-suds-cli-packages",
     "eager-feet-cheer",
+    "fix-progress-animation",
     "fix-viewport-scrolling",
     "help-bubble-component",
     "platform-auto-detection",
