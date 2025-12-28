@@ -204,7 +204,7 @@ const app = createApp()
       return [model, null]
     })
     if (removedTitle) {
-      ctx.update({ statusMessage: `${removedTitle} removed` })
+      ctx.update({ statusMessage: `${removedTitle as string} removed` })
     }
   })
   // Choose selected item
@@ -218,7 +218,7 @@ const app = createApp()
       return [model, null]
     })
     if (chosenTitle) {
-      ctx.update({ statusMessage: `You chose ${chosenTitle}!` })
+      ctx.update({ statusMessage: `You chose ${chosenTitle as string}!` })
     }
   })
   .view(({ state, components }) =>
