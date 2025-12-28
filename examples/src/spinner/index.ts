@@ -1,148 +1,52 @@
 /**
- * Boba Demo: Spinner with Styling
+ * Boba DSL Demo: Spinner with Styling
  *
- * Demonstrates \@boba/tea, \@boba/spinner, \@boba/chapstick, and \@boba/key
- * working together.
+ * Demonstrates the \@boba-cli/dsl package for building CLI apps
+ * with minimal ceremony.
+ *
+ * Compare this to spinner-demo.ts to see the reduction in boilerplate:
+ * - Original: 147 lines with class, manual state management, instanceof checks
+ * - DSL version: ~35 lines with declarative API
  *
  * Controls:
- *   s     - Cycle through spinner styles
  *   q     - Quit
  *   Ctrl+C - Quit
  */
 
 import type { PlatformAdapter } from '\@boba-cli/machine'
-import {
-  Program,
-  KeyMsg,
-  quit,
-  type Cmd,
-  type Model,
-  type Msg,
-} from '\@boba-cli/tea'
-import {
-  SpinnerModel,
-  line,
-  dot,
-  miniDot,
-  pulse,
-  points,
-  moon,
-  meter,
-  ellipsis,
-  type Spinner,
-} from '\@boba-cli/spinner'
-import { Style } from '\@boba-cli/chapstick'
-import { newBinding, matches } from '\@boba-cli/key'
-
-// Available spinners to cycle through
-const SPINNERS: { name: string; spinner: Spinner }[] = [
-  { name: 'line', spinner: line },
-  { name: 'dot', spinner: dot },
-  { name: 'miniDot', spinner: miniDot },
-  { name: 'pulse', spinner: pulse },
-  { name: 'points', spinner: points },
-  { name: 'moon', spinner: moon },
-  { name: 'meter', spinner: meter },
-  { name: 'ellipsis', spinner: ellipsis },
-]
-
-// Keybindings
-const keys = {
-  nextSpinner: newBinding({ keys: ['s', 'S'] }).withHelp('s', 'change spinner'),
-  quit: newBinding({ keys: ['q', 'Q', 'ctrl+c'] }).withHelp('q', 'quit'),
-}
-
+import { createApp, spinner, vstack, hstack, text, Style } from '\@boba-cli/dsl'
+import { makeDemoHeader } from '../constants.js'
 // Styles
-const titleStyle = new Style().bold(true).foreground('#ff79c6')
-
 const spinnerStyle = new Style().foreground('#50fa7b')
 
-const textStyle = new Style().foreground('#f8f8f2')
-
-const helpStyle = new Style().foreground('#6272a4').italic(true)
-
-const keyStyle = new Style().foreground('#bd93f9').bold(true)
-
-// Demo model
-class DemoModel implements Model<Msg, DemoModel> {
-  readonly spinner: SpinnerModel
-  readonly spinnerIndex: number
-
-  constructor(spinnerIndex = 0, spinner?: SpinnerModel) {
-    this.spinnerIndex = spinnerIndex
-    const current = SPINNERS[spinnerIndex]
-    if (!current) {
-      throw new Error(`Invalid spinner index: ${spinnerIndex}`)
-    }
-    this.spinner =
-      spinner ??
-      new SpinnerModel({
-        spinner: current.spinner,
-        style: spinnerStyle,
-      })
-  }
-
-  init(): Cmd<Msg> {
-    // Start the spinner animation
-    return this.spinner.tick()
-  }
-
-  update(msg: Msg): [DemoModel, Cmd<Msg>] {
-    // Handle key events
-    if (msg instanceof KeyMsg) {
-      if (matches(msg, keys.quit)) {
-        return [this, quit()]
-      }
-
-      if (matches(msg, keys.nextSpinner)) {
-        // Cycle to next spinner
-        const nextIndex = (this.spinnerIndex + 1) % SPINNERS.length
-        const nextSpinnerDef = SPINNERS[nextIndex]
-        if (!nextSpinnerDef) {
-          return [this, null]
-        }
-        const newSpinner = new SpinnerModel({
-          spinner: nextSpinnerDef.spinner,
-          style: spinnerStyle,
-        })
-        const next = new DemoModel(nextIndex, newSpinner)
-        return [next, newSpinner.tick()]
-      }
-    }
-
-    // Pass other messages to spinner
-    const [nextSpinner, cmd] = this.spinner.update(msg)
-    if (nextSpinner !== this.spinner) {
-      return [new DemoModel(this.spinnerIndex, nextSpinner), cmd]
-    }
-
-    return [this, cmd]
-  }
-
-  view(): string {
-    const current = SPINNERS[this.spinnerIndex]
-    const spinnerName = current?.name ?? 'unknown'
-
-    const title = titleStyle.render('🧋 Boba Demo')
-
-    const spinnerLine = `${this.spinner.view()}  ${textStyle.render('Loading something amazing...')}`
-
-    const status = helpStyle.render(
-      `Spinner: ${keyStyle.render(spinnerName)} • ` +
-        `Press ${keyStyle.render('[s]')} to change • ` +
-        `${keyStyle.render('[q]')} to quit`,
-    )
-
-    return ['', title, '', spinnerLine, '', status, ''].join('\n')
-  }
-}
+// Build the app
+const app = createApp()
+  .state({ message: 'Loading something amazing...' })
+  .component('loading', spinner({ style: spinnerStyle }))
+  .onKey(['q', 'Q', 'ctrl+c'], (ctx) => {
+    ctx.quit()
+  })
+  .view(({ state, components }) =>
+    vstack(
+      text(''),
+      makeDemoHeader('DSL'),
+      text(''),
+      hstack(
+        components.loading,
+        text('  ' + state.message).foreground('#f8f8f2'),
+      ),
+      text(''),
+      text('Press [q] to quit').dim().italic(),
+      text(''),
+    ),
+  )
+  .build()
 
 /**
- * Run the spinner demo with the given platform adapter.
+ * Run the spinner DSL demo with the given platform adapter.
  * @param platform - Platform adapter for terminal I/O
  */
 export default async function run(platform: PlatformAdapter): Promise<void> {
   console.clear()
-  const program = new Program(new DemoModel(), { platform })
-  await program.run()
+  await app.run({ platform })
 }

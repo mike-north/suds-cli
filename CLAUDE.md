@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Boba CLI is a TypeScript TUI (Terminal User Interface) component library and framework. It's a TypeScript port of Go libraries from the Charm ecosystem (Bubble Tea, Bubbles, Lip Gloss). The project implements the **Elm Architecture** for functional UI patterns with strict TypeScript throughout.
+Boba CLI is a TypeScript TUI (Terminal User Interface) component library and framework. It's a TypeScript port of Go libraries from the Charm ecosystem (Bubble Tea, Bubbles, Lip Gloss). The main API is a declarative DSL builder (`@boba-cli/dsl`), with a low-level Elm Architecture API available for advanced use cases.
 
 ## Common Commands
 
@@ -31,9 +31,13 @@ pnpm check
 pnpm fix
 
 # Run an example
-pnpm demo                    # Default (progress)
-pnpm -C examples ex:list     # Specific example
-pnpm -C examples ex:spinner  # Available: spinner, list, textarea, table, etc.
+pnpm demo                              # Default (progress)
+pnpm -C examples ex:spinner            # Animated spinner (DSL)
+pnpm -C examples ex:list               # Interactive list
+pnpm -C examples ex:textarea           # Multi-line text editor
+pnpm -C examples ex:table              # Tabular data
+pnpm -C examples ex:filetree           # File tree browser
+pnpm -C examples ex:spinner-low-level  # Spinner using low-level TEA API
 
 # Generate/update API reports after changing public API
 pnpm generate:api-report
@@ -48,34 +52,62 @@ pnpm changeset
 
 ```
 Core Layer (no internal deps):
-  @boba-cli/machine  → Platform abstraction (Node/Browser)
-  @boba-cli/core     → Shared utilities
-  @boba-cli/key      → Keybinding definitions
-  @boba-cli/runeutil → Text/grapheme handling
+  @boba-cli/machine   → Platform abstraction (Node/Browser)
+  @boba-cli/core      → Shared utilities
+  @boba-cli/key       → Keybinding definitions
+  @boba-cli/runeutil  → Text/grapheme handling
 
 Framework Layer:
-  @boba-cli/tea      → Runtime engine (Elm Architecture)
+  @boba-cli/dsl       → Declarative builder API (main API)
+  @boba-cli/tea       → Runtime engine (low-level Elm Architecture)
   @boba-cli/chapstick → Terminal styling (colors, borders, padding)
 
-Component Layer:
-  @boba-cli/spinner, progress, textinput, textarea, table, list, viewport,
-  paginator, timer, stopwatch, help, filepicker, cursor, filetree, etc.
+Component Layer (basic):
+  @boba-cli/spinner, progress, textinput, textarea, viewport, paginator,
+  timer, stopwatch, cursor, icons
+
+Component Layer (composite - depend on basic components):
+  @boba-cli/table, list, help, filepicker, filetree, markdown, code, statusbar
 
 Examples (private, not published):
   @boba-cli/examples → Interactive demos of all components
 ```
 
-### Elm Architecture Pattern
+### DSL Builder (Main API)
 
-All components follow the Elm Architecture:
+`@boba-cli/dsl` provides a declarative builder API for creating TUI applications:
+
+```typescript
+import { createApp, spinner, text, vstack } from '@boba-cli/dsl'
+
+const app = createApp()
+  .state({ loading: true })
+  .component('spin', spinner())
+  .onKey('q', ({ quit }) => quit())
+  .view(({ state, components }) =>
+    vstack(text('Loading...'), components.spin)
+  )
+  .build()
+
+await app.run()
+```
+
+### Low-Level Elm Architecture
+
+For advanced use cases requiring fine-grained control, use `@boba-cli/tea` directly:
 
 ```typescript
 class MyModel implements Model<Msg, MyModel> {
-  init(): Cmd<Msg> { }           // Initial command (side effects)
-  update(msg: Msg): [MyModel, Cmd<Msg>] { }  // Handle messages, return new state
-  view(): string { }             // Render state to string
+  init(): Cmd<Msg> { }                         // Initial command (side effects)
+  update(msg: Msg): [MyModel, Cmd<Msg>] { }    // Handle messages, return new state
+  view(): string { }                           // Render state to string
 }
 ```
+
+Key concepts:
+- **Msg** - Tagged union messages with `_tag` discriminator
+- **Cmd** - Async side effects that produce messages (or `null` for no-op)
+- **Model** - Immutable state; `update()` returns a new instance
 
 ### Platform Abstraction (`@boba-cli/machine`)
 
@@ -84,10 +116,11 @@ All Node.js-specific code must go through `@boba-cli/machine`. ESLint enforces t
 ## Build & Tooling
 
 - **Bundler**: tsup (ESM + CJS dual output)
-- **Test Framework**: Vitest
+- **Test Framework**: Vitest (runtime tests), tsd (type tests in `test-d/`)
 - **API Documentation**: API Extractor generates `.api.md` reports in `api-reports/`
 - **Linting**: ESLint with strict-type-checked preset
 - **Formatting**: Prettier
+- **Monorepo**: Nx for task orchestration (caching, dependency graph)
 
 ### API Extractor
 

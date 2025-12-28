@@ -8,7 +8,7 @@ Boba is a **best-effort TypeScript port** of the wonderful [Bubble Tea](https://
 
 ## Why Boba?
 
-- **Elm Architecture** — Simple, functional model-update-view pattern
+- **Declarative DSL** — Build TUIs with a simple, chainable builder API
 - **Type Safe** — Full TypeScript with strict types throughout
 - **Batteries Included** — Spinners, inputs, tables, lists, and more
 - **Composable** — Mix and match components to build complex UIs
@@ -17,63 +17,33 @@ Boba is a **best-effort TypeScript port** of the wonderful [Bubble Tea](https://
 ## Quick Start
 
 ```bash
-pnpm add @boba-cli/tea @boba-cli/spinner @boba-cli/chapstick
+pnpm add @boba-cli/dsl
 ```
 
 ```ts
-import {
-  Program,
-  KeyMsg,
-  KeyType,
-  quit,
-  type Model,
-  type Cmd,
-  type Msg,
-} from '@boba-cli/tea'
-import { SpinnerModel, TickMsg, dot } from '@boba-cli/spinner'
-import { Style } from '@boba-cli/chapstick'
+import { createApp, spinner, text, vstack } from '@boba-cli/dsl'
 
-class LoadingScreen implements Model<Msg, LoadingScreen> {
-  readonly spinner: SpinnerModel
+const app = createApp()
+  .state({ message: 'Loading...' })
+  .component('spin', spinner({ style: { foreground: '#50fa7b' } }))
+  .onKey('esc', ({ quit }) => quit())
+  .onKey('q', ({ quit }) => quit())
+  .view(({ state, components }) =>
+    vstack(components.spin, text(state.message))
+  )
+  .build()
 
-  constructor(spinner?: SpinnerModel) {
-    this.spinner =
-      spinner ??
-      new SpinnerModel({
-        spinner: dot,
-        style: new Style().foreground('#50fa7b'),
-      })
-  }
-
-  init(): Cmd<Msg> {
-    return this.spinner.tick() as Cmd<Msg>
-  }
-
-  update(msg: Msg): [LoadingScreen, Cmd<Msg>] {
-    if (msg instanceof KeyMsg && msg.key.type === KeyType.Esc) {
-      return [this, quit()]
-    }
-
-    const [next, cmd] = this.spinner.update(msg)
-    return [new LoadingScreen(next), cmd as Cmd<Msg>]
-  }
-
-  view(): string {
-    return `\n  ${this.spinner.view()}  Loading...\n`
-  }
-}
-
-const program = new Program(new LoadingScreen())
-await program.run()
+await app.run()
 ```
 
 ## Packages
 
-### Core
+### Framework
 
 | Package                                     | Description                                             |
 | ------------------------------------------- | ------------------------------------------------------- |
-| [@boba-cli/tea](./packages/tea)             | The runtime — keyboard/mouse input, rendering, commands |
+| [@boba-cli/dsl](./packages/dsl)             | **Main API** — Declarative builder for TUI applications |
+| [@boba-cli/tea](./packages/tea)             | Low-level runtime — keyboard/mouse input, rendering     |
 | [@boba-cli/chapstick](./packages/chapstick) | Terminal styling — colors, borders, padding, alignment  |
 | [@boba-cli/key](./packages/key)             | Keybinding definitions and matching                     |
 
@@ -103,44 +73,10 @@ await program.run()
 
 ## Examples
 
-### Styled Progress Bar
-
-```ts
-import { ProgressModel } from '@boba-cli/progress'
-import { Style, borderStyles } from '@boba-cli/chapstick'
-
-const progress = ProgressModel.withDefaultGradient({ width: 40 })
-const [updated] = progress.setPercent(0.65)
-
-const box = new Style()
-  .padding(1, 2)
-  .border(borderStyles.rounded)
-  .borderForeground('#7c3aed')
-
-console.log(box.render(updated.view()))
-```
-
-```text
-╭──────────────────────────────────────────────╮
-│                                              │
-│  ████████████████████████░░░░░░░░░░░░ 65%    │
-│                                              │
-╰──────────────────────────────────────────────╯
-```
-
 ### Interactive List
 
 ```ts
-import { ListModel, DefaultItem } from '@boba-cli/list'
-import {
-  Program,
-  KeyMsg,
-  quit,
-  type Model,
-  type Cmd,
-  type Msg,
-} from '@boba-cli/tea'
-import { matches, newBinding } from '@boba-cli/key'
+import { createApp, list, DefaultItem } from '@boba-cli/dsl'
 
 const items = [
   new DefaultItem('Build UI', 'Create the interface'),
@@ -148,100 +84,89 @@ const items = [
   new DefaultItem('Deploy', 'Ship to production'),
 ]
 
-class TaskList implements Model<Msg, TaskList> {
-  readonly list: ListModel<DefaultItem>
+const app = createApp()
+  .component('tasks', list({ items, title: 'Tasks', showFilter: true }))
+  .onKey('q', ({ quit }) => quit())
+  .view(({ components }) => components.tasks)
+  .build()
 
-  constructor(list?: ListModel<DefaultItem>) {
-    this.list =
-      list ??
-      ListModel.new({
-        items,
-        title: 'Tasks',
-        height: 10,
-        showFilter: true,
-        showHelp: true,
-      })
-  }
-
-  init(): Cmd<Msg> {
-    return this.list.init()
-  }
-
-  update(msg: Msg): [TaskList, Cmd<Msg>] {
-    if (msg instanceof KeyMsg && matches(msg, newBinding({ keys: ['q'] }))) {
-      return [this, quit()]
-    }
-    const [next, cmd] = this.list.update(msg)
-    return [new TaskList(next), cmd]
-  }
-
-  view(): string {
-    return this.list.view()
-  }
-}
+await app.run()
 ```
 
 ### Text Input Form
 
 ```ts
-import { TextInputModel, EchoMode } from '@boba-cli/textinput'
-import { Style } from '@boba-cli/chapstick'
+import { createApp, textInput, text, vstack } from '@boba-cli/dsl'
 
-const label = new Style().bold().foreground('#f8f8f2')
-const input = TextInputModel.new({
-  placeholder: 'Enter your name...',
-  width: 30,
-})
+const app = createApp()
+  .state({ name: '' })
+  .component('input', textInput({ placeholder: 'Enter your name...', width: 30 }))
+  .onKey('enter', ({ quit }) => quit())
+  .view(({ components }) =>
+    vstack(text('Name:'), components.input)
+  )
+  .build()
 
-// In your view:
-;`${label.render('Name:')} ${input.view()}`
+await app.run()
 ```
 
-### Scrollable Content
+### Progress Bar with Styling
 
 ```ts
-import { ViewportModel } from '@boba-cli/viewport'
+import { createApp, progress, text, vstack, box } from '@boba-cli/dsl'
 
-const viewport = ViewportModel.new({ width: 60, height: 20 }).setContent(
-  longMarkdownText,
-)
+const app = createApp()
+  .state({ percent: 0.65 })
+  .component('bar', progress({ width: 40, gradient: true }))
+  .onInit(({ sendToComponent }) => {
+    sendToComponent('bar', (m) => m.setPercent(0.65))
+  })
+  .view(({ components }) =>
+    box({ border: 'rounded', borderForeground: '#7c3aed', padding: [1, 2] },
+      vstack(components.bar, text('65% complete'))
+    )
+  )
+  .build()
 
-// Handle j/k, pgup/pgdn, arrows automatically
-const [next] = viewport.update(keyMsg)
-console.log(next.view())
+await app.run()
 ```
 
-## The Elm Architecture
+## Low-Level API
 
-Boba follows the [Elm Architecture](https://guide.elm-lang.org/architecture/), a simple pattern for building UIs:
+For advanced use cases requiring fine-grained control, you can use `@boba-cli/tea` directly with the [Elm Architecture](https://guide.elm-lang.org/architecture/):
 
-```text
-┌─────────────────────────────────────────────┐
-│                                             │
-│   ┌─────────┐                               │
-│   │  Model  │ ← Your application state      │
-│   └────┬────┘                               │
-│        │                                    │
-│        ▼                                    │
-│   ┌─────────┐                               │
-│   │  View   │ → Renders state to string     │
-│   └────┬────┘                               │
-│        │                                    │
-│        ▼                                    │
-│   ┌─────────┐                               │
-│   │ Update  │ ← Handles messages,           │
-│   └─────────┘   returns new state           │
-│                                             │
-└─────────────────────────────────────────────┘
+```ts
+import { Program, KeyMsg, KeyType, quit, type Model, type Cmd, type Msg } from '@boba-cli/tea'
+import { SpinnerModel, dot } from '@boba-cli/spinner'
+
+class LoadingScreen implements Model<Msg, LoadingScreen> {
+  readonly spinner: SpinnerModel
+
+  constructor(spinner?: SpinnerModel) {
+    this.spinner = spinner ?? new SpinnerModel({ spinner: dot })
+  }
+
+  init(): Cmd<Msg> {
+    return this.spinner.tick() as Cmd<Msg>
+  }
+
+  update(msg: Msg): [LoadingScreen, Cmd<Msg>] {
+    if (msg instanceof KeyMsg && msg.key.type === KeyType.Esc) {
+      return [this, quit()]
+    }
+    const [next, cmd] = this.spinner.update(msg)
+    return [new LoadingScreen(next), cmd as Cmd<Msg>]
+  }
+
+  view(): string {
+    return `\n  ${this.spinner.view()}  Loading...\n`
+  }
+}
+
+await new Program(new LoadingScreen()).run()
 ```
 
-**Model** — Your application state (any class implementing the `Model` interface)
-
-**View** — A pure function that renders your model to a string
-
-**Update** — Handles incoming messages (key presses, mouse events, timers) and returns updated state
-
-**Commands** — Async side effects that produce messages (API calls, timers, file I/O)
+The pattern: **Model** (state) → **View** (render to string) → **Update** (handle messages, return new state)
 
 ## API Documentation
 
@@ -257,11 +182,12 @@ cd boba-cli
 # Install dependencies
 pnpm install
 
-# Run a demo
-pnpm demo spinner-demo
-pnpm demo list-demo
-pnpm demo progress-demo
-pnpm demo textinput-demo
+# Run demos
+pnpm demo                              # Default (progress)
+pnpm -C examples ex:spinner            # Animated spinner (DSL)
+pnpm -C examples ex:list               # Interactive list
+pnpm -C examples ex:textarea           # Multi-line editor
+pnpm -C examples ex:spinner-low-level  # Spinner (low-level TEA API)
 ```
 
 ## Credits

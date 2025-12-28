@@ -1,8 +1,14 @@
 /**
- * Boba Demo: Text Input
+ * Boba DSL Demo: Text Input
  *
- * Demonstrates \@boba-cli/textinput with validation, placeholder,
- * width-constrained scrolling, and styles.
+ * Demonstrates the \@boba-cli/dsl package with text input validation.
+ *
+ * Compare this to textinput-demo.ts to see the reduction in boilerplate:
+ * - Original: 128 lines with class, manual state management, complex update logic
+ * - DSL version: ~45 lines with declarative API
+ *
+ * Note: This demo shows a simpler, more declarative approach. The DSL handles
+ * the text input state internally - we just display the rendered component.
  *
  * Controls:
  *   type to edit
@@ -12,33 +18,23 @@
 
 import type { PlatformAdapter } from '\@boba-cli/machine'
 import {
-  Program,
-  KeyMsg,
-  quit,
-  type Cmd,
-  type Msg,
-  type Model,
-} from '\@boba-cli/tea'
-import {
-  TextInputModel,
+  createApp,
+  textInput,
+  vstack,
+  text,
+  Style,
   EchoMode,
   type ValidateFunc,
-} from '\@boba-cli/textinput'
-import { Style } from '\@boba-cli/chapstick'
-import { newBinding, matches } from '\@boba-cli/key'
+} from '\@boba-cli/dsl'
 
-const keys = {
-  quit: newBinding({ keys: ['q', 'Q', 'ctrl+c'] }).withHelp('q', 'quit'),
-}
-
+// Styles
 const titleStyle = new Style().bold(true).foreground('#00d7ff')
 const labelStyle = new Style().foreground('#c792ea')
-const successStyle = new Style().foreground('#89ddff')
-const errorStyle = new Style().foreground('#ff5370')
 const placeholderStyle = new Style().foreground('#5c6773').italic(true)
 const promptStyle = new Style().foreground('#6ee7b7').bold(true)
 const textStyle = new Style().foreground('#e0def4')
 
+// Validation function
 const validateName: ValidateFunc = (value) => {
   if (value.trim().length < 3) {
     return new Error('Name must be at least 3 characters')
@@ -46,18 +42,11 @@ const validateName: ValidateFunc = (value) => {
   return null
 }
 
-class DemoModel implements Model<Msg, DemoModel> {
-  readonly input: TextInputModel
-  readonly focusCmd: Cmd<Msg>
-
-  constructor(input?: TextInputModel, focusCmd?: Cmd<Msg>) {
-    if (input) {
-      this.input = input
-      this.focusCmd = focusCmd ?? null
-      return
-    }
-
-    const base = TextInputModel.new({
+// Build the app
+const app = createApp()
+  .component(
+    'nameInput',
+    textInput({
       placeholder: 'Type your name…',
       width: 40,
       echoMode: EchoMode.Normal,
@@ -67,64 +56,29 @@ class DemoModel implements Model<Msg, DemoModel> {
       textStyle,
       placeholderStyle,
       validate: validateName,
-    })
-
-    const [focused, cmd] = base.focus()
-    this.input = focused
-    this.focusCmd = cmd
-  }
-
-  init(): Cmd<Msg> {
-    // Kick off cursor blinking if needed
-    return this.focusCmd
-  }
-
-  update(msg: Msg): [DemoModel, Cmd<Msg>] {
-    if (msg instanceof KeyMsg && matches(msg, keys.quit)) {
-      return [this, quit()]
-    }
-
-    const [nextInput, cmd] = this.input.update(msg)
-    if (nextInput !== this.input) {
-      return [new DemoModel(nextInput, this.focusCmd), cmd]
-    }
-
-    return [this, cmd]
-  }
-
-  view(): string {
-    const lines: string[] = []
-    lines.push(titleStyle.render('🧋 Boba Text Input Demo'))
-    lines.push('')
-    lines.push(labelStyle.render('Name:'))
-    lines.push(this.input.view())
-
-    const err = this.input.error
-    if (err) {
-      lines.push(errorStyle.render(`Error: ${err.message}`))
-    } else if (!this.input.isEmpty()) {
-      lines.push(successStyle.render(`Looks good, ${this.input.valueOf()}!`))
-    } else {
-      lines.push(successStyle.render('Enter at least 3 characters'))
-    }
-
-    lines.push('')
-    lines.push(
-      new Style()
-        .foreground('#999')
-        .render('Controls: type to edit • ctrl+v to paste • q/ctrl+c to quit'),
-    )
-
-    return lines.join('\n')
-  }
-}
+    }),
+  )
+  .onKey(['q', 'Q', 'ctrl+c'], (ctx) => {
+    ctx.quit()
+  })
+  .view(({ components }) =>
+    vstack(
+      titleStyle.render('🧋 Boba DSL Text Input Demo'),
+      text(''),
+      labelStyle.render('Name:'),
+      components.nameInput,
+      text(''),
+      text('Controls: type to edit • ctrl+v to paste • q/ctrl+c to quit').dim(),
+      text(''),
+    ),
+  )
+  .build()
 
 /**
- * Run the text input demo with the given platform adapter.
+ * Run the text input DSL demo with the given platform adapter.
  * @param platform - Platform adapter for terminal I/O
  */
 export default async function run(platform: PlatformAdapter): Promise<void> {
   console.clear()
-  const program = new Program(new DemoModel(), { platform })
-  await program.run()
+  await app.run({ platform })
 }

@@ -14,13 +14,13 @@ import listDemo from '@boba-cli/examples/list'
 import paginatorDemo from '@boba-cli/examples/paginator'
 import progressDemo from '@boba-cli/examples/progress'
 import spinnerDemo from '@boba-cli/examples/spinner'
-import spinnerDslDemo from '@boba-cli/examples/spinner-dsl'
+import spinnerLowLevelDemo from '@boba-cli/examples/spinner-low-level'
 import statusbarDemo from '@boba-cli/examples/statusbar'
 import stopwatchDemo from '@boba-cli/examples/stopwatch'
 import tableDemo from '@boba-cli/examples/table'
 import textareaDemo from '@boba-cli/examples/textarea'
 import textinputDemo from '@boba-cli/examples/textinput'
-import textinputDslDemo from '@boba-cli/examples/textinput-dsl'
+import textinputLowLevelDemo from '@boba-cli/examples/textinput-low-level'
 import timerDemo from '@boba-cli/examples/timer'
 import viewportDemo from '@boba-cli/examples/viewport'
 
@@ -101,14 +101,14 @@ export const demos: DemoInfo[] = [
   {
     name: 'spinner',
     filename: 'spinner.ts',
-    description: 'Animated loading spinners',
+    description: 'Animated loading spinner (DSL)',
     create: spinnerDemo,
   },
   {
-    name: 'spinner-dsl',
-    filename: 'spinner-dsl.ts',
-    description: 'Spinner with DSL builder',
-    create: spinnerDslDemo,
+    name: 'spinner-low-level',
+    filename: 'spinner-low-level.ts',
+    description: 'Spinner with low-level TEA API',
+    create: spinnerLowLevelDemo,
   },
   {
     name: 'statusbar',
@@ -137,14 +137,14 @@ export const demos: DemoInfo[] = [
   {
     name: 'textinput',
     filename: 'textinput.ts',
-    description: 'Single-line text input',
+    description: 'Single-line text input (DSL)',
     create: textinputDemo,
   },
   {
-    name: 'textinput-dsl',
-    filename: 'textinput-dsl.ts',
-    description: 'Text input with DSL builder',
-    create: textinputDslDemo,
+    name: 'textinput-low-level',
+    filename: 'textinput-low-level.ts',
+    description: 'Text input with low-level TEA API',
+    create: textinputLowLevelDemo,
   },
   {
     name: 'timer',

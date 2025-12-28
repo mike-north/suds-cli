@@ -10,26 +10,43 @@ Animated spinner component for Boba terminal UIs. Port of Charmbracelet Bubbles 
 pnpm add @boba-cli/spinner
 ```
 
-## Quickstart
+## Using with the DSL (Recommended)
+
+The easiest way to use spinners is through [`@boba-cli/dsl`](../dsl/README.md):
+
+```ts
+import { createApp, spinner, text, hstack } from '@boba-cli/dsl'
+
+const app = createApp()
+  .component('loading', spinner({ style: { foreground: '#7c3aed' } }))
+  .onKey('q', ({ quit }) => quit())
+  .view(({ components }) => hstack(components.loading, text(' Loading...')))
+  .build()
+
+await app.run()
+```
+
+## Low-Level Usage
+
+For direct use with `@boba-cli/tea`:
 
 ```ts
 import { SpinnerModel, TickMsg, dot } from '@boba-cli/spinner'
 import { Style } from '@boba-cli/chapstick'
 import type { Cmd, Msg, Model } from '@boba-cli/tea'
 
-// Create a spinner with custom style
 const spinner = new SpinnerModel({
   spinner: dot,
   style: new Style().foreground('#7c3aed'),
 })
 
 // In your model's init, start the spinner
-function init(): Cmd<Msg> {
+init(): Cmd<Msg> {
   return spinner.tick()
 }
 
 // In your update function, handle TickMsg
-function update(msg: Msg): [MyModel, Cmd<Msg>] {
+update(msg: Msg): [MyModel, Cmd<Msg>] {
   if (msg instanceof TickMsg) {
     const [nextSpinner, cmd] = spinner.update(msg)
     return [{ ...model, spinner: nextSpinner }, cmd]
@@ -38,7 +55,7 @@ function update(msg: Msg): [MyModel, Cmd<Msg>] {
 }
 
 // In your view, render the spinner
-function view(): string {
+view(): string {
   return `Loading ${spinner.view()}`
 }
 ```

@@ -1,6 +1,8 @@
 # @boba-cli/tea
 
-TypeScript port of [Bubble Tea](https://github.com/charmbracelet/bubbletea), the Elm-inspired terminal UI framework from Charm. Build interactive CLIs using a simple, functional architecture: Model-Update-View.
+**Low-level runtime for Boba CLI applications.** TypeScript port of [Bubble Tea](https://github.com/charmbracelet/bubbletea), the Elm-inspired terminal UI framework from Charm. Build interactive CLIs using a simple, functional architecture: Model-Update-View.
+
+> **Note:** For most applications, we recommend using [`@boba-cli/dsl`](../dsl/README.md), the main API that provides a declarative builder on top of this runtime. Use `@boba-cli/tea` directly when you need fine-grained control over the Elm Architecture.
 
 ## Install
 

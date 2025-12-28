@@ -1,6 +1,6 @@
 # @boba-cli/dsl
 
-Declarative DSL for building CLI applications with minimal ceremony. Build terminal UIs using a fluent builder API and view primitives inspired by SwiftUI.
+**The main API for building Boba CLI applications.** A declarative DSL for building terminal UIs with minimal ceremony using a fluent builder API and view primitives inspired by SwiftUI.
 
 ## Install
 
@@ -31,19 +31,19 @@ const app = createApp()
 await app.run()
 ```
 
-## Why DSL?
+## Why the DSL?
 
-Compare the DSL approach to raw TEA (The Elm Architecture):
+The DSL is the recommended way to build Boba CLI applications. For advanced use cases requiring fine-grained control, you can use the [low-level Elm Architecture API](../tea/README.md) directly.
 
-| Aspect | Raw TEA | DSL |
-|--------|---------|-----|
-| Lines of code | ~147 lines | ~35 lines |
-| Boilerplate | Manual class, state management, `instanceof` checks | Declarative builder, automatic state handling |
-| Type safety | Manual type guards, verbose generics | Phantom types provide compile-time safety |
-| View composition | String concatenation | Composable view primitives |
-| Component integration | Manual model wrapping and message routing | Automatic component lifecycle management |
+| Aspect | DSL (Main API) | Low-Level TEA |
+|--------|----------------|---------------|
+| Lines of code | ~35 lines | ~147 lines |
+| Boilerplate | Declarative builder, automatic state handling | Manual class, state management, `instanceof` checks |
+| Type safety | Phantom types provide compile-time safety | Manual type guards, verbose generics |
+| View composition | Composable view primitives | String concatenation |
+| Component integration | Automatic component lifecycle management | Manual model wrapping and message routing |
 
-See [examples/spinner-demo.ts](../../examples/spinner-demo.ts) (raw TEA) vs [examples/spinner-demo-dsl.ts](../../examples/spinner-demo-dsl.ts) (DSL) for a real comparison.
+See [examples/spinner](../../examples/src/spinner) (DSL) vs [examples/spinner-low-level](../../examples/src/spinner-low-level) (low-level) for a real comparison.
 
 ## API Reference
 
@@ -646,7 +646,7 @@ createApp()
 
 ## Advanced Usage
 
-### Accessing the Underlying TEA Model
+### Accessing the Low-Level TEA Model
 
 For advanced use cases, you can access the generated TEA model:
 

@@ -1,4 +1,4 @@
-# Animated spinners with multiple styles
+# Spinner demo using DSL builder
 
 Output "../../animations/spinner.gif"
 
@@ -13,22 +13,8 @@ Enter
 Wait+Screen /Demo/
 Show
 
-Sleep 1500ms
-
-# Cycle through spinner styles
-Sleep 1s
-Type "s"
-Sleep 800ms
-Type "s"
-Sleep 800ms
-Type "s"
-Sleep 800ms
-Type "s"
-Sleep 800ms
-Type "s"
-Sleep 1s
+Sleep 3s
 
 # Exit
-Sleep 500ms
 Type "q"
 Sleep 500ms

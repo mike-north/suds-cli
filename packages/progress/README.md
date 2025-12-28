@@ -10,7 +10,29 @@ Animated progress bar for Boba terminal UIs. Port of Charmbracelet Bubbles progr
 pnpm add @boba-cli/progress
 ```
 
-## Quickstart
+## Using with the DSL (Recommended)
+
+The easiest way to use progress bars is through [`@boba-cli/dsl`](../dsl/README.md):
+
+```ts
+import { createApp, progress, text, vstack } from '@boba-cli/dsl'
+
+const app = createApp()
+  .state({ percent: 0 })
+  .component('bar', progress({ width: 40, gradient: true }))
+  .onInit(({ sendToComponent }) => {
+    sendToComponent('bar', (m) => m.setPercent(0.65))
+  })
+  .onKey('q', ({ quit }) => quit())
+  .view(({ components }) => vstack(components.bar, text('Loading...')))
+  .build()
+
+await app.run()
+```
+
+## Low-Level Usage
+
+For direct use with `@boba-cli/tea`:
 
 ```ts
 import { ProgressModel, FrameMsg } from '@boba-cli/progress'
@@ -18,20 +40,19 @@ import type { Cmd, Msg } from '@boba-cli/tea'
 
 let progress = ProgressModel.withDefaultGradient({ width: 30 })
 
-function init(): Cmd<Msg> {
-  // Start at 40%
+init(): Cmd<Msg> {
   const [next, cmd] = progress.setPercent(0.4)
   progress = next
   return cmd
 }
 
-function update(msg: Msg): [unknown, Cmd<Msg>] {
+update(msg: Msg): [unknown, Cmd<Msg>] {
   const [next, cmd] = progress.update(msg)
   progress = next
   return [{ progress }, cmd]
 }
 
-function view(): string {
+view(): string {
   return progress.view()
 }
 ```

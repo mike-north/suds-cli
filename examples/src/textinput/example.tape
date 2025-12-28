@@ -1,11 +1,11 @@
-# Single-line text input with validation
+# Text input demo using DSL builder
 
 Output "../../animations/textinput.gif"
 
 Source ../../common.tape
 
-Set Height 475
-Set FontSize 43
+Set Height 634
+Set FontSize 38
 
 Hide
 Type "pnpm ex:textinput"
@@ -13,19 +13,16 @@ Enter
 Wait+Screen /Demo/
 Show
 
-Sleep 1500ms
-
-# Type a short name (validation error)
-Type "Hi"
 Sleep 1s
 
-# Clear and type a valid name
-Backspace 2
+# Type some text
+Type "Jo"
 Sleep 500ms
-Type@100ms "Alice Smith"
-Sleep 1500ms
+Type "hn"
+Sleep 500ms
+Type " Smith"
+Sleep 1s
 
 # Exit
-Sleep 500ms
 Type "q"
 Sleep 500ms
