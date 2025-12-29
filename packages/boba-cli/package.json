@@ -1,7 +1,7 @@
 {
   "name": "boba-cli",
   "description": "Complete Boba CLI framework - all TUI components in one package",
-  "version": "0.0.1-alpha.1",
+  "version": "0.0.1-alpha.2",
   "dependencies": {
     "@boba-cli/chapstick": "workspace:*",
     "@boba-cli/code": "workspace:*",
